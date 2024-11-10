@@ -32,16 +32,20 @@ import com.maksimowiczm.whatismyip.ui.theme.RememberIPTheme
 
 @Composable
 fun CurrentAddressScreen(
-    currentAddressViewModel: CurrentAddressViewModel
+    currentAddressViewModel: CurrentAddressViewModel,
 ) {
     val currentAddressUiState by currentAddressViewModel.currentAddressUiState.collectAsStateWithLifecycle()
     val uiState = currentAddressUiState
 
     when (uiState) {
-        CurrentAddressUiState.Error -> TODO()
         CurrentAddressUiState.Loading -> LoadingCurrentAddress()
+
         is CurrentAddressUiState.Success -> CurrentAddress(
             address = uiState.address,
+            onRefresh = currentAddressViewModel::refreshCurrentAddress
+        )
+
+        CurrentAddressUiState.Error -> ErrorCurrentAddress(
             onRefresh = currentAddressViewModel::refreshCurrentAddress
         )
     }
@@ -121,6 +125,37 @@ private fun LoadingCurrentAddress() {
     }
 }
 
+@Composable
+private fun ErrorCurrentAddress(
+    onRefresh: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onRefresh() },
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            text = "Failed to fetch your IP address",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.error
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            text = "Tap to refresh",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+    }
+}
+
 @PreviewLightDark
 @Composable
 private fun CurrentAddressPreview() {
@@ -140,6 +175,18 @@ private fun LoadingCurrentAddressPreview() {
     RememberIPTheme {
         Surface {
             LoadingCurrentAddress()
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun ErrorCurrentAddressPreview() {
+    RememberIPTheme {
+        Surface {
+            ErrorCurrentAddress(
+                onRefresh = {}
+            )
         }
     }
 }
