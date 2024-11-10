@@ -13,7 +13,7 @@ import java.net.URL
 typealias Address = String
 
 class PublicAddressDataSource(
-    private val networkDispatcher: CoroutineDispatcher,
+    private val networkDispatcher: CoroutineDispatcher
 ) {
     private val currentAddress = MutableStateFlow<Address?>(null)
 

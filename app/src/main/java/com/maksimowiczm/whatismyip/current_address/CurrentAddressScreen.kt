@@ -28,11 +28,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.maksimowiczm.whatismyip.ui.theme.RememberIPTheme
 
 @Composable
 fun CurrentAddressScreen(
-    currentAddressViewModel: CurrentAddressViewModel,
+    currentAddressViewModel: CurrentAddressViewModel = hiltViewModel(),
 ) {
     val currentAddressUiState by currentAddressViewModel.currentAddressUiState.collectAsStateWithLifecycle()
     val uiState = currentAddressUiState

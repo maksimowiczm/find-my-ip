@@ -5,14 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapBoth
 import com.maksimowiczm.whatismyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.whatismyip.domain.ObserveCurrentAddressUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CurrentAddressViewModel(
+@HiltViewModel
+class CurrentAddressViewModel @Inject constructor(
     private val publicAddressRepository: PublicAddressRepository,
     observeCurrentAddressUseCase: ObserveCurrentAddressUseCase
 ) : ViewModel() {

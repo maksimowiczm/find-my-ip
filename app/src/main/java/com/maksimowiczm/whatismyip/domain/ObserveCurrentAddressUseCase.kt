@@ -7,8 +7,9 @@ import com.maksimowiczm.whatismyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.whatismyip.data.network.Address
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ObserveCurrentAddressUseCase(
+class ObserveCurrentAddressUseCase @Inject constructor(
     private val publicAddressRepository: PublicAddressRepository,
 ) {
     operator fun invoke(): Flow<Result<Address, Unit>> {
