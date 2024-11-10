@@ -1,4 +1,4 @@
-package com.maksimowiczm.rememberip
+package com.maksimowiczm.whatismyip
 
 import org.junit.Test
 

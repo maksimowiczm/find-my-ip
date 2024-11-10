@@ -1,4 +1,4 @@
-package com.maksimowiczm.rememberip.ui.theme
+package com.maksimowiczm.whatismyip.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

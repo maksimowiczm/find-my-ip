@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.maksimowiczm.rememberip"
+    namespace = "com.maksimowiczm.whatismyip"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.maksimowiczm.rememberip"
+        applicationId = "com.maksimowiczm.whatismyip"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
@@ -41,6 +42,9 @@ android {
 
 dependencies {
 
+    implementation(libs.kotlin.result)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

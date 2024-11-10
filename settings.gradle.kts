@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Remember IP"
+rootProject.name = "What is my IP"
 include(":app")
  

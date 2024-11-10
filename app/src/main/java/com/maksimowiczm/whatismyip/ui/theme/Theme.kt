@@ -1,6 +1,5 @@
-package com.maksimowiczm.rememberip.ui.theme
+package com.maksimowiczm.whatismyip.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

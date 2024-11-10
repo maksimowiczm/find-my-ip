@@ -1,4 +1,4 @@
-package com.maksimowiczm.rememberip.ui.theme
+package com.maksimowiczm.whatismyip.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
