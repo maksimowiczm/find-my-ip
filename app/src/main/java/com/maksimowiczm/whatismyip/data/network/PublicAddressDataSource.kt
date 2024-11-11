@@ -2,13 +2,13 @@ package com.maksimowiczm.whatismyip.data.network
 
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
+import java.net.URL
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
 
 typealias Address = String
 

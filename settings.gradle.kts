@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "What is my IP"
 include(":app")
- 
