@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">What is my IP?</string>
+    <string name="history_no_permission_screen_text">Tracking your IP address is disabled by default. Enable it to see your address history. You can always change this setting in the app settings.</string>
+    <string name="history_no_permission_dialog_text">You are about to enable tracking your IP address. This will allow the app to save your address history. You can always change this setting in the app settings.</string>
+    <string name="tap_to_enable">Tap to enable</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="history">History</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="tap_to_refresh">Tap to refresh</string>
+    <string name="failed_to_fetch_your_ip_address">Failed to fetch your IP address</string>
+    <string name="fetching_your_ip_address">Fetching your IP address</string>
+    <string name="refreshing">Refreshing</string>
+    <string name="your_ip_address_is">Your IP address is</string>
 </resources>

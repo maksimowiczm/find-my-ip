@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.datastore.preferences)
     ktlintRuleset(libs.ktlint.compose)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)

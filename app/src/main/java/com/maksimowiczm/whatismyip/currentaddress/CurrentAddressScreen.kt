@@ -23,12 +23,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.maksimowiczm.whatismyip.ui.theme.RememberIPTheme
+import com.maksimowiczm.whatismyip.R
+import com.maksimowiczm.whatismyip.ui.theme.WhatsMyIpAppTheme
 
 @Composable
 fun CurrentAddressScreen(
@@ -65,7 +67,7 @@ private fun CurrentAddress(address: String, onRefresh: () -> Unit, modifier: Mod
     ) {
         Text(
             modifier = Modifier.padding(bottom = 16.dp),
-            text = "Your IP address is",
+            text = stringResource(R.string.your_ip_address_is),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
         )
@@ -78,7 +80,7 @@ private fun CurrentAddress(address: String, onRefresh: () -> Unit, modifier: Mod
 
         Text(
             modifier = Modifier.padding(top = 16.dp),
-            text = "Tap to refresh",
+            text = stringResource(R.string.tap_to_refresh),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -87,10 +89,10 @@ private fun CurrentAddress(address: String, onRefresh: () -> Unit, modifier: Mod
 
 @Composable
 private fun LoadingCurrentAddress(modifier: Modifier = Modifier) {
-    val infiniteTransition = rememberInfiniteTransition(label = "refresh")
+    val infiniteTransition = rememberInfiniteTransition(label = "refreshTransition")
 
     val rotation by infiniteTransition.animateFloat(
-        label = "refresh",
+        label = "refreshAnimation",
         initialValue = 0f,
         targetValue = 360f,
         animationSpec =
@@ -111,11 +113,11 @@ private fun LoadingCurrentAddress(modifier: Modifier = Modifier) {
                 .size(48.dp)
                 .rotate(rotation),
             imageVector = Icons.Default.Refresh,
-            contentDescription = "Refreshing"
+            contentDescription = stringResource(R.string.refreshing)
         )
 
         Text(
-            text = "Fetching your IP address",
+            text = stringResource(R.string.fetching_your_ip_address),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
         )
@@ -131,7 +133,7 @@ private fun ErrorCurrentAddress(modifier: Modifier = Modifier, onRefresh: () -> 
     ) {
         Text(
             modifier = Modifier.padding(bottom = 16.dp),
-            text = "Failed to fetch your IP address",
+            text = stringResource(R.string.failed_to_fetch_your_ip_address),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.error
@@ -139,7 +141,7 @@ private fun ErrorCurrentAddress(modifier: Modifier = Modifier, onRefresh: () -> 
 
         Text(
             modifier = Modifier.padding(top = 16.dp),
-            text = "Tap to refresh",
+            text = stringResource(R.string.tap_to_refresh),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -149,7 +151,7 @@ private fun ErrorCurrentAddress(modifier: Modifier = Modifier, onRefresh: () -> 
 @PreviewLightDark
 @Composable
 private fun CurrentAddressPreview() {
-    RememberIPTheme {
+    WhatsMyIpAppTheme {
         Surface {
             CurrentAddress(
                 modifier = Modifier.fillMaxSize(),
@@ -163,7 +165,7 @@ private fun CurrentAddressPreview() {
 @PreviewLightDark
 @Composable
 private fun LoadingCurrentAddressPreview() {
-    RememberIPTheme {
+    WhatsMyIpAppTheme {
         Surface {
             LoadingCurrentAddress(
                 modifier = Modifier.fillMaxSize()
@@ -175,7 +177,7 @@ private fun LoadingCurrentAddressPreview() {
 @PreviewLightDark
 @Composable
 private fun ErrorCurrentAddressPreview() {
-    RememberIPTheme {
+    WhatsMyIpAppTheme {
         Surface {
             ErrorCurrentAddress(
                 modifier = Modifier.fillMaxSize(),
