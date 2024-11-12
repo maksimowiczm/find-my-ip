@@ -1,6 +1,6 @@
 package com.maksimowiczm.whatismyip.data.di
 
-import com.maksimowiczm.whatismyip.data.network.PublicAddressDataSource
+import com.maksimowiczm.whatismyip.data.network.CurrentAddressDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,10 +10,10 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-object PublicAddressModule {
+object CurrentAddressModule {
     @Provides
     @Singleton
-    fun providePublicAddressDataSource() = PublicAddressDataSource(
+    fun providePublicAddressDataSource() = CurrentAddressDataSource(
         networkDispatcher = Dispatchers.IO
     )
 }

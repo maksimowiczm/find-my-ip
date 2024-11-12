@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.whatismyip.R
+import com.maksimowiczm.whatismyip.domain.AddressHistory
 import com.maksimowiczm.whatismyip.ui.theme.WhatsMyIpAppTheme
 
 @Composable
@@ -35,18 +41,27 @@ fun AddressHistoryScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: AddressHistoryViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val state = uiState
+    val hasPermission by viewModel.hasPermission.collectAsStateWithLifecycle()
 
-    when (state) {
-        AddressHistoryState.NoPermission -> NoPermissionScreen(
+    if (!hasPermission) {
+        return NoPermissionScreen(
             modifier = modifier,
             onGrantPermission = viewModel::onGrantPermission
         )
+    }
 
+    val addressHistoryState by viewModel.addressHistoryState.collectAsStateWithLifecycle()
+    val state = addressHistoryState
+
+    when (state) {
         AddressHistoryState.Loading -> Box(modifier) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
+
+        is AddressHistoryState.Loaded -> AddressHistoryList(
+            items = state.addressHistory,
+            modifier = modifier
+        )
     }
 }
 
@@ -115,6 +130,32 @@ private fun PermissionDialog(onDismiss: () -> Unit, onGrantPermission: () -> Uni
     )
 }
 
+@Composable
+private fun AddressHistoryList(items: List<AddressHistory>, modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(
+            items = items.mapIndexed { index, item -> item to index },
+            key = { (_, index) -> index }
+        ) { (it, index) ->
+            AddressHistoryListItem(address = it)
+            if (index < items.size - 1) {
+                HorizontalDivider()
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddressHistoryListItem(address: AddressHistory, modifier: Modifier = Modifier) {
+    ListItem(
+        modifier = modifier,
+        headlineContent = { Text(text = address.ip) },
+        supportingContent = { Text(text = address.date) }
+    )
+}
+
 @PreviewLightDark
 @Composable
 private fun AddressHistoryScreenPreview() {
@@ -135,6 +176,22 @@ private fun PermissionDialogPreview() {
             PermissionDialog(
                 onDismiss = {},
                 onGrantPermission = {}
+            )
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun AddressHistoryListItemPreview() {
+    WhatsMyIpAppTheme {
+        Surface {
+            AddressHistoryListItem(
+                modifier = Modifier.fillMaxWidth(),
+                address = AddressHistory(
+                    ip = "127.0.0.1",
+                    date = "January 1, 2024"
+                )
             )
         }
     }

@@ -33,7 +33,7 @@ constructor(
             }
 
             result.mapBoth(
-                success = { CurrentAddressUiState.Success(it) },
+                success = { CurrentAddressUiState.Success(it.ip) },
                 failure = { CurrentAddressUiState.Error }
             )
         }.stateIn(

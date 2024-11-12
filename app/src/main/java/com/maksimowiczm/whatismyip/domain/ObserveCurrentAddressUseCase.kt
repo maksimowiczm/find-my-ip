@@ -4,7 +4,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.maksimowiczm.whatismyip.data.Keys
-import com.maksimowiczm.whatismyip.data.network.Address
+import com.maksimowiczm.whatismyip.data.model.Address
 import com.maksimowiczm.whatismyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.whatismyip.data.repository.UserPreferencesRepository
 import javax.inject.Inject
