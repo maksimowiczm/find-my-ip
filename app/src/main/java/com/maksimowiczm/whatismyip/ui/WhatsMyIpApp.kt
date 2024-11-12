@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.whatismyip.addresshistory.AddressHistoryScreen
 import com.maksimowiczm.whatismyip.currentaddress.CurrentAddressScreen
+import com.maksimowiczm.whatismyip.settings.SettingsScreen
 import com.maksimowiczm.whatismyip.ui.theme.WhatsMyIpAppTheme
 import kotlinx.serialization.Serializable
 
@@ -75,6 +76,11 @@ fun WhatsMyIpApp(modifier: Modifier = Modifier) {
                     )
                 }
                 composable<SettingsRoute> {
+                    SettingsScreen(
+                        Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                    )
                 }
             }
         }

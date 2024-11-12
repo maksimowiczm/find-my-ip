@@ -15,4 +15,7 @@ interface AddressEntityDao {
 
     @Insert
     suspend fun insertAddress(addressEntity: AddressEntity)
+
+    @Query("DELETE FROM addressentity")
+    suspend fun deleteAll()
 }

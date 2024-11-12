@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
@@ -42,23 +44,33 @@ fun AddressHistoryScreen(
     viewModel: AddressHistoryViewModel = hiltViewModel()
 ) {
     val hasPermission by viewModel.hasPermission.collectAsStateWithLifecycle()
-
-    if (!hasPermission) {
-        return NoPermissionScreen(
-            modifier = modifier,
-            onGrantPermission = viewModel::onGrantPermission
-        )
-    }
-
     val addressHistoryState by viewModel.addressHistoryState.collectAsStateWithLifecycle()
     val state = addressHistoryState
 
-    when (state) {
-        AddressHistoryState.Loading -> Box(modifier) {
+    if (state is AddressHistoryState.Loading) {
+        return Box(modifier) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
+    }
 
-        is AddressHistoryState.Loaded -> AddressHistoryList(
+    // Only if the user has not granted permission and history is empty
+    if (!hasPermission) {
+        return if (state is AddressHistoryState.Loaded && !state.addressHistory.isEmpty()) {
+            NoPermissionScreen(
+                modifier = modifier,
+                items = state.addressHistory,
+                onGrantPermission = viewModel::onGrantPermission
+            )
+        } else {
+            NoPermissionScreen(
+                modifier = modifier,
+                onGrantPermission = viewModel::onGrantPermission
+            )
+        }
+    }
+
+    if (state is AddressHistoryState.Loaded) {
+        return AddressHistoryList(
             items = state.addressHistory,
             modifier = modifier
         )
@@ -100,7 +112,45 @@ private fun NoPermissionScreen(
 }
 
 @Composable
-private fun PermissionDialog(onDismiss: () -> Unit, onGrantPermission: () -> Unit) {
+private fun NoPermissionScreen(
+    onGrantPermission: () -> Unit,
+    items: List<AddressHistory>,
+    modifier: Modifier = Modifier.fillMaxSize()
+) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showDialog) {
+        PermissionDialog(
+            onDismiss = { showDialog = false },
+            onGrantPermission = onGrantPermission
+        )
+    }
+
+    Column(modifier) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable(onClick = { showDialog = true }),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.error
+            )
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = stringResource(R.string.history_disabled_card_text),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Justify
+            )
+        }
+
+        AddressHistoryList(items)
+    }
+}
+
+@Composable
+fun PermissionDialog(onDismiss: () -> Unit, onGrantPermission: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.are_you_sure)) },
@@ -135,9 +185,7 @@ private fun AddressHistoryList(items: List<AddressHistory>, modifier: Modifier =
     if (items.isEmpty()) {
         AddressHistoryEmptyList(modifier)
     } else {
-        LazyColumn(
-            modifier = modifier
-        ) {
+        LazyColumn(modifier) {
             items(
                 items = items.mapIndexed { index, item -> item to index },
                 key = { (_, index) -> index }
@@ -175,10 +223,28 @@ private fun AddressHistoryEmptyList(modifier: Modifier = Modifier.fillMaxSize())
 
 @PreviewLightDark
 @Composable
-private fun AddressHistoryScreenPreview() {
+private fun NoPermissionScreenPreview() {
     WhatsMyIpAppTheme {
         Surface {
             NoPermissionScreen(
+                onGrantPermission = {}
+            )
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun PermissionsDisabledScreenPreview() {
+    WhatsMyIpAppTheme {
+        Surface {
+            NoPermissionScreen(
+                items = listOf(
+                    AddressHistory(
+                        ip = "127.0.0.1",
+                        date = "January 1, 2024"
+                    )
+                ),
                 onGrantPermission = {}
             )
         }

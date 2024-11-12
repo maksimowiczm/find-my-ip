@@ -14,11 +14,13 @@ import kotlinx.coroutines.flow.map
 class PublicAddressRepository @Inject constructor(
     private val currentAddressDataSource: CurrentAddressDataSource,
     private val database: AppDatabase,
-    private val addressEntityDao: AddressEntityDao,
+    private val addressEntityDao: AddressEntityDao
 ) {
     fun observeCurrentAddress() = currentAddressDataSource.observeCurrentAddress(autoFetch = true)
 
     suspend fun refreshCurrentAddress() = currentAddressDataSource.refreshCurrentAddress()
+
+    suspend fun deleteAll() = addressEntityDao.deleteAll()
 
     fun observeAddressHistory(): Flow<List<Address>> {
         return addressEntityDao.observeAddresses()

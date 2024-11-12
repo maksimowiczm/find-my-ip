@@ -15,4 +15,10 @@
     <string name="refreshing">Refreshing</string>
     <string name="your_ip_address_is">Your IP address is</string>
     <string name="empty">Empty</string>
+    <string name="save_history">Save history</string>
+    <string name="history_settings_description">This allows the app to save your address history.</string>
+    <string name="clear_history_dialog_text">This action is irreversible. Are you sure you want to clear the history?</string>
+    <string name="clear">Clear</string>
+    <string name="clear_history">Clear history</string>
+    <string name="history_disabled_card_text">You have disabled saving history. Tap to enable.</string>
 </resources>
