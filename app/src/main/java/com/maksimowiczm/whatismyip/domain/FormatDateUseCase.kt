@@ -2,7 +2,10 @@ package com.maksimowiczm.whatismyip.domain
 
 import java.text.DateFormat
 import java.util.Date
+import javax.inject.Inject
 
-class FormatDateUseCase(private val defaultFormatter: DateFormat) {
-    operator fun invoke(date: Date) = defaultFormatter.format(date)
+class FormatDateUseCase @Inject constructor() {
+    private val defaultFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM)
+
+    operator fun invoke(date: Date) = defaultFormat.format(date)
 }

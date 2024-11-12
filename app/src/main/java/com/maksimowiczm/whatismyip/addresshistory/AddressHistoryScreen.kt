@@ -132,16 +132,20 @@ private fun PermissionDialog(onDismiss: () -> Unit, onGrantPermission: () -> Uni
 
 @Composable
 private fun AddressHistoryList(items: List<AddressHistory>, modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(
-            items = items.mapIndexed { index, item -> item to index },
-            key = { (_, index) -> index }
-        ) { (it, index) ->
-            AddressHistoryListItem(address = it)
-            if (index < items.size - 1) {
-                HorizontalDivider()
+    if (items.isEmpty()) {
+        AddressHistoryEmptyList(modifier)
+    } else {
+        LazyColumn(
+            modifier = modifier
+        ) {
+            items(
+                items = items.mapIndexed { index, item -> item to index },
+                key = { (_, index) -> index }
+            ) { (it, index) ->
+                AddressHistoryListItem(address = it)
+                if (index < items.size - 1) {
+                    HorizontalDivider()
+                }
             }
         }
     }
@@ -154,6 +158,19 @@ private fun AddressHistoryListItem(address: AddressHistory, modifier: Modifier =
         headlineContent = { Text(text = address.ip) },
         supportingContent = { Text(text = address.date) }
     )
+}
+
+@Composable
+private fun AddressHistoryEmptyList(modifier: Modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            style = MaterialTheme.typography.titleLarge,
+            text = stringResource(R.string.empty)
+        )
+    }
 }
 
 @PreviewLightDark
@@ -193,6 +210,16 @@ private fun AddressHistoryListItemPreview() {
                     date = "January 1, 2024"
                 )
             )
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun AddressHistoryEmptyListPreview() {
+    WhatsMyIpAppTheme {
+        Surface {
+            AddressHistoryEmptyList()
         }
     }
 }

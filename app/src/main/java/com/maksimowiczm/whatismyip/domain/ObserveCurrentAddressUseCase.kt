@@ -23,7 +23,7 @@ class ObserveCurrentAddressUseCase @Inject constructor(
             val address = addressResult ?: return@combine Err(Unit)
 
             if (saveHistoryResult == true) {
-                // TODO
+                publicAddressRepository.insertIfDistinct(address)
             }
 
             return@combine Ok(address)

@@ -16,7 +16,6 @@ class CurrentAddressDataSource(
     private val networkDispatcher: CoroutineDispatcher
 ) {
     private val currentAddress = MutableStateFlow<Address?>(null)
-    private val calender = Calendar.getInstance()
 
     fun observeCurrentAddress(autoFetch: Boolean): Flow<Address?> {
         if (autoFetch && currentAddress.value == null) {
@@ -38,7 +37,7 @@ class CurrentAddressDataSource(
                 currentAddress.emit(
                     Address(
                         ip = address,
-                        date = calender.time
+                        date = Calendar.getInstance().time
                     )
                 )
             }
