@@ -36,6 +36,7 @@ class HistorySettingsViewModel @Inject constructor(
     fun disableHistorySettings() {
         viewModelScope.launch {
             userPreferencesRepository.set(Keys.save_history, false)
+            userPreferencesRepository.set(Keys.run_background_worker, false)
         }
     }
 

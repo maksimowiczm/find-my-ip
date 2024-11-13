@@ -13,11 +13,13 @@ composeBom = "2024.10.01"
 navigationCompose = "2.8.3"
 hilt = "2.52"
 ksp = "2.0.10-1.0.24"
+hiltCompiler = "1.2.0"
 hiltNavigationCompose = "1.2.0"
 gradleKtlint = "12.1.1"
 ktlintCompose = "0.4.3"
 datastorePreferences = "1.1.1"
 room = "2.6.1"
+workRuntime = "2.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,11 +42,15 @@ kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", versi
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltCompiler" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 ktlint-compose = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlintCompose" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

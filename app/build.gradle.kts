@@ -48,13 +48,17 @@ android {
 
 dependencies {
 
+    runtimeOnly(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)
     ktlintRuleset(libs.ktlint.compose)
+    ksp(libs.hilt.compiler)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.work)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlin.result)

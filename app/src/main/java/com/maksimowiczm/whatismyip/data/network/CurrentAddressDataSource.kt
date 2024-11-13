@@ -1,5 +1,8 @@
 package com.maksimowiczm.whatismyip.data.network
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
@@ -35,25 +38,23 @@ class CurrentAddressDataSource(
         return currentAddress
     }
 
-    suspend fun refreshCurrentAddress(): CurrentAddressState {
+    suspend fun refreshCurrentAddress(): Result<Address, Unit> {
         return withContext(networkDispatcher) {
             currentAddress.emit(CurrentAddressState.Loading)
 
-            val result = runCatching {
+            return@withContext runCatching {
                 URL("https://api.ipify.org").readText()
             }.map {
-                CurrentAddressState.Success(
-                    Address(
-                        ip = it,
-                        date = Calendar.getInstance().time
-                    )
+                val address = Address(
+                    ip = it,
+                    date = Calendar.getInstance().time
                 )
+                currentAddress.emit(CurrentAddressState.Success(address))
+                Ok(address)
             }.getOrElse {
-                CurrentAddressState.Error(it)
+                currentAddress.emit(CurrentAddressState.Error(it))
+                Err(Unit)
             }
-
-            currentAddress.emit(result)
-            result
         }
     }
 }

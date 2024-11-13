@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.whatismyip.R
+import com.maksimowiczm.whatismyip.backgroundworker.WorkerSettings
 import com.maksimowiczm.whatismyip.ui.theme.WhatsMyIpAppTheme
 
 @Composable
@@ -63,6 +65,11 @@ fun HistorySettings(
         },
         onClear = viewModel::clearHistory
     )
+
+    if (state) {
+        HorizontalDivider(Modifier.padding(bottom = 8.dp))
+        WorkerSettings()
+    }
 }
 
 @Composable
