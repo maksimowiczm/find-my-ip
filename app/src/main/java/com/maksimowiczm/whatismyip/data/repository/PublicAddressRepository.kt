@@ -18,6 +18,11 @@ class PublicAddressRepository @Inject constructor(
 ) {
     fun observeCurrentAddress() = currentAddressDataSource.observeCurrentAddress(autoFetch = true)
 
+    /**
+     * Fetches the current address and returns it.
+     *
+     * @return The current address or null if the fetch failed.
+     */
     suspend fun refreshCurrentAddress() = currentAddressDataSource.refreshCurrentAddress()
 
     suspend fun deleteAll() = addressEntityDao.deleteAll()

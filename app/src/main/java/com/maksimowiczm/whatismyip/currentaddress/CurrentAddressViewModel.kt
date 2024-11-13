@@ -3,6 +3,7 @@ package com.maksimowiczm.whatismyip.currentaddress
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapBoth
+import com.maksimowiczm.whatismyip.data.model.Address
 import com.maksimowiczm.whatismyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.whatismyip.domain.ObserveCurrentAddressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +34,12 @@ constructor(
             }
 
             result.mapBoth(
-                success = { CurrentAddressUiState.Success(it.ip) },
+                success = {
+                    when (it) {
+                        is Address -> return@combine CurrentAddressUiState.Success(it.ip)
+                        null -> return@combine CurrentAddressUiState.Loading
+                    }
+                },
                 failure = { CurrentAddressUiState.Error }
             )
         }.stateIn(

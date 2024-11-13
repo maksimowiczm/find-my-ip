@@ -1,5 +1,6 @@
 package com.maksimowiczm.whatismyip.data.network
 
+import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import com.maksimowiczm.whatismyip.data.model.Address
@@ -12,13 +13,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+sealed interface CurrentAddressState {
+    object None : CurrentAddressState
+    object Loading : CurrentAddressState
+    data class Success(val address: Address) : CurrentAddressState
+    data class Error(val error: Throwable) : CurrentAddressState
+}
+
 class CurrentAddressDataSource(
     private val networkDispatcher: CoroutineDispatcher
 ) {
-    private val currentAddress = MutableStateFlow<Address?>(null)
+    private val currentAddress = MutableStateFlow<CurrentAddressState>(CurrentAddressState.None)
 
-    fun observeCurrentAddress(autoFetch: Boolean): Flow<Address?> {
-        if (autoFetch && currentAddress.value == null) {
+    fun observeCurrentAddress(autoFetch: Boolean): Flow<CurrentAddressState> {
+        if (autoFetch && currentAddress.value is CurrentAddressState.None) {
             CoroutineScope(networkDispatcher).launch {
                 refreshCurrentAddress()
             }
@@ -27,20 +35,25 @@ class CurrentAddressDataSource(
         return currentAddress
     }
 
-    suspend fun refreshCurrentAddress() {
-        withContext(networkDispatcher) {
-            currentAddress.emit(null)
+    suspend fun refreshCurrentAddress(): CurrentAddressState {
+        return withContext(networkDispatcher) {
+            currentAddress.emit(CurrentAddressState.Loading)
 
-            runCatching {
+            val result = runCatching {
                 URL("https://api.ipify.org").readText()
-            }.map { address ->
-                currentAddress.emit(
+            }.map {
+                CurrentAddressState.Success(
                     Address(
-                        ip = address,
+                        ip = it,
                         date = Calendar.getInstance().time
                     )
                 )
+            }.getOrElse {
+                CurrentAddressState.Error(it)
             }
+
+            currentAddress.emit(result)
+            result
         }
     }
 }
