@@ -16,15 +16,9 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
-enum class BottomNavItem {
-    Home,
-    AddressHistory,
-    Settings
-}
-
 @Composable
 fun FindMyIpBottomAppBar(
-    selectedBottomBarItem: BottomNavItem?,
+    selectedBottomBarItem: Route?,
     onHomeClick: () -> Unit,
     onAddressHistoryClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -32,7 +26,7 @@ fun FindMyIpBottomAppBar(
 ) {
     NavigationBar(modifier) {
         NavigationBarItem(
-            selected = selectedBottomBarItem == BottomNavItem.Home,
+            selected = selectedBottomBarItem == Route.CurrentAddress,
             onClick = onHomeClick,
             icon = {
                 Icon(
@@ -43,7 +37,7 @@ fun FindMyIpBottomAppBar(
             label = { Text(stringResource(R.string.home)) }
         )
         NavigationBarItem(
-            selected = selectedBottomBarItem == BottomNavItem.AddressHistory,
+            selected = selectedBottomBarItem == Route.AddressHistory,
             onClick = onAddressHistoryClick,
             icon = {
                 Icon(
@@ -54,7 +48,7 @@ fun FindMyIpBottomAppBar(
             label = { Text(stringResource(R.string.history)) }
         )
         NavigationBarItem(
-            selected = selectedBottomBarItem == BottomNavItem.Settings,
+            selected = selectedBottomBarItem == Route.Settings,
             onClick = onSettingsClick,
             icon = {
                 Icon(
@@ -73,7 +67,7 @@ private fun FindMyIpBottomAppBarPreview() {
     FindMyIpAppTheme {
         Surface {
             FindMyIpBottomAppBar(
-                selectedBottomBarItem = BottomNavItem.Home,
+                selectedBottomBarItem = Route.AddressHistory,
                 onHomeClick = {},
                 onAddressHistoryClick = {},
                 onSettingsClick = {}

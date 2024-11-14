@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.ui
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,33 +15,27 @@ import com.maksimowiczm.findmyip.addresshistory.AddressHistoryScreen
 import com.maksimowiczm.findmyip.currentaddress.CurrentAddressScreen
 import com.maksimowiczm.findmyip.settings.SettingsScreen
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
-import kotlinx.serialization.Serializable
 
 @Composable
 fun FindMyIpApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route
-
-    val selectedBottomBarItem = when (currentRoute) {
-        CurrentAddressRoute.javaClass.name -> BottomNavItem.Home
-        AddressHistoryRoute.javaClass.name -> BottomNavItem.AddressHistory
-        SettingsRoute.javaClass.name -> BottomNavItem.Settings
-        else -> null
-    }
+        navController.currentBackStackEntryAsState().value?.destination?.route?.let {
+            Route.fromRoute(it)
+        }
 
     val onHomeClick = {
-        if (selectedBottomBarItem != BottomNavItem.Home) {
+        if (currentRoute != Route.CurrentAddress) {
             navController.navigateSingleTop(CurrentAddressRoute)
         }
     }
     val onAddressHistoryClick = {
-        if (selectedBottomBarItem != BottomNavItem.AddressHistory) {
+        if (currentRoute != Route.AddressHistory) {
             navController.navigateSingleTop(AddressHistoryRoute)
         }
     }
     val onSettingsClick = {
-        if (selectedBottomBarItem != BottomNavItem.Settings) {
+        if (currentRoute != Route.Settings) {
             navController.navigateSingleTop(SettingsRoute)
         }
     }
@@ -50,7 +45,7 @@ fun FindMyIpApp(modifier: Modifier = Modifier) {
             modifier = modifier,
             bottomBar = {
                 FindMyIpBottomAppBar(
-                    selectedBottomBarItem = selectedBottomBarItem,
+                    selectedBottomBarItem = currentRoute,
                     onHomeClick = onHomeClick,
                     onAddressHistoryClick = onAddressHistoryClick,
                     onSettingsClick = onSettingsClick
@@ -61,21 +56,42 @@ fun FindMyIpApp(modifier: Modifier = Modifier) {
                 navController = navController,
                 startDestination = CurrentAddressRoute
             ) {
-                composable<CurrentAddressRoute> {
+                composable<CurrentAddressRoute>(
+                    enterTransition = {
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    }
+                ) {
                     CurrentAddressScreen(
                         Modifier
                             .padding(innerPadding)
                             .fillMaxSize()
                     )
                 }
-                composable<AddressHistoryRoute> {
+                composable<AddressHistoryRoute>(
+                    enterTransition = {
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    }
+                ) {
                     AddressHistoryScreen(
                         Modifier
                             .padding(innerPadding)
                             .fillMaxSize()
                     )
                 }
-                composable<SettingsRoute> {
+                composable<SettingsRoute>(
+                    enterTransition = {
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up)
+                    }
+                ) {
                     SettingsScreen(
                         Modifier
                             .padding(innerPadding)
@@ -86,15 +102,6 @@ fun FindMyIpApp(modifier: Modifier = Modifier) {
         }
     }
 }
-
-@Serializable
-data object CurrentAddressRoute
-
-@Serializable
-data object AddressHistoryRoute
-
-@Serializable
-data object SettingsRoute
 
 fun NavController.navigateSingleTop(route: Any) {
     navigate(route) {
