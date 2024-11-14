@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">What is my IP?</string>
+    <string name="app_name">Find my IP</string>
     <string name="history_no_permission_screen_text">Tracking your IP address is disabled by default. Enable it to see your address history. You can always change this setting in the app settings.</string>
     <string name="history_no_permission_dialog_text">You are about to enable tracking your IP address. This will allow the app to save your address history. You can always change this setting in the app settings.</string>
     <string name="tap_to_enable">Tap to enable</string>

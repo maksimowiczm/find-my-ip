@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "What is my IP"
+rootProject.name = "Find my IP"
 include(":app")

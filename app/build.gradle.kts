@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.maksimowiczm.whatismyip"
+    namespace = "com.maksimowiczm.findmyip"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.maksimowiczm.whatismyip"
+        applicationId = "com.maksimowiczm.findmyip"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
