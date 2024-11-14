@@ -42,8 +42,10 @@ class Application : Application(), Configuration.Provider {
         super.onCreate()
 
         workerJob = combine(
-            userPreferencesRepository.get(Keys.run_background_worker).drop(1).distinctUntilChanged(),
-            userPreferencesRepository.get(Keys.background_worker_interval).drop(1).distinctUntilChanged()
+            userPreferencesRepository
+                .get(Keys.run_background_worker).drop(1).distinctUntilChanged(),
+            userPreferencesRepository
+                .get(Keys.background_worker_interval).drop(1).distinctUntilChanged()
         ) { runWorker, interval ->
             val workManager = WorkManager.getInstance(this@Application)
 

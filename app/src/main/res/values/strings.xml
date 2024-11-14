@@ -23,6 +23,8 @@
     <string name="history_disabled_card_text">You have disabled saving history. Tap to enable.</string>
     <string name="enable">Enable</string>
     <string name="background_service_settings_title">Background service</string>
-    <string name="background_service_settings_description">This allows the app to run in the background and check your public IP address periodically.</string>
+    <string name="background_service_settings_description">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
+    <string name="learn_about_doze">Click here to learn more about Doze mode.</string>
+    <string name="doze_link">https://source.android.com/docs/core/power/platform_mgmt</string>
     <string name="check_every_n_minutes">Check every %1$s minutes</string>
 </resources>

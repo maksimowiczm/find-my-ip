@@ -14,11 +14,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,11 +71,7 @@ private fun WorkerSettings(
             text = stringResource(R.string.background_service_settings_title),
             style = MaterialTheme.typography.titleMedium
         )
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = stringResource(R.string.background_service_settings_description),
-            style = MaterialTheme.typography.bodyMedium
-        )
+        WorkerServiceDescription()
         Row(
             modifier = Modifier
                 .defaultMinSize(minHeight = 64.dp)
@@ -105,41 +108,79 @@ private fun WorkerSettings(
             )
         }
         if (isEnabled) {
-            var sliderValue by rememberSaveable { mutableFloatStateOf(intervalIndex.toFloat()) }
-            val index = { sliderValue.roundToInt() }
-            Slider(
-                value = sliderValue,
-                onValueChange = {
-                    sliderValue = it
-                    onEnable(index())
-                },
-                valueRange = 0f..intervals.size.toFloat() - 1,
-                steps = intervals.size - 2,
-                modifier = Modifier.padding(8.dp)
-            )
+            WorkerServiceSettings(intervalIndex, intervals, onEnable, workerStatus)
+        }
+    }
+}
+
+@Composable
+private fun WorkerServiceSettings(
+    intervalIndex: Int,
+    intervals: Array<Long>,
+    onEnable: (Int) -> Unit,
+    workerStatus: WorkInfo.State?,
+    modifier: Modifier = Modifier
+) {
+    var sliderValue by rememberSaveable { mutableFloatStateOf(intervalIndex.toFloat()) }
+    val index = { sliderValue.roundToInt() }
+    Column(modifier) {
+        Slider(
+            value = sliderValue,
+            onValueChange = {
+                sliderValue = it
+                onEnable(index())
+            },
+            valueRange = 0f..intervals.size.toFloat() - 1,
+            steps = intervals.size - 2,
+            modifier = Modifier.padding(8.dp)
+        )
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = stringResource(R.string.check_every_n_minutes, intervals[index()]),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        if (workerStatus != null) {
             Text(
                 modifier = Modifier.padding(8.dp),
-                text = stringResource(R.string.check_every_n_minutes, intervals[index()]),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            if (workerStatus != null) {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = "Service status: $workerStatus",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = when (workerStatus) {
-                        WorkInfo.State.ENQUEUED,
-                        WorkInfo.State.RUNNING -> MaterialTheme.colorScheme.secondary
+                text = "Service status: $workerStatus",
+                style = MaterialTheme.typography.bodyMedium,
+                color = when (workerStatus) {
+                    WorkInfo.State.ENQUEUED,
+                    WorkInfo.State.RUNNING -> MaterialTheme.colorScheme.outline
 
-                        WorkInfo.State.SUCCEEDED,
-                        WorkInfo.State.FAILED,
-                        WorkInfo.State.BLOCKED,
-                        WorkInfo.State.CANCELLED -> MaterialTheme.colorScheme.error
-                    }
-                )
+                    WorkInfo.State.SUCCEEDED,
+                    WorkInfo.State.FAILED,
+                    WorkInfo.State.BLOCKED,
+                    WorkInfo.State.CANCELLED -> MaterialTheme.colorScheme.error
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun WorkerServiceDescription() {
+    val description = stringResource(R.string.background_service_settings_description)
+    val link = stringResource(R.string.doze_link)
+    val linkColor = MaterialTheme.colorScheme.primary
+    val learn = stringResource(R.string.learn_about_doze)
+
+    val annotatedLinkString = remember {
+        buildAnnotatedString {
+            append(description)
+            append(" ")
+            withLink(LinkAnnotation.Url(link, TextLinkStyles(SpanStyle(linkColor)))) {
+                append(learn)
             }
         }
     }
+
+    Text(
+        modifier = Modifier.padding(8.dp),
+        text = annotatedLinkString,
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Justify
+    )
 }
 
 @PreviewLightDark
