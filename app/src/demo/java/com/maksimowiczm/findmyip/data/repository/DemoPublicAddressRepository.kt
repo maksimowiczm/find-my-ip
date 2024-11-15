@@ -54,7 +54,7 @@ class DemoPublicAddressRepository : PublicAddressRepository {
                 add(Calendar.MINUTE, -random.nextInt(60))
             }.time
         )
-    }.toMutableList()
+    }.sortedBy { it.date }.toMutableList()
 
     private val addressHistoryFlow = MutableStateFlow<List<Address>>(addressHistory)
 
