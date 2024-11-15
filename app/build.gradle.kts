@@ -30,7 +30,32 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        create("demo") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+            resValue("string", "app_name", "Find my IP - demo")
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("src/main/java")
+        }
+        getByName("debug") {
+            java.srcDirs("src/release/java")
+        }
+        getByName("release") {
+            java.srcDirs("src/release/java")
+        }
+
+        getByName("demo") {
+            java.srcDirs("src/demo/java")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
