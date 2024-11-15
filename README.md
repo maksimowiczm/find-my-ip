@@ -21,3 +21,7 @@ app.
 
 - [Public IP](https://github.com/guildem/publicip-android) - does not allow to
 store IP history
+
+### Launcher icon
+
+Icon made by Freepik from [www.flaticon.com](https://www.flaticon.com/)
