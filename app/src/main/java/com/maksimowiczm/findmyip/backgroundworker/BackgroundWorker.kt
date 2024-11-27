@@ -5,31 +5,23 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.github.michaelbull.result.mapBoth
-import com.maksimowiczm.findmyip.data.Keys
-import com.maksimowiczm.findmyip.data.repository.PublicAddressRepository
-import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
+import com.github.michaelbull.result.getOrElse
+import com.maksimowiczm.findmyip.domain.ObserveCurrentAddressUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.first
 
 @HiltWorker
 class BackgroundWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val publicAddressRepository: PublicAddressRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val observeCurrentAddressUseCase: ObserveCurrentAddressUseCase
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result {
-        // Make sure we are allowed to save the history
-        if (userPreferencesRepository.get(Keys.save_history).firstOrNull() != true) {
-            return Result.success()
+        observeCurrentAddressUseCase().first().getOrElse {
+            Log.w(TAG, "Failed to refresh current address")
+            return Result.failure()
         }
-
-        publicAddressRepository.refreshCurrentAddress().mapBoth(
-            success = { publicAddressRepository.insertIfDistinct(it) },
-            failure = { Log.w(TAG, "Failed to refresh current address") }
-        )
 
         return Result.success()
     }
