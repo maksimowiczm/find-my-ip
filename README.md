@@ -1,5 +1,7 @@
 ## Find my IP
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/repository/browse/?fdid=com.maksimowiczm.findmyip)
+
 ### What is this?
 
 Find My IP is a straightforward Android app designed to fetch and optionally
