@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.backgroundworker
+package com.maksimowiczm.findmyip.settings.backgroundworker
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,7 +36,7 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun WorkerSettings(
+internal fun WorkerSettings(
     modifier: Modifier = Modifier,
     viewModel: WorkerSettingsViewModel = hiltViewModel()
 ) {
@@ -68,7 +68,7 @@ private fun WorkerSettings(
     Column(modifier) {
         Text(
             modifier = Modifier.padding(8.dp),
-            text = stringResource(R.string.background_service_settings_title),
+            text = stringResource(R.string.history_background_service_title),
             style = MaterialTheme.typography.titleMedium
         )
         WorkerServiceDescription()
@@ -160,7 +160,7 @@ private fun WorkerServiceSettings(
 
 @Composable
 private fun WorkerServiceDescription() {
-    val description = stringResource(R.string.background_service_settings_description)
+    val description = stringResource(R.string.history_background_service_description)
     val link = stringResource(R.string.doze_link)
     val linkColor = MaterialTheme.colorScheme.primary
     val learn = stringResource(R.string.learn_about_doze)

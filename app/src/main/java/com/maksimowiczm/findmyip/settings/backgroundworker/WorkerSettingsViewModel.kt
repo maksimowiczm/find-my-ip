@@ -1,10 +1,11 @@
-package com.maksimowiczm.findmyip.backgroundworker
+package com.maksimowiczm.findmyip.settings.backgroundworker
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
+import com.maksimowiczm.findmyip.backgroundworker.BackgroundWorker
 import com.maksimowiczm.findmyip.data.Keys
 import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,13 +23,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class WorkerSettingsViewModel @Inject constructor(
+internal class WorkerSettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     @ApplicationContext applicationContext: Context
 ) : ViewModel() {
     val workerStatus = WorkManager
         .getInstance(applicationContext)
-        .getWorkInfosByTagFlow(BackgroundWorker.TAG)
+        .getWorkInfosByTagFlow(BackgroundWorker.Companion.TAG)
         .map { infos ->
             if (infos.size > 1) {
                 Log.w("WorkerSettingsViewModel", "More than one worker with the same tag")

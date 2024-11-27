@@ -9,18 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,8 +42,24 @@ fun AddressHistoryScreen(
 ) {
     val hasPermission by viewModel.hasPermission.collectAsStateWithLifecycle()
     val addressHistoryState by viewModel.addressHistoryState.collectAsStateWithLifecycle()
-    val state = addressHistoryState
 
+    Scaffold(modifier) { innerPadding ->
+        AddressHistoryScreen(
+            modifier = Modifier.padding(innerPadding),
+            state = addressHistoryState,
+            hasPermission = hasPermission,
+            onGrantPermission = viewModel::onGrantPermission
+        )
+    }
+}
+
+@Composable
+private fun AddressHistoryScreen(
+    state: AddressHistoryState,
+    hasPermission: Boolean,
+    onGrantPermission: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     if (state is AddressHistoryState.Loading) {
         return Box(modifier) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
@@ -59,12 +72,12 @@ fun AddressHistoryScreen(
             NoPermissionScreen(
                 modifier = modifier,
                 items = state.addressHistory,
-                onGrantPermission = viewModel::onGrantPermission
+                onGrantPermission = onGrantPermission
             )
         } else {
             NoPermissionScreen(
                 modifier = modifier,
-                onGrantPermission = viewModel::onGrantPermission
+                onGrantPermission = onGrantPermission
             )
         }
     }
@@ -85,7 +98,7 @@ private fun NoPermissionScreen(
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showDialog) {
-        PermissionDialog(
+        HistoryPermissionDialog(
             onDismiss = { showDialog = false },
             onGrantPermission = onGrantPermission
         )
@@ -98,7 +111,7 @@ private fun NoPermissionScreen(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.history_no_permission_screen_text),
+            text = stringResource(R.string.history_no_permission_description),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Justify
         )
@@ -120,7 +133,7 @@ private fun NoPermissionScreen(
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showDialog) {
-        PermissionDialog(
+        HistoryPermissionDialog(
             onDismiss = { showDialog = false },
             onGrantPermission = onGrantPermission
         )
@@ -139,7 +152,7 @@ private fun NoPermissionScreen(
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.history_disabled_card_text),
+                text = stringResource(R.string.history_disabled_card_description),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Justify
             )
@@ -147,37 +160,6 @@ private fun NoPermissionScreen(
 
         AddressHistoryList(items)
     }
-}
-
-@Composable
-fun PermissionDialog(onDismiss: () -> Unit, onGrantPermission: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.are_you_sure)) },
-        text = {
-            Text(
-                text = stringResource(R.string.history_no_permission_dialog_text),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify
-            )
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.error,
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                )
-            ) {
-                Text(stringResource(R.string.cancel))
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onGrantPermission) {
-                Text(stringResource(R.string.ok))
-            }
-        }
-    )
 }
 
 @Composable
@@ -245,19 +227,6 @@ private fun PermissionsDisabledScreenPreview() {
                         date = "January 1, 2024"
                     )
                 ),
-                onGrantPermission = {}
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun PermissionDialogPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            PermissionDialog(
-                onDismiss = {},
                 onGrantPermission = {}
             )
         }

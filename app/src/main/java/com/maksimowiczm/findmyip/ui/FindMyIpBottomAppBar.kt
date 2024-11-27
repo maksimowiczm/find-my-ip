@@ -17,7 +17,7 @@ import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
-fun FindMyIpBottomAppBar(
+internal fun FindMyIpBottomAppBar(
     selectedBottomBarItem: Route?,
     onHomeClick: () -> Unit,
     onAddressHistoryClick: () -> Unit,
@@ -27,7 +27,11 @@ fun FindMyIpBottomAppBar(
     NavigationBar(modifier) {
         NavigationBarItem(
             selected = selectedBottomBarItem == Route.CurrentAddress,
-            onClick = onHomeClick,
+            onClick = {
+                if (selectedBottomBarItem != Route.CurrentAddress) {
+                    onHomeClick()
+                }
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -38,7 +42,11 @@ fun FindMyIpBottomAppBar(
         )
         NavigationBarItem(
             selected = selectedBottomBarItem == Route.AddressHistory,
-            onClick = onAddressHistoryClick,
+            onClick = {
+                if (selectedBottomBarItem != Route.AddressHistory) {
+                    onAddressHistoryClick()
+                }
+            },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_history_24),
@@ -49,7 +57,11 @@ fun FindMyIpBottomAppBar(
         )
         NavigationBarItem(
             selected = selectedBottomBarItem == Route.Settings,
-            onClick = onSettingsClick,
+            onClick = {
+                if (selectedBottomBarItem != Route.Settings) {
+                    onSettingsClick()
+                }
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Settings,

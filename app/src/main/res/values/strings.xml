@@ -1,12 +1,10 @@
 <resources>
     <string name="app_name">Find my IP</string>
-    <string name="history_no_permission_screen_text">Tracking your IP address is disabled by default. Enable it to see your address history. You can always change this setting in the app settings.</string>
-    <string name="history_no_permission_dialog_text">You are about to enable tracking your IP address. This will allow the app to save your address history. You can always change this setting in the app settings.</string>
+
     <string name="tap_to_enable">Tap to enable</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="history">History</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="tap_to_refresh">Tap to refresh</string>
@@ -15,16 +13,34 @@
     <string name="refreshing">Refreshing</string>
     <string name="your_ip_address_is">Your IP address is</string>
     <string name="empty">Empty</string>
-    <string name="save_history">Save history</string>
-    <string name="history_settings_description">This allows the app to save your address history.</string>
-    <string name="clear_history_dialog_text">This action is irreversible. Are you sure you want to clear the history?</string>
     <string name="clear">Clear</string>
-    <string name="clear_history">Clear history</string>
-    <string name="history_disabled_card_text">You have disabled saving history. Tap to enable.</string>
     <string name="enable">Enable</string>
-    <string name="background_service_settings_title">Background service</string>
-    <string name="background_service_settings_description">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
+
+    <!-- START: address history -->
+    <string name="history">History</string>
+
+    <string name="history_save">Save history</string>
+    <string name="history_save_description">Save your IP address history.</string>
+
+    <string name="history_clear">Clear history</string>
+    <string name="history_clear_description">Clear all saved addresses</string>
+    <string name="history_clear_dialog_description">This action is irreversible. Are you sure you want to clear the history?</string>
+
+    <string name="history_no_permission_description">Tracking your IP address is disabled by default. Enable it to see your address history. You can always change this setting in the app settings.</string>
+    <string name="history_no_permission_dialog_description">You are about to enable tracking your IP address. This will allow the app to save your address history. You can always change this setting in the app settings.</string>
+
+    <string name="history_disabled_description">To see and change the history settings, enable the history first.</string>
+    <string name="history_disabled_card_description">You have disabled saving history. Tap to enable.</string>
+
+    <string name="history_background_service_title">Background service</string>
+    <string name="history_background_service_description">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
+    <string name="check_every_n_minutes">Check every %1$s minutes</string>
     <string name="learn_about_doze">Click here to learn more about Doze mode.</string>
     <string name="doze_link">https://source.android.com/docs/core/power/platform_mgmt</string>
-    <string name="check_every_n_minutes">Check every %1$s minutes</string>
+    <!-- END: address history settings -->
+
+    <string name="back">Back</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+
 </resources>

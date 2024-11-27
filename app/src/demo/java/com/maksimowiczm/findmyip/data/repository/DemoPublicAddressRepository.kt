@@ -4,9 +4,9 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.network.CurrentAddressState
+import java.util.Calendar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import java.util.Calendar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
