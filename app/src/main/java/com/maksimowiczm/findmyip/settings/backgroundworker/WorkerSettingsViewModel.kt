@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
-import com.maksimowiczm.findmyip.backgroundworker.BackgroundWorker
 import com.maksimowiczm.findmyip.data.Keys
 import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
+import com.maksimowiczm.findmyip.data.worker.AddressHistoryBackgroundWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -29,7 +29,7 @@ internal class WorkerSettingsViewModel @Inject constructor(
 ) : ViewModel() {
     val workerStatus = WorkManager
         .getInstance(applicationContext)
-        .getWorkInfosByTagFlow(BackgroundWorker.Companion.TAG)
+        .getWorkInfosByTagFlow(AddressHistoryBackgroundWorker.Companion.TAG)
         .map { infos ->
             if (infos.size > 1) {
                 Log.w("WorkerSettingsViewModel", "More than one worker with the same tag")

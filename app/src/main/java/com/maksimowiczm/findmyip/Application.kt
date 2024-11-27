@@ -4,16 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.maksimowiczm.findmyip.backgroundworker.BackgroundWorker
 import com.maksimowiczm.findmyip.data.Keys
 import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
+import com.maksimowiczm.findmyip.data.worker.AddressHistoryBackgroundWorker
 import dagger.hilt.android.HiltAndroidApp
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +36,7 @@ class Application : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
 
+        // Start the background address history worker based on user preferences
         workerJob = combine(
             userPreferencesRepository
                 .get(Keys.run_background_worker).drop(1).distinctUntilChanged(),
@@ -51,25 +47,12 @@ class Application : Application(), Configuration.Provider {
 
             if (runWorker != true || interval == null) {
                 Log.d(TAG, "Cancelling background worker")
-                workManager.cancelAllWorkByTag(BackgroundWorker.TAG)
+                AddressHistoryBackgroundWorker.cancelPeriodicWorkRequest(workManager)
                 return@combine
             }
 
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val request = PeriodicWorkRequestBuilder<BackgroundWorker>(interval, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .addTag(BackgroundWorker.TAG)
-                .build()
-
             Log.d(TAG, "Enqueuing background worker")
-            workManager.enqueueUniquePeriodicWork(
-                BackgroundWorker.TAG,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-                request
-            )
+            AddressHistoryBackgroundWorker.createPeriodicWorkRequest(workManager, interval)
         }.launchIn(CoroutineScope(Dispatchers.Default + SupervisorJob()))
     }
 
