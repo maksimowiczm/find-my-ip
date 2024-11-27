@@ -3,31 +3,30 @@ package com.maksimowiczm.findmyip.domain
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
-import com.maksimowiczm.findmyip.data.Keys
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.network.CurrentAddressState
 import com.maksimowiczm.findmyip.data.repository.PublicAddressRepository
-import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 class ObserveCurrentAddressUseCase @Inject constructor(
     private val publicAddressRepository: PublicAddressRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val decideSaveAddressInHistoryUseCase: DecideSaveAddressInHistoryUseCase
 ) {
     operator fun invoke(): Flow<Result<Address?, Unit>> {
-        return combine(
-            publicAddressRepository.observeCurrentAddress(),
-            userPreferencesRepository.get(Keys.save_history)
-        ) { addressState, saveHistoryResult ->
+        return publicAddressRepository.observeCurrentAddress().map { addressState ->
             val address = when (addressState) {
-                is CurrentAddressState.Error -> return@combine Err(Unit)
-                CurrentAddressState.Loading, CurrentAddressState.None -> return@combine Ok(null)
+                is CurrentAddressState.Error -> return@map Err(Unit)
+
+                CurrentAddressState.Loading,
+                CurrentAddressState.None,
+                CurrentAddressState.NetworkUnavailable -> return@map Ok(null)
+
                 is CurrentAddressState.Success -> addressState.address
             }
 
-            if (saveHistoryResult == true) {
+            if (decideSaveAddressInHistoryUseCase(address)) {
                 publicAddressRepository.insertIfDistinct(address)
             }
 

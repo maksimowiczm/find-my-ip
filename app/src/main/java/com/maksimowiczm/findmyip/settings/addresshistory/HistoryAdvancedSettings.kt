@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -50,6 +51,8 @@ internal fun HistoryAdvancedSettings(
         onNavigateBack = onNavigateBack,
         modifier = modifier
     ) {
+        NetworkTypeSettings()
+        HorizontalDivider()
         WorkerSettings()
     }
 }
@@ -79,11 +82,9 @@ private fun HistoryAdvancedSettings(
             )
         }
     ) { innerPadding ->
-        Column(Modifier.padding(innerPadding)) {
+        Column(Modifier.padding(top = innerPadding.calculateTopPadding())) {
             ListItem(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .clickable(onClick = { onEnabledChange(!enabled) }),
+                modifier = Modifier.clickable(onClick = { onEnabledChange(!enabled) }),
                 colors = ListItemDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),

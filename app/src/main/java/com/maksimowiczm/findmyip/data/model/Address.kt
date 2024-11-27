@@ -4,5 +4,6 @@ import java.util.Date
 
 data class Address(
     val ip: String,
-    val date: Date
+    val date: Date,
+    val networkType: NetworkType?
 )

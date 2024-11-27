@@ -32,6 +32,9 @@
     <string name="history_disabled_description">To see and change the history settings, enable the history first.</string>
     <string name="history_disabled_card_description">You have disabled saving history. Tap to enable.</string>
 
+    <string name="history_network_type">Network Type</string>
+    <string name="history_network_type_description">You can choose which network types to store in the history.</string>
+
     <string name="history_background_service_title">Background service</string>
     <string name="history_background_service_description">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
     <string name="check_every_n_minutes">Check every %1$s minutes</string>
@@ -42,5 +45,8 @@
     <string name="back">Back</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="wi_fi">Wi-Fi</string>
+    <string name="mobile">Mobile</string>
+    <string name="vpn">VPN</string>
 
 </resources>

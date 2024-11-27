@@ -54,7 +54,8 @@ class PublicAddressRepositoryImpl(
 private fun AddressEntity.toAddress(): Address {
     return Address(
         ip = ip,
-        date = Calendar.getInstance().apply { timeInMillis = timestamp.toLong() }.time
+        date = Calendar.getInstance().apply { timeInMillis = timestamp.toLong() }.time,
+        networkType = null
     )
 }
 
