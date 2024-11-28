@@ -34,7 +34,7 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
 fun CurrentAddressScreen(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier,
     viewModel: CurrentAddressViewModel = hiltViewModel()
 ) {
     val currentAddressUiState = viewModel.currentAddressUiState.collectAsStateWithLifecycle()

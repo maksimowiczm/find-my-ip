@@ -53,7 +53,7 @@ private fun NetworkTypeSettings(
         modifier.padding(top = 8.dp)
     ) {
         Column(
-            modifier.padding(horizontal = 8.dp)
+            Modifier.padding(horizontal = 8.dp)
         ) {
             Text(
                 modifier = Modifier.padding(vertical = 8.dp),

@@ -2,6 +2,7 @@ package com.maksimowiczm.findmyip.settings.addresshistory
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -14,7 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -66,54 +66,50 @@ private fun HistoryAdvancedSettings(
     modifier: Modifier = Modifier,
     Settings: @Composable (LazyItemScope.() -> Unit)
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text("Address history settings") },
-                navigationIcon = {
-                    IconButton(onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(Modifier.padding(top = innerPadding.calculateTopPadding())) {
-            ListItem(
-                modifier = Modifier.clickable(onClick = { onEnabledChange(!enabled) }),
-                colors = ListItemDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
-                headlineContent = {
-                    if (enabled) {
-                        Text(stringResource(R.string.on))
-                    } else {
-                        Text(stringResource(R.string.off))
-                    }
-                },
-                trailingContent = {
-                    Switch(
-                        checked = enabled,
-                        onCheckedChange = onEnabledChange
+    Column(modifier) {
+        TopAppBar(
+            title = { Text("Address history settings") },
+            navigationIcon = {
+                IconButton(onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back)
                     )
                 }
-            )
-            LazyColumn {
-                item {
-                    if (!enabled) {
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = stringResource(R.string.history_disabled_description),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    } else {
-                        Settings()
-                    }
+            },
+            // These were already set in the parent
+            windowInsets = WindowInsets(0.dp)
+        )
+        ListItem(
+            modifier = Modifier.clickable(onClick = { onEnabledChange(!enabled) }),
+            colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            ),
+            headlineContent = {
+                if (enabled) {
+                    Text(stringResource(R.string.on))
+                } else {
+                    Text(stringResource(R.string.off))
+                }
+            },
+            trailingContent = {
+                Switch(
+                    checked = enabled,
+                    onCheckedChange = onEnabledChange
+                )
+            }
+        )
+        LazyColumn {
+            item {
+                if (!enabled) {
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = stringResource(R.string.history_disabled_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                } else {
+                    Settings()
                 }
             }
         }

@@ -15,7 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,20 +36,18 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
 fun AddressHistoryScreen(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier,
     viewModel: AddressHistoryViewModel = hiltViewModel()
 ) {
     val hasPermission by viewModel.hasPermission.collectAsStateWithLifecycle()
     val addressHistoryState by viewModel.addressHistoryState.collectAsStateWithLifecycle()
 
-    Scaffold(modifier) { innerPadding ->
-        AddressHistoryScreen(
-            modifier = Modifier.padding(innerPadding),
-            state = addressHistoryState,
-            hasPermission = hasPermission,
-            onGrantPermission = viewModel::onGrantPermission
-        )
-    }
+    AddressHistoryScreen(
+        modifier = modifier,
+        state = addressHistoryState,
+        hasPermission = hasPermission,
+        onGrantPermission = viewModel::onGrantPermission
+    )
 }
 
 @Composable
@@ -84,8 +81,8 @@ private fun AddressHistoryScreen(
 
     if (state is AddressHistoryState.Loaded) {
         return AddressHistoryList(
-            items = state.addressHistory,
-            modifier = modifier
+            modifier = modifier,
+            items = state.addressHistory
         )
     }
 }
