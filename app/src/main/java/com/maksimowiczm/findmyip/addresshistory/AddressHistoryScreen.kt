@@ -7,19 +7,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.domain.AddressHistory
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddressHistoryScreen(
@@ -40,58 +40,75 @@ fun AddressHistoryScreen(
     viewModel: AddressHistoryViewModel = hiltViewModel()
 ) {
     val hasPermission by viewModel.hasPermission.collectAsStateWithLifecycle()
-    val addressHistoryState by viewModel.addressHistoryState.collectAsStateWithLifecycle()
+    val ipv4HistoryState by viewModel.ipv4HistoryState.collectAsStateWithLifecycle()
+    val ipv6HistoryState by viewModel.ipv6HistoryState.collectAsStateWithLifecycle()
 
     AddressHistoryScreen(
         modifier = modifier,
-        state = addressHistoryState,
         hasPermission = hasPermission,
-        onGrantPermission = viewModel::onGrantPermission
+        onGrantPermission = viewModel::onGrantPermission,
+        ipv4HistoryState = ipv4HistoryState,
+        ipv6HistoryState = ipv6HistoryState
     )
 }
 
 @Composable
 private fun AddressHistoryScreen(
-    state: AddressHistoryState,
     hasPermission: Boolean,
     onGrantPermission: () -> Unit,
+    ipv4HistoryState: AddressHistoryState,
+    ipv6HistoryState: AddressHistoryState,
     modifier: Modifier = Modifier
 ) {
-    if (state is AddressHistoryState.Loading) {
+    if (ipv4HistoryState is AddressHistoryState.Loading ||
+        ipv6HistoryState is AddressHistoryState.Loading
+    ) {
         return Box(modifier) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     }
 
-    // Only if the user has not granted permission and history is empty
     if (!hasPermission) {
-        return if (state is AddressHistoryState.Loaded && !state.addressHistory.isEmpty()) {
-            NoPermissionScreen(
-                modifier = modifier,
-                items = state.addressHistory,
-                onGrantPermission = onGrantPermission
-            )
-        } else {
-            NoPermissionScreen(
-                modifier = modifier,
-                onGrantPermission = onGrantPermission
-            )
-        }
+        return NoPermissionScreen(
+            modifier = modifier,
+            onGrantPermission = onGrantPermission
+        )
     }
 
-    if (state is AddressHistoryState.Loaded) {
+    if (
+        ipv4HistoryState is AddressHistoryState.Loaded &&
+        ipv6HistoryState is AddressHistoryState.Disabled
+    ) {
         return AddressHistoryList(
             modifier = modifier,
-            items = state.addressHistory
+            items = ipv4HistoryState.addressHistory
+        )
+    }
+
+    if (
+        ipv4HistoryState is AddressHistoryState.Disabled &&
+        ipv6HistoryState is AddressHistoryState.Loaded
+    ) {
+        return AddressHistoryList(
+            modifier = modifier,
+            items = ipv6HistoryState.addressHistory
+        )
+    }
+
+    if (
+        ipv4HistoryState is AddressHistoryState.Loaded &&
+        ipv6HistoryState is AddressHistoryState.Loaded
+    ) {
+        return TabAddressHistoryList(
+            modifier = modifier,
+            ipv4History = ipv4HistoryState.addressHistory,
+            ipv6History = ipv6HistoryState.addressHistory
         )
     }
 }
 
 @Composable
-private fun NoPermissionScreen(
-    modifier: Modifier = Modifier.fillMaxSize(),
-    onGrantPermission: () -> Unit
-) {
+private fun NoPermissionScreen(onGrantPermission: () -> Unit, modifier: Modifier = Modifier) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showDialog) {
@@ -122,136 +139,93 @@ private fun NoPermissionScreen(
 }
 
 @Composable
-private fun NoPermissionScreen(
-    onGrantPermission: () -> Unit,
-    items: List<AddressHistory>,
-    modifier: Modifier = Modifier.fillMaxSize()
+private fun TabAddressHistoryList(
+    ipv4History: List<AddressHistory>,
+    ipv6History: List<AddressHistory>,
+    modifier: Modifier = Modifier
 ) {
-    var showDialog by rememberSaveable { mutableStateOf(false) }
-
-    if (showDialog) {
-        HistoryPermissionDialog(
-            onDismiss = { showDialog = false },
-            onGrantPermission = onGrantPermission
-        )
-    }
-
     Column(modifier) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clickable(onClick = { showDialog = true }),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.error
-            )
+        val pagerState = rememberPagerState(pageCount = { 2 })
+        val coroutineScope = rememberCoroutineScope()
+
+        TabRow(
+            selectedTabIndex = pagerState.currentPage
+
         ) {
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.history_disabled_card_description),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify
-            )
+            Tab(
+                selected = pagerState.currentPage == 0,
+                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(0) } }
+            ) {
+                Text(
+                    modifier = Modifier.padding(10.dp),
+                    text = stringResource(R.string.ipv4)
+                )
+            }
+            Tab(
+                selected = pagerState.currentPage == 1,
+                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(1) } }
+            ) {
+                Text(
+                    modifier = Modifier.padding(10.dp),
+                    text = stringResource(R.string.ipv6)
+                )
+            }
         }
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) { page ->
+            when (page) {
+                0 -> AddressHistoryList(
+                    modifier = Modifier.fillMaxSize(),
+                    items = ipv4History
+                )
 
-        AddressHistoryList(items)
-    }
-}
-
-@Composable
-private fun AddressHistoryList(items: List<AddressHistory>, modifier: Modifier = Modifier) {
-    if (items.isEmpty()) {
-        AddressHistoryEmptyList(modifier)
-    } else {
-        LazyColumn(modifier) {
-            items(
-                items = items.mapIndexed { index, item -> item to index },
-                key = { (_, index) -> index }
-            ) { (it, index) ->
-                AddressHistoryListItem(address = it)
-                if (index < items.size - 1) {
-                    HorizontalDivider()
-                }
+                1 -> AddressHistoryList(
+                    modifier = Modifier.fillMaxSize(),
+                    items = ipv6History
+                )
             }
         }
     }
 }
 
-@Composable
-private fun AddressHistoryListItem(address: AddressHistory, modifier: Modifier = Modifier) {
-    ListItem(
-        modifier = modifier,
-        headlineContent = { Text(text = address.ip) },
-        supportingContent = { Text(text = address.date) }
-    )
-}
-
-@Composable
-private fun AddressHistoryEmptyList(modifier: Modifier = Modifier.fillMaxSize()) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            style = MaterialTheme.typography.titleLarge,
-            text = stringResource(R.string.empty)
-        )
-    }
-}
-
 @PreviewLightDark
 @Composable
-private fun NoPermissionScreenPreview() {
+private fun PreviewAddressHistoryScreen() {
     FindMyIpAppTheme {
         Surface {
-            NoPermissionScreen(
-                onGrantPermission = {}
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun PermissionsDisabledScreenPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            NoPermissionScreen(
-                items = listOf(
-                    AddressHistory(
-                        ip = "127.0.0.1",
-                        date = "January 1, 2024"
+            AddressHistoryScreen(
+                hasPermission = true,
+                onGrantPermission = {},
+                ipv4HistoryState = AddressHistoryState.Loaded(
+                    listOf(
+                        AddressHistory(
+                            ip = "127.0.0.1",
+                            date = "January 1, 2024"
+                        ),
+                        AddressHistory(
+                            ip = "127.0.0.1",
+                            date = "January 2, 2024"
+                        )
                     )
                 ),
-                onGrantPermission = {}
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun AddressHistoryListItemPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            AddressHistoryListItem(
-                modifier = Modifier.fillMaxWidth(),
-                address = AddressHistory(
-                    ip = "127.0.0.1",
-                    date = "January 1, 2024"
+                ipv6HistoryState = AddressHistoryState.Loaded(
+                    listOf(
+                        AddressHistory(
+                            ip = "::1",
+                            date = "January 1, 2024"
+                        ),
+                        AddressHistory(
+                            ip = "::1",
+                            date = "January 2, 2024"
+                        )
+                    )
                 )
             )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun AddressHistoryEmptyListPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            AddressHistoryEmptyList()
         }
     }
 }
