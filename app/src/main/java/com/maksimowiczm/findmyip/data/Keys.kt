@@ -14,6 +14,10 @@ object Keys {
     val run_background_worker = booleanPreferencesKey("run_background_worker")
     val background_worker_interval = longPreferencesKey("background_worker_interval")
 
+    val ipv4_enabled = booleanPreferencesKey("ipv4_enabled")
+    val ipv6_enabled = booleanPreferencesKey("ipv6_enabled")
+    val ip_features_tested = booleanPreferencesKey("ip_features_tested")
+
     /**
      * Default preferences values.
      * Should be used to explicitly define certain preferences which should not be null by default.
@@ -25,6 +29,10 @@ object Keys {
         Pair(save_mobile_history, true),
         Pair(save_vpn_history, false),
 
-        Pair(run_background_worker, false)
+        Pair(run_background_worker, false),
+
+        Pair(ip_features_tested, false),
+        Pair(ipv4_enabled, false),
+        Pair(ipv6_enabled, false)
     )
 }

@@ -1,188 +1,157 @@
 package com.maksimowiczm.findmyip.currentaddress
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
-import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 
 @Composable
-fun CurrentAddressScreen(
+internal fun CurrentAddressScreen(
     modifier: Modifier = Modifier,
-    viewModel: CurrentAddressViewModel = hiltViewModel()
+    viewModel: AddressViewModel = hiltViewModel()
 ) {
-    val currentAddressUiState = viewModel.currentAddressUiState.collectAsStateWithLifecycle()
-    val uiState = currentAddressUiState.value
+    val ipv4 by viewModel.ipv4.collectAsStateWithLifecycle()
+    val ipv6 by viewModel.ipv6.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
-    when (uiState) {
-        CurrentAddressUiState.Loading -> LoadingCurrentAddress(modifier = modifier)
-
-        is CurrentAddressUiState.Success ->
-            CurrentAddress(
-                modifier = modifier,
-                address = uiState.address,
-                onRefresh = viewModel::refreshCurrentAddress
-            )
-
-        CurrentAddressUiState.Error ->
-            ErrorCurrentAddress(
-                modifier = modifier,
-                onRefresh = viewModel::refreshCurrentAddress
-            )
-    }
+    CurrentAddressScreen(
+        modifier = modifier,
+        isLoading = isLoading,
+        ipv4 = ipv4,
+        ipv6 = ipv6,
+        onRefresh = viewModel::refresh
+    )
 }
 
 @Composable
-private fun CurrentAddress(address: String, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+private fun CurrentAddressScreen(
+    isLoading: Boolean,
+    ipv4: AddressState,
+    ipv6: AddressState,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = modifier.clickable { onRefresh() },
+        modifier = if (!isLoading) {
+            modifier.clickable(onClick = onRefresh)
+        } else {
+            modifier
+        },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (isLoading || ipv4 is AddressState.Loading || ipv6 is AddressState.Loading) {
+            CircularProgressIndicator()
+            return
+        }
+
         Text(
-            modifier = Modifier.padding(bottom = 16.dp),
             text = stringResource(R.string.your_ip_address_is),
-            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge
         )
 
-        Text(
-            text = address,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
-        )
+        when (ipv4) {
+            AddressState.Error -> ErrorAddress(
+                modifier = Modifier.padding(top = 8.dp),
+                internetProtocolVersion = InternetProtocolVersion.IPv4
+            )
+
+            is AddressState.Loaded -> LoadedAddress(
+                modifier = Modifier.padding(top = 8.dp),
+                internetProtocolVersion = InternetProtocolVersion.IPv4,
+                addressState = ipv4
+            )
+
+            AddressState.Loading,
+            AddressState.Disabled -> Unit
+        }
+        when (ipv6) {
+            AddressState.Error -> ErrorAddress(
+                modifier = Modifier.padding(top = 8.dp),
+                internetProtocolVersion = InternetProtocolVersion.IPv6
+            )
+
+            is AddressState.Loaded -> LoadedAddress(
+                modifier = Modifier.padding(top = 8.dp),
+                internetProtocolVersion = InternetProtocolVersion.IPv6,
+                addressState = ipv6
+            )
+
+            AddressState.Loading,
+            AddressState.Disabled -> Unit
+        }
 
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = stringResource(R.string.tap_to_refresh),
-            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge
         )
     }
 }
 
 @Composable
-private fun LoadingCurrentAddress(modifier: Modifier = Modifier) {
-    val infiniteTransition = rememberInfiniteTransition(label = "refreshTransition")
-
-    val rotation by infiniteTransition.animateFloat(
-        label = "refreshAnimation",
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec =
-        infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = LinearEasing)
-        )
-    )
-
-    Column(
-        modifier = modifier.wrapContentSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+private fun LoadedAddress(
+    internetProtocolVersion: InternetProtocolVersion,
+    addressState: AddressState.Loaded,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom
     ) {
-        Icon(
-            modifier =
-            Modifier
-                .padding(bottom = 16.dp)
-                .size(48.dp)
-                .rotate(rotation),
-            imageVector = Icons.Default.Refresh,
-            contentDescription = stringResource(R.string.refreshing)
-        )
-
         Text(
-            text = stringResource(R.string.fetching_your_ip_address),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge
+            text = addressState.address,
+            style = if (addressState.address.length < 16) {
+                MaterialTheme.typography.titleLarge
+            } else {
+                MaterialTheme.typography.titleSmall
+            }
         )
+        InternetProtocolVersionLabel(internetProtocolVersion, Modifier.padding(start = 4.dp))
     }
 }
 
 @Composable
-private fun ErrorCurrentAddress(modifier: Modifier = Modifier, onRefresh: () -> Unit) {
-    Column(
-        modifier = modifier.clickable { onRefresh() },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+private fun ErrorAddress(
+    internetProtocolVersion: InternetProtocolVersion,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            modifier = Modifier.padding(bottom = 16.dp),
-            text = stringResource(R.string.failed_to_fetch_your_ip_address),
-            textAlign = TextAlign.Center,
+            text = stringResource(R.string.unavailable),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.error
         )
-
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = stringResource(R.string.tap_to_refresh),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        InternetProtocolVersionLabel(internetProtocolVersion, Modifier.padding(start = 4.dp))
     }
 }
 
-@PreviewLightDark
 @Composable
-private fun CurrentAddressPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            CurrentAddress(
-                modifier = Modifier.fillMaxSize(),
-                address = "127.0.0.1",
-                onRefresh = {}
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun LoadingCurrentAddressPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            LoadingCurrentAddress(
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun ErrorCurrentAddressPreview() {
-    FindMyIpAppTheme {
-        Surface {
-            ErrorCurrentAddress(
-                modifier = Modifier.fillMaxSize(),
-                onRefresh = {}
-            )
-        }
-    }
+private fun InternetProtocolVersionLabel(
+    internetProtocolVersion: InternetProtocolVersion,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier,
+        text = internetProtocolVersion.name,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.outline
+    )
 }

@@ -11,6 +11,8 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.github.michaelbull.result.getOrElse
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.ObserveCurrentAddressError
 import com.maksimowiczm.findmyip.domain.ObserveCurrentAddressUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -24,8 +26,21 @@ class AddressHistoryBackgroundWorker @AssistedInject constructor(
     private val observeCurrentAddressUseCase: ObserveCurrentAddressUseCase
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result {
-        observeCurrentAddressUseCase().first().getOrElse {
-            Log.w(TAG, "Failed to refresh current address")
+        observeCurrentAddressUseCase(InternetProtocolVersion.IPv4).first().getOrElse { err ->
+            if (err is ObserveCurrentAddressError.Disabled) {
+                return Result.success()
+            }
+
+            Log.w(TAG, "Failed to refresh ipv4 address")
+            return Result.failure()
+        }
+
+        observeCurrentAddressUseCase(InternetProtocolVersion.IPv6).first().getOrElse {
+            if (it is ObserveCurrentAddressError.Disabled) {
+                return Result.success()
+            }
+
+            Log.w(TAG, "Failed to refresh ipv6 address")
             return Result.failure()
         }
 

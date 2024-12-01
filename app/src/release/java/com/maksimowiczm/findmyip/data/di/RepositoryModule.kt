@@ -4,6 +4,8 @@ import android.content.Context
 import com.maksimowiczm.findmyip.data.database.AppDatabase
 import com.maksimowiczm.findmyip.data.database.entity.AddressEntityDao
 import com.maksimowiczm.findmyip.data.network.CurrentAddressDataSource
+import com.maksimowiczm.findmyip.data.network.IPv4DataSource
+import com.maksimowiczm.findmyip.data.network.IPv6DataSource
 import com.maksimowiczm.findmyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
 import com.maksimowiczm.findmyip.data.repository.impl.PublicAddressRepositoryImpl
@@ -21,11 +23,13 @@ import kotlinx.coroutines.Dispatchers
 object RepositoryModule {
     @Provides
     fun providePublicAddressRepository(
-        currentAddressDataSource: CurrentAddressDataSource,
+        @IPv4DataSource ipv4DataSource: CurrentAddressDataSource,
+        @IPv6DataSource ipv6DataSource: CurrentAddressDataSource,
         database: AppDatabase,
         addressEntityDao: AddressEntityDao
     ): PublicAddressRepository = PublicAddressRepositoryImpl(
-        currentAddressDataSource = currentAddressDataSource,
+        ipv4DataSource = ipv4DataSource,
+        ipv6DataSource = ipv6DataSource,
         database = database,
         addressEntityDao = addressEntityDao
     )

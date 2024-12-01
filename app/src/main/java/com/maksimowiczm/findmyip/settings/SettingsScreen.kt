@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.settings.addresshistory.HistorySettings
+import com.maksimowiczm.findmyip.settings.internetprotocolversion.InternetProtocolVersionSettings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +30,7 @@ internal fun SettingsScreen(onHistorySettingsClick: () -> Unit, modifier: Modifi
             item {
                 HistorySettings(onHistorySettingsClick = onHistorySettingsClick)
                 HorizontalDivider()
+                InternetProtocolVersionSettings()
             }
         }
     }

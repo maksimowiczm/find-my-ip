@@ -7,8 +7,10 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import com.maksimowiczm.findmyip.data.model.Address
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import java.net.URL
 import java.util.Calendar
+import javax.inject.Qualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +28,9 @@ sealed interface CurrentAddressState {
 
 class CurrentAddressDataSource(
     private val networkDispatcher: CoroutineDispatcher,
-    private val connectivityObserver: ConnectivityObserver
+    private val connectivityObserver: ConnectivityObserver,
+    private val addressProviderUrl: String,
+    private val internetProtocolVersion: InternetProtocolVersion
 ) {
     private val currentAddress = MutableStateFlow<CurrentAddressState>(CurrentAddressState.None)
 
@@ -53,12 +57,13 @@ class CurrentAddressDataSource(
 
             // theoretically network request could be executed on mobile data, it a race condition
             return@withContext runCatching {
-                URL("https://api.ipify.org").readText()
+                URL(addressProviderUrl).readText()
             }.map {
                 val address = Address(
                     ip = it,
                     date = Calendar.getInstance().time,
-                    networkType = networkType
+                    networkType = networkType,
+                    internetProtocolVersion = internetProtocolVersion
                 )
                 currentAddress.emit(CurrentAddressState.Success(address))
                 Ok(address)
@@ -69,3 +74,11 @@ class CurrentAddressDataSource(
         }
     }
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IPv4DataSource
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IPv6DataSource

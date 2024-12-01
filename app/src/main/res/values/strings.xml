@@ -42,11 +42,20 @@
     <string name="doze_link">https://source.android.com/docs/core/power/platform_mgmt</string>
     <!-- END: address history settings -->
 
+    <!-- START: address types -->
+    <string name="ipv4">IPv4</string>
+    <string name="ipv6">IPv6</string>
+
+    <string name="internet_protocol">Internet Protocol</string>
+    <string name="internet_protocol_description">Choose which Internet Protocol to use. At least one must be enabled.</string>
+    <!-- END: address types -->
+
     <string name="back">Back</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="wi_fi">Wi-Fi</string>
     <string name="mobile">Mobile</string>
     <string name="vpn">VPN</string>
+    <string name="unavailable">Unavailable</string>
 
 </resources>

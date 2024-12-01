@@ -20,6 +20,9 @@ android {
         versionName = "v1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "IPV4_PROVIDER", "\"https://api.ipify.org\"")
+        buildConfigField("String", "IPV6_PROVIDER", "\"https://api6.ipify.org\"")
     }
 
     buildTypes {
@@ -65,6 +68,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
