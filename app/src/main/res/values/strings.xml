@@ -18,6 +18,7 @@
 
     <!-- START: address history -->
     <string name="history">History</string>
+    <string name="history_description">Customize your IP address history settings.</string>
 
     <string name="history_save">Save history</string>
     <string name="history_save_description">Save your IP address history.</string>

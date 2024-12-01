@@ -1,15 +1,10 @@
 package com.maksimowiczm.findmyip.settings.backgroundworker
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +12,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -32,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkInfo
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.settings.SettingToggle
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlin.math.roundToInt
 
@@ -72,41 +67,18 @@ private fun WorkerSettings(
             style = MaterialTheme.typography.titleMedium
         )
         WorkerServiceDescription()
-        Row(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 64.dp)
-                .clickable(
-                    onClick = {
-                        if (isEnabled) {
-                            onDisable()
-                        } else {
-                            onEnable(intervalIndex)
-                        }
-                    }
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(1f),
-                text = stringResource(R.string.enable),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Switch(
-                checked = isEnabled,
-                onCheckedChange = {
-                    if (it) {
-                        onEnable(intervalIndex)
-                    } else {
-                        onDisable()
-                    }
-                },
-                modifier = Modifier
-                    .padding(8.dp)
-                    .height(48.dp)
-            )
-        }
+        SettingToggle(
+            headlineContent = { Text(stringResource(R.string.enable)) },
+            checked = isEnabled,
+            onCheckedChange = {
+                if (it) {
+                    onEnable(intervalIndex)
+                } else {
+                    onDisable()
+                }
+            },
+            enabled = true
+        )
         if (isEnabled) {
             WorkerServiceSettings(intervalIndex, intervals, onEnable, workerStatus)
         }

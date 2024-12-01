@@ -9,10 +9,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
-import com.maksimowiczm.findmyip.settings.addresshistory.HistorySettings
+import com.maksimowiczm.findmyip.settings.addresshistory.AddressHistorySettingsDescription
+import com.maksimowiczm.findmyip.settings.addresshistory.ClearHistorySetting
+import com.maksimowiczm.findmyip.settings.addresshistory.SaveAddressHistorySettings
 import com.maksimowiczm.findmyip.settings.internetprotocolversion.InternetProtocolVersionSettings
+import com.maksimowiczm.findmyip.settings.internetprotocolversion.InternetProtocolVersionSettingsDescription
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,9 +25,25 @@ internal fun SettingsScreen(onHistorySettingsClick: () -> Unit, modifier: Modifi
         TopAppBar(title = { Text(stringResource(R.string.settings)) })
         LazyColumn {
             item {
-                HistorySettings(onHistorySettingsClick = onHistorySettingsClick)
+                AddressHistorySettingsDescription()
+            }
+            item {
+                SaveAddressHistorySettings(onHistorySettingsClick)
+            }
+            item {
+                ClearHistorySetting()
+            }
+            item {
                 HorizontalDivider()
+            }
+            item {
+                InternetProtocolVersionSettingsDescription()
+            }
+            item {
                 InternetProtocolVersionSettings()
+            }
+            item {
+                HorizontalDivider()
             }
         }
     }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+// TODO don't allow disabling both
 @HiltViewModel
 internal class InternetProtocolVersionSettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
