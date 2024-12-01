@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -71,14 +72,17 @@ internal class AddressViewModel @Inject constructor(
 
     val isLoading = combine(
         isLoadingV4,
-        isLoadingV6
-    ) { isLoadingV4, isLoadingV6 ->
-        isLoadingV4 || isLoadingV6
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(2000),
-        initialValue = true
-    )
+        isLoadingV6,
+        userPreferencesRepository.get(Keys.ip_features_tested)
+    ) { isLoadingV4, isLoadingV6, tested ->
+        isLoadingV4 || isLoadingV6 || tested != true
+    }
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2000),
+            initialValue = true
+        )
 
     fun refresh() {
         viewModelScope.launch { refresh(InternetProtocolVersion.IPv4) }

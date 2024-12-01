@@ -16,6 +16,7 @@ object Keys {
 
     val ipv4_enabled = booleanPreferencesKey("ipv4_enabled")
     val ipv6_enabled = booleanPreferencesKey("ipv6_enabled")
+    val ip_features_tested = booleanPreferencesKey("ip_features_tested")
 
     /**
      * Default preferences values.
@@ -30,7 +31,8 @@ object Keys {
 
         Pair(run_background_worker, false),
 
-        Pair(ipv4_enabled, true),
+        Pair(ip_features_tested, false),
+        Pair(ipv4_enabled, false),
         Pair(ipv6_enabled, false)
     )
 }
