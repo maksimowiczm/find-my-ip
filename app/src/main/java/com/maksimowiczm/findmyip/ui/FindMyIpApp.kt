@@ -14,8 +14,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.maksimowiczm.findmyip.addresshistory.AddressHistoryScreen
 import com.maksimowiczm.findmyip.currentaddress.CurrentAddressScreen
+import com.maksimowiczm.findmyip.settings.Setting
 import com.maksimowiczm.findmyip.settings.SettingsNavigation
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
@@ -52,15 +54,24 @@ private fun FindMyIpAppContent() {
                 exitTransition = { slideOutOfContainer(SlideDirection.Up) }
             ) {
                 currentRoute = Route.Variant.AddressHistory
-                AddressHistoryScreen(Modifier.fillMaxSize())
+                AddressHistoryScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    onGrantPermission = {
+                        navController.navigateSingleTop(Route.Settings(Setting.SaveHistory))
+                    }
+                )
             }
 
             composable<Route.Settings>(
                 enterTransition = { slideIntoContainer(SlideDirection.Up) },
                 exitTransition = { slideOutOfContainer(SlideDirection.Up) }
             ) {
+                val route = it.toRoute<Route.Settings>()
                 currentRoute = Route.Variant.Settings
-                SettingsNavigation(Modifier.fillMaxSize())
+                SettingsNavigation(
+                    modifier = Modifier.fillMaxSize(),
+                    highlight = route.highlight
+                )
             }
         }
 
@@ -68,12 +79,12 @@ private fun FindMyIpAppContent() {
             selectedBottomBarItem = currentRoute,
             onHomeClick = { navController.navigateSingleTop(Route.CurrentAddress) },
             onAddressHistoryClick = { navController.navigateSingleTop(Route.AddressHistory) },
-            onSettingsClick = { navController.navigateSingleTop(Route.Settings) }
+            onSettingsClick = { navController.navigateSingleTop(Route.Settings(null)) }
         )
     }
 }
 
-fun NavController.navigateSingleTop(route: Any) {
+private fun NavController.navigateSingleTop(route: Any) {
     navigate(route) {
         launchSingleTop = true
     }

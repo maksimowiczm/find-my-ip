@@ -13,11 +13,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AddressHistoryViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository,
+internal class AddressHistoryViewModel @Inject constructor(
+    userPreferencesRepository: UserPreferencesRepository,
     observeAddressHistoryUseCase: ObserveAddressHistoryUseCase
 ) : ViewModel() {
     val hasPermission = userPreferencesRepository.get(Keys.save_history)
@@ -57,12 +56,6 @@ class AddressHistoryViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(2000),
         initialValue = AddressHistoryState.Loading
     )
-
-    fun onGrantPermission() {
-        viewModelScope.launch {
-            userPreferencesRepository.set(Keys.save_history, true)
-        }
-    }
 }
 
 sealed interface AddressHistoryState {

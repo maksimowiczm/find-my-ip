@@ -21,10 +21,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,7 +36,8 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun AddressHistoryScreen(
+internal fun AddressHistoryScreen(
+    onGrantPermission: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: AddressHistoryViewModel = hiltViewModel()
 ) {
@@ -50,7 +48,7 @@ fun AddressHistoryScreen(
     AddressHistoryScreen(
         modifier = modifier,
         hasPermission = hasPermission,
-        onGrantPermission = viewModel::onGrantPermission,
+        onGrantPermission = onGrantPermission,
         ipv4HistoryState = ipv4HistoryState,
         ipv6HistoryState = ipv6HistoryState
     )
@@ -113,17 +111,8 @@ private fun AddressHistoryScreen(
 
 @Composable
 private fun NoPermissionScreen(onGrantPermission: () -> Unit, modifier: Modifier = Modifier) {
-    var showDialog by rememberSaveable { mutableStateOf(false) }
-
-    if (showDialog) {
-        HistoryPermissionDialog(
-            onDismiss = { showDialog = false },
-            onGrantPermission = onGrantPermission
-        )
-    }
-
     Column(
-        modifier = modifier.clickable { showDialog = true },
+        modifier = modifier.clickable(onClick = onGrantPermission),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

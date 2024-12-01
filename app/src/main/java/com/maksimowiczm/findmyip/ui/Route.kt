@@ -1,9 +1,10 @@
 package com.maksimowiczm.findmyip.ui
 
+import com.maksimowiczm.findmyip.settings.Setting
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface Route {
+internal sealed interface Route {
     @Serializable
     data object CurrentAddress : Route
 
@@ -11,7 +12,7 @@ sealed interface Route {
     data object AddressHistory : Route
 
     @Serializable
-    data object Settings : Route
+    data class Settings(val highlight: Setting?) : Route
 
     enum class Variant {
         CurrentAddress,

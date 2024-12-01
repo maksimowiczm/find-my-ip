@@ -21,6 +21,7 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 @Composable
 internal fun SaveAddressHistorySettings(
     onHistorySettingsClick: () -> Unit,
+    highlight: Boolean,
     modifier: Modifier = Modifier,
     viewModel: AddressHistorySettingsViewModel = hiltViewModel()
 ) {
@@ -36,7 +37,8 @@ internal fun SaveAddressHistorySettings(
                 viewModel.disableHistorySettings()
             }
         },
-        onAdvancedSettingsClick = onHistorySettingsClick
+        onAdvancedSettingsClick = onHistorySettingsClick,
+        highlight = highlight
     )
 }
 
@@ -45,6 +47,7 @@ private fun SaveAddressHistorySettings(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onAdvancedSettingsClick: () -> Unit,
+    highlight: Boolean,
     modifier: Modifier = Modifier
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -62,6 +65,7 @@ private fun SaveAddressHistorySettings(
     }
 
     SettingClickableToggle(
+        modifier = modifier,
         headlineContent = { Text(stringResource(R.string.history_save)) },
         supportingContent = { Text(stringResource(R.string.history_save_description)) },
         checked = checked,
@@ -73,8 +77,8 @@ private fun SaveAddressHistorySettings(
             }
         },
         enabled = true,
-        modifier = modifier,
-        onClick = onAdvancedSettingsClick
+        onClick = onAdvancedSettingsClick,
+        highlight = highlight
     )
 }
 
@@ -84,6 +88,7 @@ private fun SaveAddressHistorySettingsPreview() {
     FindMyIpAppTheme {
         Surface {
             SaveAddressHistorySettings(
+                highlight = false,
                 checked = true,
                 onCheckedChange = {},
                 onAdvancedSettingsClick = {}

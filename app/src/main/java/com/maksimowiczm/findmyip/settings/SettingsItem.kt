@@ -19,6 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -26,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
-fun SettingClickable(
+internal fun SettingClickable(
     onClick: () -> Unit,
     headlineContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
@@ -44,7 +47,7 @@ fun SettingClickable(
 }
 
 @Composable
-fun SettingToggle(
+internal fun SettingToggle(
     headlineContent: @Composable () -> Unit,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
@@ -53,8 +56,14 @@ fun SettingToggle(
     supportingContent: (@Composable () -> Unit)? = null,
     highlight: Boolean = false
 ) {
+    var clicked by rememberSaveable { mutableStateOf(false) }
+    val onCheckedChange: (Boolean) -> Unit = {
+        clicked = true
+        onCheckedChange(it)
+    }
+
     SettingInternal(
-        highlight = highlight,
+        highlight = highlight && !clicked,
         onClick = { onCheckedChange(!checked) },
         headlineContent = headlineContent,
         supportingContent = supportingContent,
@@ -70,7 +79,7 @@ fun SettingToggle(
 }
 
 @Composable
-fun SettingClickableToggle(
+internal fun SettingClickableToggle(
     headlineContent: @Composable () -> Unit,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
@@ -80,8 +89,14 @@ fun SettingClickableToggle(
     supportingContent: (@Composable () -> Unit)? = null,
     highlight: Boolean = false
 ) {
+    var clicked by rememberSaveable { mutableStateOf(false) }
+    val onCheckedChange: (Boolean) -> Unit = {
+        clicked = true
+        onCheckedChange(it)
+    }
+
     SettingInternal(
-        highlight = highlight,
+        highlight = highlight && !clicked,
         onClick = onClick,
         headlineContent = headlineContent,
         supportingContent = supportingContent,
@@ -114,18 +129,22 @@ private fun SettingInternal(
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "color")
     val animatedColor by infiniteTransition.animateColor(
-        initialValue = MaterialTheme.colorScheme.surfaceContainer,
-        targetValue = MaterialTheme.colorScheme.secondaryContainer,
+        initialValue = MaterialTheme.colorScheme.surface,
+        targetValue = MaterialTheme.colorScheme.surfaceVariant,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 500, easing = LinearEasing),
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "color"
     )
+    var clicked by rememberSaveable { mutableStateOf(false) }
 
     ListItem(
-        modifier = modifier.clickable(onClick = onClick),
-        colors = if (highlight) {
+        modifier = modifier.clickable(onClick = {
+            onClick()
+            clicked = true
+        }),
+        colors = if (highlight && !clicked) {
             ListItemDefaults.colors(containerColor = animatedColor)
         } else {
             ListItemDefaults.colors()

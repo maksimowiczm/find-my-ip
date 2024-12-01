@@ -18,7 +18,11 @@ import com.maksimowiczm.findmyip.settings.internetprotocolversion.InternetProtoc
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SettingsScreen(onHistorySettingsClick: () -> Unit, modifier: Modifier = Modifier) {
+internal fun SettingsScreen(
+    onHistorySettingsClick: () -> Unit,
+    highlightSetting: Setting?,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
     ) {
@@ -28,7 +32,10 @@ internal fun SettingsScreen(onHistorySettingsClick: () -> Unit, modifier: Modifi
                 AddressHistorySettingsDescription()
             }
             item {
-                SaveAddressHistorySettings(onHistorySettingsClick)
+                SaveAddressHistorySettings(
+                    onHistorySettingsClick = onHistorySettingsClick,
+                    highlight = highlightSetting == Setting.SaveHistory
+                )
             }
             item {
                 ClearHistorySetting()
