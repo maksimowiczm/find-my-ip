@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.addresshistory.AddressHistoryState.Disabled
+import com.maksimowiczm.findmyip.addresshistory.AddressHistoryState.Loaded
 import com.maksimowiczm.findmyip.domain.AddressHistory
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlinx.coroutines.launch
@@ -70,7 +74,18 @@ private fun AddressHistoryScreen(
         }
     }
 
-    if (!hasPermission) {
+    val shouldShowNoPermission = !hasPermission && (
+        // Linter hack 💀
+        false ||
+            ipv4HistoryState is Loaded &&
+            ipv4HistoryState.addressHistory.isEmpty() && ipv6HistoryState is Disabled ||
+            ipv6HistoryState is Loaded &&
+            ipv6HistoryState.addressHistory.isEmpty() && ipv4HistoryState is Disabled ||
+            ipv4HistoryState is Loaded && ipv4HistoryState.addressHistory.isEmpty() &&
+            ipv6HistoryState is Loaded && ipv6HistoryState.addressHistory.isEmpty()
+        )
+
+    if (shouldShowNoPermission) {
         return NoPermissionScreen(
             modifier = modifier,
             onGrantPermission = onGrantPermission
@@ -78,34 +93,31 @@ private fun AddressHistoryScreen(
     }
 
     if (
-        ipv4HistoryState is AddressHistoryState.Loaded &&
-        ipv6HistoryState is AddressHistoryState.Disabled
-    ) {
-        return AddressHistoryList(
-            modifier = modifier.safeDrawingPadding(),
-            items = ipv4HistoryState.addressHistory
-        )
-    }
-
-    if (
-        ipv4HistoryState is AddressHistoryState.Disabled &&
-        ipv6HistoryState is AddressHistoryState.Loaded
-    ) {
-        return AddressHistoryList(
-            modifier = modifier.safeDrawingPadding(),
-            items = ipv6HistoryState.addressHistory
-        )
-    }
-
-    if (
-        ipv4HistoryState is AddressHistoryState.Loaded &&
-        ipv6HistoryState is AddressHistoryState.Loaded
+        ipv4HistoryState is Loaded &&
+        ipv6HistoryState is Loaded
     ) {
         return TabAddressHistoryList(
             modifier = modifier,
             ipv4History = ipv4HistoryState.addressHistory,
-            ipv6History = ipv6HistoryState.addressHistory
+            ipv6History = ipv6HistoryState.addressHistory,
+            hasPermission = hasPermission,
+            onGrantPermission = onGrantPermission
         )
+    }
+
+    val state = ipv4HistoryState as? Loaded
+        ?: ipv6HistoryState as? Loaded
+
+    if (state != null) {
+        return Column(modifier.safeDrawingPadding()) {
+            if (!hasPermission) {
+                AddressHistoryDisabledCard(onGrantPermission)
+            }
+            AddressHistoryList(
+                modifier = Modifier.fillMaxSize(),
+                items = state.addressHistory
+            )
+        }
     }
 }
 
@@ -135,6 +147,8 @@ private fun NoPermissionScreen(onGrantPermission: () -> Unit, modifier: Modifier
 private fun TabAddressHistoryList(
     ipv4History: List<AddressHistory>,
     ipv6History: List<AddressHistory>,
+    hasPermission: Boolean,
+    onGrantPermission: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val topPadding = WindowInsets.statusBars
@@ -168,6 +182,10 @@ private fun TabAddressHistoryList(
             }
         }
 
+        if (!hasPermission) {
+            AddressHistoryDisabledCard(onGrantPermission)
+        }
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -190,15 +208,37 @@ private fun TabAddressHistoryList(
     }
 }
 
+@Composable
+private fun AddressHistoryDisabledCard(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .padding(horizontal = 8.dp)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.error
+        )
+    ) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = stringResource(R.string.history_disabled_card_description),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Justify
+        )
+    }
+}
+
 @PreviewLightDark
 @Composable
 private fun PreviewAddressHistoryScreen() {
     FindMyIpAppTheme {
         Surface {
             AddressHistoryScreen(
-                hasPermission = true,
+                hasPermission = false,
                 onGrantPermission = {},
-                ipv4HistoryState = AddressHistoryState.Loaded(
+                ipv4HistoryState = Loaded(
                     listOf(
                         AddressHistory(
                             ip = "127.0.0.1",
@@ -210,7 +250,7 @@ private fun PreviewAddressHistoryScreen() {
                         )
                     )
                 ),
-                ipv6HistoryState = AddressHistoryState.Loaded(
+                ipv6HistoryState = Loaded(
                     listOf(
                         AddressHistory(
                             ip = "::1",
