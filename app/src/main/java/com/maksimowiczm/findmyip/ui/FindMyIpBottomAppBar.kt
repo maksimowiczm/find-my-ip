@@ -18,7 +18,7 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
 internal fun FindMyIpBottomAppBar(
-    selectedBottomBarItem: Route?,
+    selectedBottomBarItem: Route.Variant?,
     onHomeClick: () -> Unit,
     onAddressHistoryClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -26,9 +26,9 @@ internal fun FindMyIpBottomAppBar(
 ) {
     NavigationBar(modifier) {
         NavigationBarItem(
-            selected = selectedBottomBarItem == Route.CurrentAddress,
+            selected = selectedBottomBarItem == Route.Variant.CurrentAddress,
             onClick = {
-                if (selectedBottomBarItem != Route.CurrentAddress) {
+                if (selectedBottomBarItem != Route.Variant.CurrentAddress) {
                     onHomeClick()
                 }
             },
@@ -41,9 +41,9 @@ internal fun FindMyIpBottomAppBar(
             label = { Text(stringResource(R.string.home)) }
         )
         NavigationBarItem(
-            selected = selectedBottomBarItem == Route.AddressHistory,
+            selected = selectedBottomBarItem == Route.Variant.AddressHistory,
             onClick = {
-                if (selectedBottomBarItem != Route.AddressHistory) {
+                if (selectedBottomBarItem != Route.Variant.AddressHistory) {
                     onAddressHistoryClick()
                 }
             },
@@ -56,9 +56,9 @@ internal fun FindMyIpBottomAppBar(
             label = { Text(stringResource(R.string.history)) }
         )
         NavigationBarItem(
-            selected = selectedBottomBarItem == Route.Settings,
+            selected = selectedBottomBarItem == Route.Variant.Settings,
             onClick = {
-                if (selectedBottomBarItem != Route.Settings) {
+                if (selectedBottomBarItem != Route.Variant.Settings) {
                     onSettingsClick()
                 }
             },
@@ -79,7 +79,7 @@ private fun FindMyIpBottomAppBarPreview() {
     FindMyIpAppTheme {
         Surface {
             FindMyIpBottomAppBar(
-                selectedBottomBarItem = Route.AddressHistory,
+                selectedBottomBarItem = Route.Variant.AddressHistory,
                 onHomeClick = {},
                 onAddressHistoryClick = {},
                 onSettingsClick = {}

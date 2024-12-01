@@ -4,9 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
@@ -80,7 +84,7 @@ private fun AddressHistoryScreen(
         ipv6HistoryState is AddressHistoryState.Disabled
     ) {
         return AddressHistoryList(
-            modifier = modifier,
+            modifier = modifier.safeDrawingPadding(),
             items = ipv4HistoryState.addressHistory
         )
     }
@@ -90,7 +94,7 @@ private fun AddressHistoryScreen(
         ipv6HistoryState is AddressHistoryState.Loaded
     ) {
         return AddressHistoryList(
-            modifier = modifier,
+            modifier = modifier.safeDrawingPadding(),
             items = ipv6HistoryState.addressHistory
         )
     }
@@ -144,13 +148,16 @@ private fun TabAddressHistoryList(
     ipv6History: List<AddressHistory>,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    val topPadding = WindowInsets.statusBars
+        .asPaddingValues()
+        .calculateTopPadding()
+
+    Column(modifier.padding(top = topPadding)) {
         val pagerState = rememberPagerState(pageCount = { 2 })
         val coroutineScope = rememberCoroutineScope()
 
         TabRow(
             selectedTabIndex = pagerState.currentPage
-
         ) {
             Tab(
                 selected = pagerState.currentPage == 0,
@@ -171,6 +178,7 @@ private fun TabAddressHistoryList(
                 )
             }
         }
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier

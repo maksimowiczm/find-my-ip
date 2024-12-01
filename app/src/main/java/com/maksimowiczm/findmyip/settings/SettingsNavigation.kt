@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.maksimowiczm.findmyip.settings.addresshistory.HistoryAdvancedSettings
+import com.maksimowiczm.findmyip.settings.addresshistory.AddressHistoryAdvancedSettings
 
 @Composable
 fun SettingsNavigation(modifier: Modifier = Modifier) {
@@ -34,7 +34,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier) {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
             }
         ) {
-            HistoryAdvancedSettings(
+            AddressHistoryAdvancedSettings(
                 modifier = modifier,
                 onNavigateBack = { navController.popBackStack(SettingsHome, false) }
             )

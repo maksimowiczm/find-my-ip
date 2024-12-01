@@ -2,7 +2,6 @@ package com.maksimowiczm.findmyip.settings.addresshistory
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -32,14 +31,14 @@ import com.maksimowiczm.findmyip.settings.backgroundworker.WorkerSettings
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
-internal fun HistoryAdvancedSettings(
+internal fun AddressHistoryAdvancedSettings(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HistorySettingsViewModel = hiltViewModel()
+    viewModel: AddressHistorySettingsViewModel = hiltViewModel()
 ) {
     val enabled by viewModel.saveHistoryState.collectAsStateWithLifecycle()
 
-    HistoryAdvancedSettings(
+    AddressHistoryAdvancedSettings(
         enabled = enabled,
         onEnabledChange = {
             if (it) {
@@ -59,7 +58,7 @@ internal fun HistoryAdvancedSettings(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HistoryAdvancedSettings(
+private fun AddressHistoryAdvancedSettings(
     enabled: Boolean,
     onEnabledChange: (Boolean) -> Unit,
     onNavigateBack: () -> Unit,
@@ -76,9 +75,7 @@ private fun HistoryAdvancedSettings(
                         contentDescription = stringResource(R.string.back)
                     )
                 }
-            },
-            // These were already set in the parent
-            windowInsets = WindowInsets(0.dp)
+            }
         )
         ListItem(
             modifier = Modifier.clickable(onClick = { onEnabledChange(!enabled) }),
@@ -118,10 +115,10 @@ private fun HistoryAdvancedSettings(
 
 @PreviewLightDark
 @Composable
-private fun HistoryAdvancedSettingsPreview() {
+private fun AddressHistoryAdvancedSettingsPreview() {
     FindMyIpAppTheme {
         Surface {
-            HistoryAdvancedSettings(
+            AddressHistoryAdvancedSettings(
                 enabled = true,
                 onNavigateBack = {},
                 onEnabledChange = {},
