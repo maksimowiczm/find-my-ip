@@ -16,8 +16,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = 21
         targetSdk = 34
-        versionCode = 2
-        versionName = "v1.1.0"
+        versionCode = 3
+        versionName = "v1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
