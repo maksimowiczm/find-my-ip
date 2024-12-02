@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-// TODO don't allow disabling both
 @HiltViewModel
 internal class InternetProtocolVersionSettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
@@ -34,13 +33,19 @@ internal class InternetProtocolVersionSettingsViewModel @Inject constructor(
 
     fun setIpv4(value: Boolean) {
         viewModelScope.launch {
-            userPreferencesRepository.set(Keys.ipv4_enabled, value)
+            userPreferencesRepository.set(
+                Keys.ipv4_enabled to value,
+                Keys.ipv6_enabled to ipv6Enabled.value
+            )
         }
     }
 
     fun setIpv6(value: Boolean) {
         viewModelScope.launch {
-            userPreferencesRepository.set(Keys.ipv6_enabled, value)
+            userPreferencesRepository.set(
+                Keys.ipv4_enabled to ipv4Enabled.value,
+                Keys.ipv6_enabled to value
+            )
         }
     }
 }

@@ -28,26 +28,26 @@ class TestInternetProtocolsUseCase @Inject constructor(
         coroutineScope {
             val (ipv4test, ipv6test) = awaitAll(
                 async {
-                    publicAddressRepository.refreshCurrentAddress(
-                        InternetProtocolVersion.IPv4
-                    )
+                    publicAddressRepository.refreshCurrentAddress(InternetProtocolVersion.IPv4)
                 },
                 async {
-                    publicAddressRepository.refreshCurrentAddress(
-                        InternetProtocolVersion.IPv6
-                    )
+                    publicAddressRepository.refreshCurrentAddress(InternetProtocolVersion.IPv6)
                 }
             )
 
-            userPreferencesRepository.set(Keys.ipv4_enabled, ipv4test.isOk)
-            userPreferencesRepository.set(Keys.ipv6_enabled, ipv6test.isOk)
-
-            // If both tests failed, enable IPv4 by default.
-            if (ipv4test.isErr && ipv6test.isErr) {
-                userPreferencesRepository.set(Keys.ipv4_enabled, true)
+            // If both test fail set IPv4 as default.
+            val ipv4 = if (ipv4test.isErr && ipv6test.isErr) {
+                true
+            } else {
+                ipv4test.isOk
             }
+            val ipv6 = ipv6test.isOk
 
-            userPreferencesRepository.set(Keys.ip_features_tested, true)
+            userPreferencesRepository.set(
+                Keys.ipv4_enabled to ipv4,
+                Keys.ipv6_enabled to ipv6,
+                Keys.ip_features_tested to true
+            )
         }
     }
 }

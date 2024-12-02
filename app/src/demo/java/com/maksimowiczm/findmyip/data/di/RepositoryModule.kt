@@ -4,7 +4,6 @@ import android.content.Context
 import com.maksimowiczm.findmyip.data.repository.DemoPublicAddressRepository
 import com.maksimowiczm.findmyip.data.repository.PublicAddressRepository
 import com.maksimowiczm.findmyip.data.repository.UserPreferencesRepository
-import com.maksimowiczm.findmyip.data.repository.impl.UserPreferencesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +23,7 @@ object RepositoryModule {
     @Singleton
     fun provideUserPreferencesRepository(
         @ApplicationContext context: Context
-    ): UserPreferencesRepository = UserPreferencesRepositoryImpl(
+    ): UserPreferencesRepository = UserPreferencesRepository(
         context = context,
         ioDispatcher = Dispatchers.IO
     )
