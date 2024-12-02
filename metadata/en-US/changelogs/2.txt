@@ -1,0 +1,4 @@
+- Added IPv6 support
+- Added Internet Protocol detection on first startup
+- Enabled edge-to-edge functionality
+- Reworked settings
