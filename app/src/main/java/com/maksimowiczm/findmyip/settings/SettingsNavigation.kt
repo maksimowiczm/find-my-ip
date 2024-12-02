@@ -38,7 +38,7 @@ internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifi
         ) {
             AddressHistoryAdvancedSettings(
                 modifier = modifier,
-                onNavigateBack = { navController.popBackStack(SettingsHome, false) }
+                onNavigateBack = { navController.popBackStack(SettingsHome(null), false) }
             )
         }
     }
