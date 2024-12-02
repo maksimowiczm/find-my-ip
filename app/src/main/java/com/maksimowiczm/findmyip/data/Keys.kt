@@ -27,7 +27,7 @@ object Keys {
 
         Pair(save_wifi_history, true),
         Pair(save_mobile_history, true),
-        Pair(save_vpn_history, false),
+        Pair(save_vpn_history, true),
 
         Pair(run_background_worker, false),
 

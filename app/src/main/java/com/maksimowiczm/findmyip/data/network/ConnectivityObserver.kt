@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.*
+import android.net.NetworkInfo
 import android.os.Build
 import com.maksimowiczm.findmyip.data.model.NetworkType
 import kotlinx.coroutines.channels.awaitClose
@@ -21,28 +22,12 @@ class ConnectivityObserver(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
-
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-
-            return when {
-                capabilities == null -> null
-                capabilities.hasTransport(TRANSPORT_WIFI) -> NetworkType.WIFI
-                capabilities.hasTransport(TRANSPORT_CELLULAR) -> NetworkType.MOBILE
-                capabilities.hasTransport(TRANSPORT_VPN) -> NetworkType.VPN
-                else -> null
-            }
+            return capabilities?.toNetworkType()
         } else {
             @Suppress("DEPRECATION")
             val networkInfo = connectivityManager.activeNetworkInfo
-
-            @Suppress("DEPRECATION")
-            return when {
-                networkInfo == null -> null
-                networkInfo.type == ConnectivityManager.TYPE_WIFI -> NetworkType.WIFI
-                networkInfo.type == ConnectivityManager.TYPE_MOBILE -> NetworkType.MOBILE
-                networkInfo.type == ConnectivityManager.TYPE_VPN -> NetworkType.VPN
-                else -> null
-            }
+            return networkInfo?.toNetworkType()
         }
     }
 
@@ -62,25 +47,16 @@ class ConnectivityObserver(
                     return
                 }
 
-                when {
-                    capabilities.hasTransport(TRANSPORT_WIFI) -> trySend(NetworkType.WIFI)
-                    capabilities.hasTransport(TRANSPORT_CELLULAR) -> trySend(NetworkType.MOBILE)
-                    capabilities.hasTransport(TRANSPORT_VPN) -> trySend(NetworkType.VPN)
-                }
+                val networkType = capabilities.toNetworkType()
+                trySend(networkType)
             }
 
             override fun onCapabilitiesChanged(
                 network: Network,
                 networkCapabilities: NetworkCapabilities
             ) {
-                when {
-                    networkCapabilities.hasTransport(TRANSPORT_WIFI) -> trySend(NetworkType.WIFI)
-                    networkCapabilities.hasTransport(
-                        TRANSPORT_CELLULAR
-                    ) -> trySend(NetworkType.MOBILE)
-
-                    networkCapabilities.hasTransport(TRANSPORT_VPN) -> trySend(NetworkType.VPN)
-                }
+                val networkType = networkCapabilities.toNetworkType()
+                trySend(networkType)
             }
 
             override fun onLost(network: Network) {
@@ -104,4 +80,24 @@ class ConnectivityObserver(
             connectivityManager.unregisterNetworkCallback(callback)
         }
     }.distinctUntilChanged()
+}
+
+private fun NetworkCapabilities.toNetworkType(): NetworkType? {
+    return when {
+        // Check for VPN first, as it is a subset of mobile capabilities
+        hasTransport(TRANSPORT_VPN) -> NetworkType.VPN
+        hasTransport(TRANSPORT_WIFI) -> NetworkType.WIFI
+        hasTransport(TRANSPORT_CELLULAR) -> NetworkType.MOBILE
+        else -> null
+    }
+}
+
+@Suppress("DEPRECATION")
+private fun NetworkInfo.toNetworkType(): NetworkType? {
+    return when {
+        type == ConnectivityManager.TYPE_VPN -> NetworkType.VPN
+        type == ConnectivityManager.TYPE_WIFI -> NetworkType.WIFI
+        type == ConnectivityManager.TYPE_MOBILE -> NetworkType.MOBILE
+        else -> null
+    }
 }
