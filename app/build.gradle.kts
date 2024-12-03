@@ -34,6 +34,14 @@ android {
             )
         }
 
+        create("demoDebug") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+            resValue("string", "app_name", "Find my IP - demo")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         create("demo") {
             initWith(getByName("release"))
             applicationIdSuffix = ".demo"
@@ -55,6 +63,9 @@ android {
         }
 
         getByName("demo") {
+            java.srcDirs("src/demo/java")
+        }
+        getByName("demoDebug") {
             java.srcDirs("src/demo/java")
         }
     }

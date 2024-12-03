@@ -76,7 +76,7 @@ private fun FindMyIpAppContent() {
         }
 
         FindMyIpBottomAppBar(
-            selectedBottomBarItem = currentRoute,
+            selectedBottomBarItem = { currentRoute },
             onHomeClick = { navController.navigateSingleTop(Route.CurrentAddress) },
             onAddressHistoryClick = { navController.navigateSingleTop(Route.AddressHistory) },
             onSettingsClick = { navController.navigateSingleTop(Route.Settings(null)) }

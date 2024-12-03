@@ -18,12 +18,14 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 
 @Composable
 internal fun FindMyIpBottomAppBar(
-    selectedBottomBarItem: Route.Variant?,
+    selectedBottomBarItem: () -> Route.Variant?,
     onHomeClick: () -> Unit,
     onAddressHistoryClick: () -> Unit,
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val selectedBottomBarItem = selectedBottomBarItem() ?: return
+
     NavigationBar(modifier) {
         NavigationBarItem(
             selected = selectedBottomBarItem == Route.Variant.CurrentAddress,
@@ -79,7 +81,7 @@ private fun FindMyIpBottomAppBarPreview() {
     FindMyIpAppTheme {
         Surface {
             FindMyIpBottomAppBar(
-                selectedBottomBarItem = Route.Variant.AddressHistory,
+                selectedBottomBarItem = { Route.Variant.AddressHistory },
                 onHomeClick = {},
                 onAddressHistoryClick = {},
                 onSettingsClick = {}

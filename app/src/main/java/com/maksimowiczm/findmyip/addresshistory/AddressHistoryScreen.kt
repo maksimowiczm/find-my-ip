@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
@@ -109,9 +109,12 @@ private fun AddressHistoryScreen(
         ?: ipv6HistoryState as? Loaded
 
     if (state != null) {
-        return Column(modifier.safeDrawingPadding()) {
+        return Column(modifier.windowInsetsPadding(WindowInsets.statusBars)) {
             if (!hasPermission) {
-                AddressHistoryDisabledCard(onGrantPermission)
+                AddressHistoryDisabledCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    onGrantPermission = onGrantPermission
+                )
             }
             AddressHistoryList(
                 modifier = Modifier.fillMaxSize(),
@@ -132,7 +135,7 @@ private fun NoPermissionScreen(onGrantPermission: () -> Unit, modifier: Modifier
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(R.string.history_no_permission_description),
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Justify
+            textAlign = TextAlign.Center
         )
 
         Text(
@@ -183,7 +186,13 @@ private fun TabAddressHistoryList(
         }
 
         if (!hasPermission) {
-            AddressHistoryDisabledCard(onGrantPermission)
+            AddressHistoryDisabledCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+                    .padding(horizontal = 4.dp),
+                onGrantPermission = onGrantPermission
+            )
         }
 
         HorizontalPager(
@@ -209,13 +218,12 @@ private fun TabAddressHistoryList(
 }
 
 @Composable
-private fun AddressHistoryDisabledCard(onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun AddressHistoryDisabledCard(
+    onGrantPermission: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
-            .padding(horizontal = 8.dp)
-            .clickable(onClick = onClick),
+        modifier = modifier.clickable(onClick = onGrantPermission),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
             contentColor = MaterialTheme.colorScheme.error
