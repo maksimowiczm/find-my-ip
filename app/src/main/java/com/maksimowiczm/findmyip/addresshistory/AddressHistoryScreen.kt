@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -154,11 +153,7 @@ private fun TabAddressHistoryList(
     onGrantPermission: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val topPadding = WindowInsets.statusBars
-        .asPaddingValues()
-        .calculateTopPadding()
-
-    Column(modifier.padding(top = topPadding)) {
+    Column(modifier.windowInsetsPadding(WindowInsets.statusBars)) {
         val pagerState = rememberPagerState(pageCount = { 2 })
         val coroutineScope = rememberCoroutineScope()
 
