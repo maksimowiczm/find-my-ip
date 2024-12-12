@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Find my IP</string>
+    <string name="app_name" translatable="false">Find my IP</string>
 
     <string name="tap_to_enable">Tap to enable</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -40,12 +40,12 @@
     <string name="history_background_service_description">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
     <string name="check_every_n_minutes">Check every %1$s minutes</string>
     <string name="learn_about_doze">Click here to learn more about Doze mode.</string>
-    <string name="doze_link">https://source.android.com/docs/core/power/platform_mgmt</string>
+    <string name="doze_link" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
     <!-- END: address history settings -->
 
     <!-- START: address types -->
-    <string name="ipv4">IPv4</string>
-    <string name="ipv6">IPv6</string>
+    <string name="ipv4" translatable="false">IPv4</string>
+    <string name="ipv6" translatable="false">IPv6</string>
 
     <string name="internet_protocol">Internet Protocol</string>
     <string name="internet_protocol_description">Choose which Internet Protocol to use. At least one must be enabled.</string>
@@ -54,7 +54,7 @@
     <string name="back">Back</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="wi_fi">Wi-Fi</string>
+    <string name="wi_fi" translatable="false">Wi-Fi</string>
     <string name="mobile">Mobile</string>
     <string name="vpn">VPN</string>
     <string name="unavailable">Unavailable</string>
