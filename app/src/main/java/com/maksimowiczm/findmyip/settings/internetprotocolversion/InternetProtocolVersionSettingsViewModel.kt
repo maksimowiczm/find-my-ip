@@ -15,36 +15,46 @@ import kotlinx.coroutines.launch
 internal class InternetProtocolVersionSettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    val ipv4Enabled = userPreferencesRepository.get(Keys.ipv4_enabled).map {
-        it == true
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = false
-    )
+    // Store ui state in memory to avoid race conditions
+    private var localIpv4Enabled: Boolean
+    private var localIpv6Enabled: Boolean
 
-    val ipv6Enabled = userPreferencesRepository.get(Keys.ipv6_enabled).map {
-        it == true
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = false
-    )
+    init {
+        localIpv4Enabled = userPreferencesRepository.get(Keys.ipv4_enabled) ?: false
+        localIpv6Enabled = userPreferencesRepository.get(Keys.ipv6_enabled) ?: false
+    }
+
+    val ipv4Enabled = userPreferencesRepository.observe(Keys.ipv4_enabled)
+        .map { it ?: false }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), localIpv4Enabled)
+
+    val ipv6Enabled = userPreferencesRepository.observe(Keys.ipv6_enabled)
+        .map { it ?: false }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), localIpv6Enabled)
 
     fun setIpv4(value: Boolean) {
-        viewModelScope.launch {
-            userPreferencesRepository.set(
-                Keys.ipv4_enabled to value,
-                Keys.ipv6_enabled to ipv6Enabled.value
-            )
+        if (!value && !localIpv6Enabled) {
+            return
         }
+
+        localIpv4Enabled = value
+        setIpFeatures()
     }
 
     fun setIpv6(value: Boolean) {
+        if (!value && !localIpv4Enabled) {
+            return
+        }
+
+        localIpv6Enabled = value
+        setIpFeatures()
+    }
+
+    private fun setIpFeatures() {
         viewModelScope.launch {
             userPreferencesRepository.set(
-                Keys.ipv4_enabled to ipv4Enabled.value,
-                Keys.ipv6_enabled to value
+                Keys.ipv4_enabled to localIpv4Enabled,
+                Keys.ipv6_enabled to localIpv6Enabled
             )
         }
     }
