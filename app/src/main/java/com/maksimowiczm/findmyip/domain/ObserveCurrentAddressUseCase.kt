@@ -37,8 +37,8 @@ class ObserveCurrentAddressUseCase @Inject constructor(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<Result<Address, ObserveCurrentAddressError>> {
         val enabledFlow = when (internetProtocolVersion) {
-            InternetProtocolVersion.IPv4 -> userPreferencesRepository.get(Keys.ipv4_enabled)
-            InternetProtocolVersion.IPv6 -> userPreferencesRepository.get(Keys.ipv6_enabled)
+            InternetProtocolVersion.IPv4 -> userPreferencesRepository.observe(Keys.ipv4_enabled)
+            InternetProtocolVersion.IPv6 -> userPreferencesRepository.observe(Keys.ipv6_enabled)
         }
 
         return enabledFlow.flatMapLatest { enabled ->

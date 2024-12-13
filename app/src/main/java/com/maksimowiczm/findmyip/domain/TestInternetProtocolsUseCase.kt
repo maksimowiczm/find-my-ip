@@ -8,7 +8,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 
 /**
  * This use case is responsible for testing and enabling IPv4 and IPv6 features. It works only once
@@ -19,7 +18,7 @@ class TestInternetProtocolsUseCase @Inject constructor(
     private val publicAddressRepository: PublicAddressRepository
 ) {
     suspend operator fun invoke() {
-        val tested = userPreferencesRepository.get(Keys.ip_features_tested).first()
+        val tested = userPreferencesRepository.get(Keys.ip_features_tested)
 
         if (tested == true) {
             return

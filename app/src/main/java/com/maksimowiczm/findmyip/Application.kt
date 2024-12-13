@@ -39,9 +39,9 @@ class Application : Application(), Configuration.Provider {
         // Start the background address history worker based on user preferences
         workerJob = combine(
             userPreferencesRepository
-                .get(Keys.run_background_worker).drop(1).distinctUntilChanged(),
+                .observe(Keys.run_background_worker).drop(1).distinctUntilChanged(),
             userPreferencesRepository
-                .get(Keys.background_worker_interval).drop(1).distinctUntilChanged()
+                .observe(Keys.background_worker_interval).drop(1).distinctUntilChanged()
         ) { runWorker, interval ->
             val workManager = WorkManager.getInstance(this@Application)
 

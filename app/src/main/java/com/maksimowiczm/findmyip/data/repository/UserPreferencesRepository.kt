@@ -7,7 +7,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.maksimowiczm.findmyip.data.Keys
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class UserPreferencesRepository(
@@ -26,8 +28,15 @@ class UserPreferencesRepository(
      * If the preference is not set, has no default value, or is explicitly set to `null`, it will emit `null`.
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> get(key: Preferences.Key<T>): Flow<T?> {
+    fun <T> observe(key: Preferences.Key<T>): Flow<T?> {
         return dataStore.data.map { it[key] ?: Keys.defaultPreferences[key] as T? }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> get(key: Preferences.Key<T>): T? {
+        return runBlocking(ioDispatcher) {
+            dataStore.data.map { it[key] ?: Keys.defaultPreferences[key] as T? }.first()
+        }
     }
 
     suspend fun <T> set(key: Preferences.Key<T>, value: T) {

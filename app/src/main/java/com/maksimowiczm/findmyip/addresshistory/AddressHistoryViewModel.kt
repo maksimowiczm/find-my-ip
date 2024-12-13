@@ -19,7 +19,7 @@ internal class AddressHistoryViewModel @Inject constructor(
     userPreferencesRepository: UserPreferencesRepository,
     observeAddressHistoryUseCase: ObserveAddressHistoryUseCase
 ) : ViewModel() {
-    val hasPermission = userPreferencesRepository.get(Keys.save_history)
+    val hasPermission = userPreferencesRepository.observe(Keys.save_history)
         .map { it == true }
         .stateIn(
             scope = viewModelScope,
@@ -29,7 +29,7 @@ internal class AddressHistoryViewModel @Inject constructor(
 
     val ipv4HistoryState = combine(
         observeAddressHistoryUseCase(InternetProtocolVersion.IPv4),
-        userPreferencesRepository.get(Keys.ipv4_enabled)
+        userPreferencesRepository.observe(Keys.ipv4_enabled)
     ) { history, enabled ->
         if (enabled != true) {
             return@combine AddressHistoryState.Disabled
@@ -44,7 +44,7 @@ internal class AddressHistoryViewModel @Inject constructor(
 
     val ipv6HistoryState = combine(
         observeAddressHistoryUseCase(InternetProtocolVersion.IPv6),
-        userPreferencesRepository.get(Keys.ipv6_enabled)
+        userPreferencesRepository.observe(Keys.ipv6_enabled)
     ) { history, enabled ->
         if (enabled != true) {
             return@combine AddressHistoryState.Disabled

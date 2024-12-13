@@ -17,14 +17,13 @@ internal class AddressHistorySettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val publicAddressRepository: PublicAddressRepository
 ) : ViewModel() {
-    val saveHistoryState = userPreferencesRepository
-        .get(Keys.save_history).map {
-            it == true
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(2000),
-            initialValue = false
-        )
+    val saveHistoryState = userPreferencesRepository.observe(Keys.save_history).map {
+        it == true
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(2000),
+        initialValue = false
+    )
 
     fun enableHistorySettings() {
         viewModelScope.launch {
@@ -34,8 +33,10 @@ internal class AddressHistorySettingsViewModel @Inject constructor(
 
     fun disableHistorySettings() {
         viewModelScope.launch {
-            userPreferencesRepository.set(Keys.save_history, false)
-            userPreferencesRepository.set(Keys.run_background_worker, false)
+            userPreferencesRepository.set(
+                Keys.save_history to false,
+                Keys.run_background_worker to false
+            )
         }
     }
 

@@ -15,21 +15,21 @@ import kotlinx.coroutines.launch
 class NetworkTypeSettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    val wifiState = userPreferencesRepository.get(Keys.save_wifi_history)
+    val wifiState = userPreferencesRepository.observe(Keys.save_wifi_history)
         .map { it == true }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             false
         )
 
-    val mobileState = userPreferencesRepository.get(Keys.save_mobile_history)
+    val mobileState = userPreferencesRepository.observe(Keys.save_mobile_history)
         .map { it == true }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             false
         )
 
-    val vpnState = userPreferencesRepository.get(Keys.save_vpn_history)
+    val vpnState = userPreferencesRepository.observe(Keys.save_vpn_history)
         .map { it == true }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),

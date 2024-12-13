@@ -31,7 +31,7 @@ internal class AddressViewModel @Inject constructor(
     private val isLoadingV6 = MutableStateFlow(true)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val ipv4 = userPreferencesRepository.get(Keys.ipv4_enabled).flatMapLatest {
+    val ipv4 = userPreferencesRepository.observe(Keys.ipv4_enabled).flatMapLatest {
         if (it != true) {
             isLoadingV4.emit(false)
             return@flatMapLatest MutableStateFlow(AddressState.Disabled)
@@ -51,7 +51,7 @@ internal class AddressViewModel @Inject constructor(
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val ipv6 = userPreferencesRepository.get(Keys.ipv6_enabled).flatMapLatest {
+    val ipv6 = userPreferencesRepository.observe(Keys.ipv6_enabled).flatMapLatest {
         if (it != true) {
             isLoadingV6.emit(false)
             return@flatMapLatest MutableStateFlow(AddressState.Disabled)
@@ -73,7 +73,7 @@ internal class AddressViewModel @Inject constructor(
     val isLoading = combine(
         isLoadingV4,
         isLoadingV6,
-        userPreferencesRepository.get(Keys.ip_features_tested)
+        userPreferencesRepository.observe(Keys.ip_features_tested)
     ) { isLoadingV4, isLoadingV6, tested ->
         isLoadingV4 || isLoadingV6 || tested != true
     }

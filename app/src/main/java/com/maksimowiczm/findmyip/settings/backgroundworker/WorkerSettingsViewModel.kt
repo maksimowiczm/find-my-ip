@@ -43,7 +43,7 @@ internal class WorkerSettingsViewModel @Inject constructor(
 
     val workerEnabledState: StateFlow<Boolean> =
         combine(
-            userPreferencesRepository.get(Keys.run_background_worker),
+            userPreferencesRepository.observe(Keys.run_background_worker),
             localEnabled
         ) { runWorker, localEnabled ->
             runWorker == true || localEnabled
@@ -53,7 +53,7 @@ internal class WorkerSettingsViewModel @Inject constructor(
             initialValue = false
         )
     val workerIntervalIndex: StateFlow<Int> =
-        userPreferencesRepository.get(Keys.background_worker_interval)
+        userPreferencesRepository.observe(Keys.background_worker_interval)
             .map { intervals.indexOf(it) }
             .map { if (it == -1) 0 else it }
             .stateIn(
