@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Find my IP</string>
-
     <string name="tap_to_enable">Toque para ativar</string>
     <string name="are_you_sure">Você tem certeza?</string>
     <string name="cancel">Cancelar</string>
@@ -40,13 +38,9 @@
     <string name="history_background_service_description">Isso permite que o app execute em segundo plano e verifique seu endereço IP público periodicamente. É importante notar que isso pode não funcionar se o seu dispositivo entrar em modo de soneca.</string>
     <string name="check_every_n_minutes">Verificar a cada %1$s minutos</string>
     <string name="learn_about_doze">Toque aqui para saber mais sobre o modo de soneca.</string>
-    <string name="doze_link" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
     <!-- END: address history settings -->
 
     <!-- START: address types -->
-    <string name="ipv4" translatable="false">IPv4</string>
-    <string name="ipv6" translatable="false">IPv6</string>
-
     <string name="internet_protocol">Protocolo da Internet</string>
     <string name="internet_protocol_description">Escolha qual protocolo da internet usar. Pelo menos um deve estar ativado.</string>
     <!-- END: address types -->
@@ -54,7 +48,6 @@
     <string name="back">Voltar</string>
     <string name="on">Ativado</string>
     <string name="off">Desativado</string>
-    <string name="wi_fi" translatable="false">Wi-Fi</string>
     <string name="mobile">Redes móveis</string>
     <string name="vpn">VPN</string>
     <string name="unavailable">Indisponível</string>
