@@ -24,7 +24,7 @@ internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifi
         ) {
             SettingsScreen(
                 modifier = modifier,
-                onHistorySettingsClick = { navController.navigate(AddressHistoryAdvancedSettings) },
+                onHistorySettingsClick = navController::navigateAddressHistoryAdvancedSettings,
                 highlightSetting = it.toRoute<SettingsHome>().highlight
             )
         }
@@ -38,7 +38,7 @@ internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifi
         ) {
             AddressHistoryAdvancedSettings(
                 modifier = modifier,
-                onNavigateBack = { navController.popBackStack(SettingsHome(null), false) }
+                onNavigateBack = { navController.popBackStack<SettingsHome>(inclusive = false) }
             )
         }
     }
