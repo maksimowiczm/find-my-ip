@@ -24,6 +24,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
@@ -140,15 +142,17 @@ private fun SettingInternal(
     var clicked by rememberSaveable { mutableStateOf(false) }
 
     ListItem(
-        modifier = modifier.clickable(onClick = {
-            onClick()
-            clicked = true
-        }),
-        colors = if (highlight && !clicked) {
-            ListItemDefaults.colors(containerColor = animatedColor)
-        } else {
-            ListItemDefaults.colors()
-        },
+        modifier = modifier
+            .clickable {
+                onClick()
+                clicked = true
+            }
+            .drawBehind {
+                if (highlight && !clicked) {
+                    drawRect(animatedColor)
+                }
+            },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         headlineContent = headlineContent,
         supportingContent = supportingContent,
         trailingContent = trailingContent
