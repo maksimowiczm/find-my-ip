@@ -93,10 +93,10 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
     runtimeOnly(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)

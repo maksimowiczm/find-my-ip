@@ -86,7 +86,7 @@ class DemoPublicAddressRepository : PublicAddressRepository {
     }
 
     private val random = java.util.Random()
-    private val v4History = DEMO_IPS_V4.map { ip ->
+    private val v4History = (0..10).flatMap { DEMO_IPS_V4 }.map { ip ->
         Address(
             ip = ip,
             date = Calendar.getInstance().apply {
@@ -98,7 +98,7 @@ class DemoPublicAddressRepository : PublicAddressRepository {
             internetProtocolVersion = InternetProtocolVersion.IPv4
         )
     }.sortedBy { it.date }.toMutableList()
-    private val v6History = DEMO_IPS_V6.map { ip ->
+    private val v6History = (0..10).flatMap { DEMO_IPS_V6 }.map { ip ->
         Address(
             ip = ip,
             date = Calendar.getInstance().apply {

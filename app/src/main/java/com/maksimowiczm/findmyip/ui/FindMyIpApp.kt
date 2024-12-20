@@ -1,91 +1,62 @@
 package com.maksimowiczm.findmyip.ui
 
-import androidx.compose.animation.AnimatedContentTransitionScope.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.maksimowiczm.findmyip.addresshistory.AddressHistoryScreen
-import com.maksimowiczm.findmyip.currentaddress.CurrentAddressScreen
-import com.maksimowiczm.findmyip.settings.Setting
-import com.maksimowiczm.findmyip.settings.SettingsNavigation
-import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.addresshistory.AddressHistory
+import com.maksimowiczm.findmyip.currentaddress.CurrentAddress
+import com.maksimowiczm.findmyip.navigation.FindMyIpNavHost
+import com.maksimowiczm.findmyip.settings.SettingsHome
+import com.maksimowiczm.findmyip.settings.SettingsRoute
 
 @Composable
-internal fun FindMyIpApp() {
-    FindMyIpAppTheme {
-        Surface {
-            FindMyIpAppContent()
+internal fun FindMyIpApp(modifier: Modifier = Modifier) {
+    val appState = rememberFindMyIpAppState()
+    val currentDestination = appState.currentDestination
+
+    NavigationSuiteScaffold(
+        modifier = modifier,
+        navigationSuiteItems = {
+            item(
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_home_24),
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(R.string.home)) },
+                selected = currentDestination.isRouteInHierarchy<CurrentAddress>(),
+                onClick = { appState.navigateToTopLevelDestination(CurrentAddress) }
+            )
+            item(
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_history_24),
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(R.string.history)) },
+                selected = currentDestination.isRouteInHierarchy<AddressHistory>(),
+                onClick = { appState.navigateToTopLevelDestination(AddressHistory) }
+            )
+            item(
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_settings_24),
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(R.string.settings)) },
+                selected = currentDestination.isRouteInHierarchy<SettingsRoute>(),
+                onClick = { appState.navigateToTopLevelDestination(SettingsHome(null)) }
+            )
         }
-    }
-}
-
-@Composable
-private fun FindMyIpAppContent() {
-    val navController = rememberNavController()
-    var currentRoute by remember { mutableStateOf<Route.Variant?>(null) }
-
-    Column(Modifier.fillMaxSize()) {
-        NavHost(
-            modifier = Modifier.weight(1f),
-            navController = navController,
-            startDestination = Route.CurrentAddress
-        ) {
-            composable<Route.CurrentAddress>(
-                enterTransition = { slideIntoContainer(SlideDirection.Up) },
-                exitTransition = { slideOutOfContainer(SlideDirection.Up) }
-            ) {
-                currentRoute = Route.Variant.CurrentAddress
-                CurrentAddressScreen(Modifier.fillMaxSize())
-            }
-
-            composable<Route.AddressHistory>(
-                enterTransition = { slideIntoContainer(SlideDirection.Up) },
-                exitTransition = { slideOutOfContainer(SlideDirection.Up) }
-            ) {
-                currentRoute = Route.Variant.AddressHistory
-                AddressHistoryScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    onGrantPermission = {
-                        navController.navigateSingleTop(Route.Settings(Setting.SaveHistory))
-                    }
-                )
-            }
-
-            composable<Route.Settings>(
-                enterTransition = { slideIntoContainer(SlideDirection.Up) },
-                exitTransition = { slideOutOfContainer(SlideDirection.Up) }
-            ) {
-                val route = it.toRoute<Route.Settings>()
-                currentRoute = Route.Variant.Settings
-                SettingsNavigation(
-                    modifier = Modifier.fillMaxSize(),
-                    highlight = route.highlight
-                )
-            }
-        }
-
-        FindMyIpBottomAppBar(
-            selectedBottomBarItem = { currentRoute },
-            onHomeClick = { navController.navigateSingleTop(Route.CurrentAddress) },
-            onAddressHistoryClick = { navController.navigateSingleTop(Route.AddressHistory) },
-            onSettingsClick = { navController.navigateSingleTop(Route.Settings(null)) }
-        )
-    }
-}
-
-private fun NavController.navigateSingleTop(route: Any) {
-    navigate(route) {
-        launchSingleTop = true
+    ) {
+        FindMyIpNavHost(appState)
     }
 }

@@ -1,7 +1,11 @@
 package com.maksimowiczm.findmyip.addresshistory
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +36,9 @@ internal fun AddressHistoryList(items: List<AddressHistory>, modifier: Modifier 
                 if (index < items.size - 1) {
                     HorizontalDivider()
                 }
+            }
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             }
         }
     }

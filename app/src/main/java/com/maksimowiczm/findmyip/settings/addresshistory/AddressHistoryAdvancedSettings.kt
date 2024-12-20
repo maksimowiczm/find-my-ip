@@ -2,7 +2,11 @@ package com.maksimowiczm.findmyip.settings.addresshistory
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material.icons.Icons
@@ -108,6 +112,9 @@ private fun AddressHistoryAdvancedSettings(
                 } else {
                     Settings()
                 }
+            }
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             }
         }
     }

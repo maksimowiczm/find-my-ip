@@ -1,20 +1,44 @@
 package com.maksimowiczm.findmyip.settings
 
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.maksimowiczm.findmyip.settings.addresshistory.AddressHistoryAdvancedSettings
+import kotlinx.serialization.Serializable
 
-@Composable
-internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
+@Serializable
+internal data object SettingsRoute
 
-    NavHost(navController, startDestination = SettingsHome(highlight)) {
+@Serializable
+internal data class SettingsHome(val highlight: Setting?)
+
+@Serializable
+internal enum class Setting {
+    SaveHistory,
+    ClearHistory,
+    InternetProtocolVersion
+}
+
+@Serializable
+internal data object AddressHistoryAdvancedSettings
+
+internal fun NavGraphBuilder.settingsGraph(
+    onAddressHistoryAdvancedSettings: () -> Unit,
+    onAddressHistoryAdvancedSettingsNavigateBack: () -> Unit
+) {
+    navigation<SettingsRoute>(
+        startDestination = SettingsHome(null)
+    ) {
         composable<SettingsHome>(
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
             },
@@ -23,8 +47,8 @@ internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifi
             }
         ) {
             SettingsScreen(
-                modifier = modifier,
-                onHistorySettingsClick = navController::navigateAddressHistoryAdvancedSettings,
+                modifier = Modifier.fillMaxSize(),
+                onHistorySettingsClick = onAddressHistoryAdvancedSettings,
                 highlightSetting = it.toRoute<SettingsHome>().highlight
             )
         }
@@ -37,9 +61,20 @@ internal fun SettingsNavigation(highlight: Setting?, modifier: Modifier = Modifi
             }
         ) {
             AddressHistoryAdvancedSettings(
-                modifier = modifier,
-                onNavigateBack = { navController.popBackStack<SettingsHome>(inclusive = false) }
+                modifier = Modifier.fillMaxSize(),
+                onNavigateBack = onAddressHistoryAdvancedSettingsNavigateBack
             )
         }
     }
+}
+
+internal fun NavController.navigateSettingsHome(
+    highlight: Setting? = null,
+    navOptions: NavOptions? = null
+) {
+    navigate(SettingsHome(highlight), navOptions)
+}
+
+internal fun NavController.navigateAddressHistoryAdvancedSettings(navOptions: NavOptions? = null) {
+    navigate(AddressHistoryAdvancedSettings, navOptions)
 }
