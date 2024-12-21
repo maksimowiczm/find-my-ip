@@ -6,10 +6,17 @@ env:
 
 on:
   workflow_dispatch:
+    inputs:
+      chosen-runner:
+        required: true
+        type: choice
+        options:
+          - self-hosted
+          - ubuntu-latest
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: "${{ inputs.chosen-runner }}"
 
     steps:
       - uses: actions/checkout@v4
