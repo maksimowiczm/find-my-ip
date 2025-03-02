@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.old
+package com.maksimowiczm.findmyip
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -23,10 +23,19 @@ fun rememberFindMyIpAppState(
 
 @Stable
 class FindMyIpAppState(val navController: NavHostController) {
-    val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
+    val currentTopRoute: TopRoute?
+        @Composable get() {
+            val destination = navController.currentBackStackEntryAsState().value?.destination
 
-    inline fun <reified T : Any> navigateToTopLevelDestination(destination: T) {
+            return when {
+                destination.isRouteInHierarchy<TopRoute.Home>() -> TopRoute.Home
+                destination.isRouteInHierarchy<TopRoute.History>() -> TopRoute.History
+                destination.isRouteInHierarchy<TopRoute.Settings>() -> TopRoute.Settings
+                else -> null
+            }
+        }
+
+    inline fun <reified T : TopRoute> navigate(destination: T) {
         val start = navController.graph.findStartDestination().id
 
         val topDestination = navController.currentDestination?.hierarchy?.first()
