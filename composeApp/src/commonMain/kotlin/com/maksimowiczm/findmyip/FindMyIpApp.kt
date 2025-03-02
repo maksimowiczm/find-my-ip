@@ -9,8 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.maksimowiczm.findmyip.feature.addresshistory.AddressHistory
-import com.maksimowiczm.findmyip.feature.currentaddress.CurrentAddress
+import com.maksimowiczm.findmyip.old.FindMyIpNavHost
+import com.maksimowiczm.findmyip.old.feature.addresshistory.AddressHistory
+import com.maksimowiczm.findmyip.old.feature.currentaddress.CurrentAddress
+import com.maksimowiczm.findmyip.old.isRouteInHierarchy
+import com.maksimowiczm.findmyip.old.rememberFindMyIpAppState
 import com.maksimowiczm.findmyip.settings.SettingsHome
 import com.maksimowiczm.findmyip.settings.SettingsRoute
 import findmyip.composeapp.generated.resources.Res

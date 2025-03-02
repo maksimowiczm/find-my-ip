@@ -1,8 +1,8 @@
 package com.maksimowiczm.findmyip.infrastructure.android
 
 import android.app.Application
-import com.maksimowiczm.findmyip.infrastructure.di.createDatastore
-import com.maksimowiczm.findmyip.infrastructure.di.initKoin
+import com.maksimowiczm.findmyip.old.infrastructure.di.createDatastore
+import com.maksimowiczm.findmyip.old.infrastructure.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

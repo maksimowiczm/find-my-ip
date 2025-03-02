@@ -3,7 +3,7 @@ package com.maksimowiczm.findmyip.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import kotlinx.coroutines.flow.Flow
 
 @Dao

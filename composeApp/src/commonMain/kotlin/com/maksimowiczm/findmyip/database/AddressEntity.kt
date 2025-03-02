@@ -3,7 +3,7 @@ package com.maksimowiczm.findmyip.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 
 @Entity
 data class AddressEntity(
