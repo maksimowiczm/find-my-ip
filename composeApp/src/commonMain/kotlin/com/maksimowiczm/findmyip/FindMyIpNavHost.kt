@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.ui.home.HomeScreen
+import com.maksimowiczm.findmyip.ui.settings.SettingsScreen
 import kotlinx.serialization.Serializable
 
 sealed interface TopRoute {
@@ -37,6 +38,8 @@ fun FindMyIpNavHost(
             HomeScreen()
         }
         composable<TopRoute.History> { Surface { Spacer(Modifier.fillMaxSize()) } }
-        composable<TopRoute.Settings> { Surface { Spacer(Modifier.fillMaxSize()) } }
+        composable<TopRoute.Settings> {
+            SettingsScreen()
+        }
     }
 }
