@@ -21,6 +21,7 @@ koin = "4.0.2"
 kotlinResult = "2.0.1"
 datastorePreferences = "1.1.3"
 kotlinxSerializationJson = "1.8.0"
+composeShimmer = "1.3.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -47,6 +48,7 @@ kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", versi
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
