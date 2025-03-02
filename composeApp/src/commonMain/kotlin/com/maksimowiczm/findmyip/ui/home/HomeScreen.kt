@@ -55,7 +55,7 @@ private fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val shimmer = rememberShimmer(
-        shimmerBounds = ShimmerBounds.View
+        shimmerBounds = ShimmerBounds.Window
     )
 
     Surface(

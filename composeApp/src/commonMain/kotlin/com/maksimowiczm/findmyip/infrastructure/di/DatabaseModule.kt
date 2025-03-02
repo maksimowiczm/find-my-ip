@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.old.infrastructure.di
+package com.maksimowiczm.findmyip.infrastructure.di
 
 import androidx.room.RoomDatabase
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase

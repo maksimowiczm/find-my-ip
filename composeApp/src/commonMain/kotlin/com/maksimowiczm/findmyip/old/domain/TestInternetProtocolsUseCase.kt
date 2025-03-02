@@ -1,9 +1,9 @@
 package com.maksimowiczm.findmyip.old.domain
 
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.Keys
 import com.maksimowiczm.findmyip.old.data.PublicAddressRepository
 import com.maksimowiczm.findmyip.old.data.UserPreferencesRepository
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

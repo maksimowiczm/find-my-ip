@@ -1,8 +1,8 @@
 package com.maksimowiczm.findmyip.old.data
 
 import com.github.michaelbull.result.Result
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.model.Address
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.network.CurrentAddressState
 import kotlinx.coroutines.flow.Flow
 

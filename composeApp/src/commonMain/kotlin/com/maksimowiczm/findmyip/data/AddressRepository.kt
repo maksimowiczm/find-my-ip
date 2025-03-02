@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.data
 
+import androidx.paging.PagingData
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +16,8 @@ interface AddressRepository {
     fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<AddressStatus>
 
     fun refreshAddresses()
+
+    fun observeAddressesPaged(
+        internetProtocolVersion: InternetProtocolVersion
+    ): Flow<PagingData<Address>>
 }

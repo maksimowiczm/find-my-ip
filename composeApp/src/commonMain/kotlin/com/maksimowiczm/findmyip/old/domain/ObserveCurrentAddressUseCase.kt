@@ -3,11 +3,11 @@ package com.maksimowiczm.findmyip.old.domain
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.Keys
 import com.maksimowiczm.findmyip.old.data.PublicAddressRepository
 import com.maksimowiczm.findmyip.old.data.UserPreferencesRepository
 import com.maksimowiczm.findmyip.old.data.model.Address
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.network.CurrentAddressState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.old.data.model
 
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import java.util.Date
 
 data class Address(

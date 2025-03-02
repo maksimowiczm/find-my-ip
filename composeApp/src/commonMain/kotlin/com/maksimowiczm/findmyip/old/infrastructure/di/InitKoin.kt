@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.old.infrastructure.di
 
+import com.maksimowiczm.findmyip.infrastructure.di.databaseModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 

@@ -1,10 +1,11 @@
 package com.maksimowiczm.findmyip.database
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Transaction
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 
 @Dao
 interface AddressEntityDao {
@@ -14,9 +15,9 @@ interface AddressEntityDao {
            WHERE internetProtocolVersion == :internetProtocolVersion 
            ORDER BY timestamp DESC"""
     )
-    fun observeAddresses(
+    fun observeAddressesPaged(
         internetProtocolVersion: InternetProtocolVersion
-    ): Flow<List<AddressEntity>>
+    ): PagingSource<Int, AddressEntity>
 
     @Query(
         """SELECT * 
@@ -32,4 +33,12 @@ interface AddressEntityDao {
 
     @Query("DELETE FROM addressentity")
     suspend fun deleteAll()
+
+    @Transaction
+    suspend fun insertIfDistinct(addressEntity: AddressEntity) {
+        val latestAddress = getLatestAddress(addressEntity.internetProtocolVersion)
+        if (latestAddress?.ip != addressEntity.ip) {
+            insertAddress(addressEntity)
+        }
+    }
 }

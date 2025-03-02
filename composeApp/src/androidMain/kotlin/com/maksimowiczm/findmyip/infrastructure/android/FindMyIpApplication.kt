@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.infrastructure.android
 
 import android.app.Application
+import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.infrastructure.di.initKoin
 import com.maksimowiczm.findmyip.old.infrastructure.di.createDatastore
 import org.koin.android.ext.koin.androidContext
@@ -18,6 +19,7 @@ class FindMyIpApplication : Application() {
             modules(
                 module {
                     single { createDatastore(androidContext()) }
+                    factory { StringFormatRepository(androidContext()) }
                 }
             )
         }

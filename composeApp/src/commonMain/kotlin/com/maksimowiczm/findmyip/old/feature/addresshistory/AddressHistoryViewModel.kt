@@ -2,9 +2,9 @@ package com.maksimowiczm.findmyip.old.feature.addresshistory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.Keys
 import com.maksimowiczm.findmyip.old.data.UserPreferencesRepository
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.domain.AddressHistory
 import com.maksimowiczm.findmyip.old.domain.ObserveAddressHistoryUseCase
 import kotlinx.coroutines.flow.SharingStarted

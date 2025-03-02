@@ -1,15 +1,14 @@
 package com.maksimowiczm.findmyip.old.data
 
 import androidx.room.withTransaction
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
 import com.maksimowiczm.findmyip.old.data.model.Address
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.network.CurrentAddressDataSource
 import java.util.Calendar
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class PublicAddressRepositoryImpl(
     private val ipv4DataSource: CurrentAddressDataSource,
@@ -38,10 +37,9 @@ class PublicAddressRepositoryImpl(
 
     override fun observeAddressHistory(
         internetProtocolVersion: InternetProtocolVersion
-    ): Flow<List<Address>> = addressEntityDao.observeAddresses(internetProtocolVersion)
-        .map { addressEntities ->
-            addressEntities.map { it.toAddress() }
-        }
+    ): Flow<List<Address>> {
+        TODO()
+    }
 
     /**
      * Inserts the given address into the database if it is different from the latest address.

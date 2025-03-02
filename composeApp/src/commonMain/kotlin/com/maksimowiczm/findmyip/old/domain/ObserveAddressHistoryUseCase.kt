@@ -1,7 +1,7 @@
 package com.maksimowiczm.findmyip.old.domain
 
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.PublicAddressRepository
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

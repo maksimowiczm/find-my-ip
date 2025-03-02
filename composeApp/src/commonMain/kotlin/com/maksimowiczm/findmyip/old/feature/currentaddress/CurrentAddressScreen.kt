@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import findmyip.composeapp.generated.resources.Res
 import findmyip.composeapp.generated.resources.tap_to_refresh
 import findmyip.composeapp.generated.resources.unavailable

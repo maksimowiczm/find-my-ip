@@ -6,8 +6,8 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.data.model.Address
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.old.network.CurrentAddressState
 import java.net.URL
 import java.util.Calendar

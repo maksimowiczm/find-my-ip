@@ -1,10 +1,10 @@
 package com.maksimowiczm.findmyip.old.infrastructure.di
 
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
 import com.maksimowiczm.findmyip.old.data.PublicAddressRepository
 import com.maksimowiczm.findmyip.old.data.PublicAddressRepositoryImpl
 import com.maksimowiczm.findmyip.old.data.UserPreferencesRepository
-import com.maksimowiczm.findmyip.old.data.model.InternetProtocolVersion
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
