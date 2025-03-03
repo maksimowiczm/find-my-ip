@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -42,7 +43,7 @@ fun FindMyIpApp(modifier: Modifier = Modifier) {
             item(
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Settings,
+                        imageVector = Icons.Default.History,
                         contentDescription = null
                     )
                 },

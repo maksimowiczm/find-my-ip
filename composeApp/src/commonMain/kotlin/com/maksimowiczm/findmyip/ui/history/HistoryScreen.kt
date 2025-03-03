@@ -1,7 +1,9 @@
 package com.maksimowiczm.findmyip.ui.history
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +37,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
@@ -49,9 +49,13 @@ import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.history_disabled_card_description
+import findmyip.composeapp.generated.resources.empty
+import findmyip.composeapp.generated.resources.headline_address_history_disabled
+import findmyip.composeapp.generated.resources.headline_ip_version_disabled
 import findmyip.composeapp.generated.resources.ipv4
 import findmyip.composeapp.generated.resources.ipv6
+import findmyip.composeapp.generated.resources.neutral_enable_address_history_in_settings
+import findmyip.composeapp.generated.resources.neutral_enable_ip_version_in_settings
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -60,13 +64,19 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = koinViewModel()) {
     val enabled by viewModel.enabled.collectAsStateWithLifecycle()
+
+    val ipv4Enabled by viewModel.ipv4Enabled.collectAsStateWithLifecycle()
     val ipv4History = viewModel.ipv4data.collectAsLazyPagingItems()
+
+    val ipv6Enabled by viewModel.ipv6Enabled.collectAsStateWithLifecycle()
     val ipv6History = viewModel.ipv6data.collectAsLazyPagingItems()
 
     HistoryScreen(
         enabled = enabled,
         onGrantPermission = viewModel::onPermissionGranted,
+        ipv4Enabled = ipv4Enabled,
         ipv4History = ipv4History,
+        ipv6Enabled = ipv6Enabled,
         ipv6History = ipv6History,
         formatDate = viewModel::formatDate,
         modifier = modifier
@@ -77,7 +87,9 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = k
 private fun HistoryScreen(
     enabled: Boolean,
     onGrantPermission: () -> Unit,
+    ipv4Enabled: Boolean,
     ipv4History: LazyPagingItems<Address>,
+    ipv6Enabled: Boolean,
     ipv6History: LazyPagingItems<Address>,
     formatDate: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
@@ -92,8 +104,9 @@ private fun HistoryScreen(
         } else {
             HistoryScreenWithList(
                 hasPermission = enabled,
-                onGrantPermission = onGrantPermission,
+                ipv4Enabled = ipv4Enabled,
                 ipv4History = ipv4History,
+                ipv6Enabled = ipv6Enabled,
                 ipv6History = ipv6History,
                 formatDate = formatDate
             )
@@ -104,13 +117,13 @@ private fun HistoryScreen(
 @Composable
 private fun HistoryScreenWithList(
     hasPermission: Boolean,
-    onGrantPermission: () -> Unit,
+    ipv4Enabled: Boolean,
     ipv4History: LazyPagingItems<Address>,
+    ipv6Enabled: Boolean,
     ipv6History: LazyPagingItems<Address>,
     formatDate: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState { 2 }
     val coroutineScope = rememberCoroutineScope()
 
     val topPadding = WindowInsets.systemBars.only(WindowInsetsSides.Top)
@@ -123,38 +136,52 @@ private fun HistoryScreenWithList(
 
     val padding = topPadding.union(horizontalPadding).asPaddingValues()
 
+    val showIpv4 = ipv4Enabled || ipv4History.itemCount > 0
+    val showIpv6 = ipv6Enabled || ipv6History.itemCount > 0
+
+    val pagerState = rememberPagerState(
+        initialPage = if (showIpv4 && !showIpv6) {
+            0
+        } else if (!showIpv4 && showIpv6) {
+            1
+        } else {
+            0
+        }
+    ) { 2 }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(padding)
             .consumeWindowInsets(padding)
     ) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage
-        ) {
-            Tab(
-                selected = pagerState.currentPage == 0,
-                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(0) } }
+        if (showIpv4 && showIpv6) {
+            TabRow(
+                selectedTabIndex = pagerState.currentPage
             ) {
-                Text(
-                    modifier = Modifier.padding(10.dp),
-                    text = stringResource(Res.string.ipv4)
-                )
-            }
-            Tab(
-                selected = pagerState.currentPage == 1,
-                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(1) } }
-            ) {
-                Text(
-                    modifier = Modifier.padding(10.dp),
-                    text = stringResource(Res.string.ipv6)
-                )
+                Tab(
+                    selected = pagerState.currentPage == 0,
+                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(0) } }
+                ) {
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = stringResource(Res.string.ipv4)
+                    )
+                }
+                Tab(
+                    selected = pagerState.currentPage == 1,
+                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(1) } }
+                ) {
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = stringResource(Res.string.ipv6)
+                    )
+                }
             }
         }
 
         if (!hasPermission) {
             AddressHistoryDisabledCard(
-                onGrantPermission = onGrantPermission,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -164,15 +191,18 @@ private fun HistoryScreenWithList(
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
+            userScrollEnabled = showIpv4 && showIpv6
         ) {
             when (it) {
                 0 -> HistoryList(
+                    enabled = ipv4Enabled,
                     items = ipv4History,
                     formatDate = formatDate
                 )
 
                 1 -> HistoryList(
+                    enabled = ipv6Enabled,
                     items = ipv6History,
                     formatDate = formatDate
                 )
@@ -182,29 +212,33 @@ private fun HistoryScreenWithList(
 }
 
 @Composable
-private fun AddressHistoryDisabledCard(
-    onGrantPermission: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+private fun AddressHistoryDisabledCard(modifier: Modifier = Modifier) {
     Card(
-        onClick = onGrantPermission,
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-            contentColor = MaterialTheme.colorScheme.error
-        )
+        modifier = modifier
     ) {
-        Text(
-            modifier = Modifier.padding(16.dp),
-            text = stringResource(Res.string.history_disabled_card_description),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Justify
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = stringResource(Res.string.headline_address_history_disabled),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = stringResource(
+                    Res.string.neutral_enable_address_history_in_settings
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HistoryList(
+    enabled: Boolean,
     items: LazyPagingItems<Address>,
     formatDate: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
@@ -213,27 +247,65 @@ private fun HistoryList(
         shimmerBounds = ShimmerBounds.Window
     )
 
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(
-            count = items.itemCount,
-            key = items.itemKey()
-        ) { index ->
-            val item = items[index]
-
-            Crossfade(
-                targetState = item
+    val disabledCard = @Composable {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                if (it == null) {
-                    AddressHistoryListItemSkeleton(
-                        shimmer = shimmer
-                    )
-                } else {
-                    AddressHistoryListItem(
-                        ip = it.ip,
-                        date = formatDate(it.date)
-                    )
+                Text(
+                    text = stringResource(Res.string.headline_ip_version_disabled),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(
+                        Res.string.neutral_enable_ip_version_in_settings
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+
+    if (items.itemCount == 0) {
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(stringResource(Res.string.empty))
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+        ) {
+            stickyHeader {
+                if (!enabled) {
+                    disabledCard()
+                }
+            }
+
+            items(
+                count = items.itemCount,
+                key = items.itemKey()
+            ) { index ->
+                val item = items[index]
+
+                Crossfade(
+                    targetState = item
+                ) {
+                    if (it == null) {
+                        AddressHistoryListItemSkeleton(
+                            shimmer = shimmer
+                        )
+                    } else {
+                        AddressHistoryListItem(
+                            ip = it.ip,
+                            date = formatDate(it.date)
+                        )
+                    }
                 }
             }
         }

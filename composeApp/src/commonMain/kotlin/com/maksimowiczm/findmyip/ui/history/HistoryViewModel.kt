@@ -33,9 +33,27 @@ class HistoryViewModel(
             initialValue = runBlocking { dataStore.get(PreferenceKeys.historyEnabled) ?: false }
         )
 
+    val ipv4Enabled = dataStore
+        .observe(PreferenceKeys.ipv4Enabled)
+        .map { it ?: false }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = runBlocking { dataStore.get(PreferenceKeys.ipv4Enabled) ?: false }
+        )
+
     val ipv4data = addressRepository
         .observeAddressesPaged(InternetProtocolVersion.IPv4)
         .cachedIn(viewModelScope)
+
+    val ipv6Enabled = dataStore
+        .observe(PreferenceKeys.ipv6Enabled)
+        .map { it ?: false }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = runBlocking { dataStore.get(PreferenceKeys.ipv6Enabled) ?: false }
+        )
 
     val ipv6data = addressRepository
         .observeAddressesPaged(InternetProtocolVersion.IPv6)

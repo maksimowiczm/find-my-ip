@@ -65,7 +65,9 @@ fun FindMyIpNavHost(
             composable<TopRoute.Settings.AdvancedHistorySettings> {
                 AdvancedHistorySettingsScreen(
                     onNavigateUp = {
-                        navController.navigateUp()
+                        navController.popBackStack<TopRoute.Settings.AdvancedHistorySettings>(
+                            inclusive = true
+                        )
                     }
                 )
             }

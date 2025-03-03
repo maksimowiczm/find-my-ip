@@ -4,10 +4,16 @@
     <string name="headline_history_settings">History settings</string>
     <string name="headline_clear_history">Clear history</string>
     <string name="headline_network_type">Network type</string>
+    <string name="headline_ip_version_disabled">IP version disabled</string>
+    <string name="headline_address_history_disabled">Address history disabled</string>
 
     <string name="description_clear_history">Clear all saved addresses</string>
     <string name="description_clear_history_dialog">Your address history will be permanently deleted</string>
     <string name="description_network_type">You can choose which network types to store in the history</string>
+
+    <string name="neutral_empty">Empty</string>
+    <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
+    <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
 
     <string name="tap_to_enable">Tap to enable</string>
     <string name="are_you_sure">Are you sure?</string>
