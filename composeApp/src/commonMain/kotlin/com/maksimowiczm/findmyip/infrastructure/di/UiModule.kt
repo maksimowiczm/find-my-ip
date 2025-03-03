@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
+import com.maksimowiczm.findmyip.MigrationViewModel
 import com.maksimowiczm.findmyip.ui.history.HistoryViewModel
 import com.maksimowiczm.findmyip.ui.home.HomeViewModel
 import com.maksimowiczm.findmyip.ui.settings.history.HistorySettingsViewModel
@@ -12,4 +13,5 @@ val uiModule = module {
     viewModelOf(::InternetProtocolVersionSettingsViewModel)
     viewModelOf(::HistoryViewModel)
     viewModelOf(::HistorySettingsViewModel)
+    viewModelOf(::MigrationViewModel)
 }

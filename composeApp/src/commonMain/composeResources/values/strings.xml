@@ -11,6 +11,7 @@
     <string name="headline_check_every">Check every</string>
     <string name="headline_custom">Custom</string>
     <string name="headline_custom_interval">Custom interval</string>
+    <string name="headline_migration_from_version_1">Migration from version 1</string>
 
     <string name="unit_minutes_short">min</string>
 
@@ -19,6 +20,7 @@
     <string name="description_clear_history">Clear all saved addresses</string>
     <string name="description_clear_history_dialog">Your address history will be permanently deleted</string>
     <string name="description_network_type">You can choose which network types to store in the history</string>
+    <string name="description_migration_from_version_1">Seems like you have migrated from version 1. Unfortunately I have broken all user preferences. Your address history is still here but you have to setup your history and background worker preferences again.</string>
 
     <string name="neutral_empty">Empty</string>
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
@@ -27,6 +29,8 @@
     <string name="action_confirm">Confirm</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_learn_about_doze">Click here to learn more about Doze mode</string>
+    <string name="action_hide">Hide</string>
+    <string name="action_dont_show_again">Don't show again</string>
 
     <string name="link_doze" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
 

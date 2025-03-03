@@ -13,5 +13,7 @@ object PreferenceKeys {
     val saveMobileHistory = booleanPreferencesKey("saveMobileHistory")
     val saveVpnHistory = booleanPreferencesKey("saveVpnHistory")
 
-    val ipFeaturesTested = booleanPreferencesKey("ip_features_tested")
+    val ipFeaturesTested = booleanPreferencesKey("ipFeaturesTested")
+
+    val hideMigrationDialog = booleanPreferencesKey("hideMigrationDialog")
 }
