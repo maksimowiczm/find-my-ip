@@ -1,55 +1,61 @@
 <resources>
-    <string name="tap_to_enable">Toque para ativar</string>
-    <string name="are_you_sure">Você tem certeza?</string>
-    <string name="cancel">Cancelar</string>
-    <string name="ok">OK</string>
-    <string name="home">Início</string>
-    <string name="settings">Configurações</string>
-    <string name="tap_to_refresh">Toque para atualizar</string>
-    <string name="failed_to_fetch_your_ip_address">Falha ao obter seu endereço IP</string>
-    <string name="fetching_your_ip_address">Obtendo seu endereço IP</string>
-    <string name="refreshing">Atualizando</string>
-    <string name="your_ip_address_is">Seu endereço IP é</string>
-    <string name="empty">Vazio</string>
-    <string name="clear">Limpar</string>
-    <string name="enable">Ativar</string>
 
-    <!-- START: address history -->
-    <string name="history">Histórico</string>
-    <string name="history_description">Customize suas configurações do histórico de endereços IP.</string>
 
-    <string name="history_save">Salvar histórico</string>
-    <string name="history_save_description">Salve seu histórico de endereços IP.</string>
 
-    <string name="history_clear">Limpar histórico</string>
-    <string name="history_clear_description">Limpar todos os endereços salvos</string>
-    <string name="history_clear_dialog_description">Esta ação é irreversível. Você tem certeza que deseja realmente limpar o histórico?</string>
 
-    <string name="history_no_permission_description">O rastreamento de endereço IP é desativado por padrão. Ative-o para ver seu histórico de endereços. Você pode sempre mudar esta opção nas configurações do app.</string>
-    <string name="history_no_permission_dialog_description">Você está prestes a ativar o rastreamento do seu endereço IP. Isto permite que o app salve seu histórico de endereços. Você pode sempre mudar esta opção nas configurações do app.</string>
 
-    <string name="history_disabled_description">Para ver e mudar as configurações de histórico, ative o histórico primeiro.</string>
-    <string name="history_disabled_card_description">Você desativou o histórico. Toque para ativar.</string>
+    <string name="headline_enable">Ativar</string>
 
-    <string name="history_network_type">Tipo de Rede</string>
-    <string name="history_network_type_description">Você pode mudar quais tipos de rede devem ser salvas no histórico.</string>
 
-    <string name="history_background_service_title">Serviço de segundo plano</string>
-    <string name="history_background_service_description">Isso permite que o app execute em segundo plano e verifique seu endereço IP público periodicamente. É importante notar que isso pode não funcionar se o seu dispositivo entrar em modo de soneca.</string>
-    <string name="check_every_n_minutes">Verificar a cada %1$s minutos</string>
-    <string name="learn_about_doze">Toque aqui para saber mais sobre o modo de soneca.</string>
-    <!-- END: address history settings -->
 
-    <!-- START: address types -->
-    <string name="internet_protocol">Protocolo da Internet</string>
-    <string name="internet_protocol_description">Escolha qual protocolo da internet usar. Pelo menos um deve estar ativado.</string>
-    <!-- END: address types -->
 
-    <string name="back">Voltar</string>
-    <string name="on">Ativado</string>
-    <string name="off">Desativado</string>
+
+    <string name="headline_home">Início</string>
+    <string name="headline_history">Histórico</string>
+    <string name="headline_settings">Configurações</string>
+    <string name="headline_your_ip_address_is">Seu endereço IP é</string>
+
+    <string name="headline_empty">Vazio</string>
+    <string name="headline_on">Ativado</string>
+    <string name="headline_off">Desativado</string>
+
+    <string name="headline_internet_protocol">Protocolo da Internet</string>
+
+
+
+    <string name="description_background_worker">Isso permite que o app execute em segundo plano e verifique seu endereço IP público periodicamente. É importante notar que isso pode não funcionar se o seu dispositivo entrar em modo de soneca.</string>
+
+    <string name="description_clear_history">Limpar todos os endereços salvos</string>
+    <string name="description_clear_history_dialog">Esta ação é irreversível. Você tem certeza que deseja realmente limpar o histórico?</string>
+    <string name="description_network_type">Você pode mudar quais tipos de rede devem ser salvas no histórico.</string>
+
+    <string name="description_history_no_permission">O rastreamento de endereço IP é desativado por padrão. Ative-o para ver seu histórico de endereços. Você pode sempre mudar esta opção nas configurações do app.</string>
+
+    <string name="description_history_settings_disabled">Para ver e mudar as configurações de histórico, ative o histórico primeiro.</string>
+    <string name="description_save_history">Salve seu histórico de endereços IP.</string>
+    <string name="description_internet_protocol">Escolha qual protocolo da internet usar. Pelo menos um deve estar ativado.</string>
+
+    <string name="neutral_empty">Vazio</string>
+
+
+
+    <string name="error_unavailable">Indisponível</string>
+
+    <string name="action_enable">Ativar</string>
+
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_learn_about_doze">Toque aqui para saber mais sobre o modo de soneca.</string>
+
+
+
+
+
+    <string name="action_tap_to_refresh">Toque para atualizar</string>
+    <string name="action_tap_to_enable">Toque para ativar</string>
+    <string name="action_go_back">Voltar</string>
+    <string name="action_clear">Limpar</string>
+
     <string name="mobile">Redes móveis</string>
     <string name="vpn">VPN</string>
     <string name="unavailable">Indisponível</string>
-
 </resources>

@@ -39,13 +39,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import findmyip.composeapp.generated.resources.action_cancel
 import findmyip.composeapp.generated.resources.action_confirm
 import findmyip.composeapp.generated.resources.action_learn_about_doze
 import findmyip.composeapp.generated.resources.description_background_worker
 import findmyip.composeapp.generated.resources.description_interval_less_than_15_min
-import findmyip.composeapp.generated.resources.enable
 import findmyip.composeapp.generated.resources.headline_background_worker
 import findmyip.composeapp.generated.resources.headline_check_every
 import findmyip.composeapp.generated.resources.headline_custom
@@ -132,7 +132,7 @@ private fun BackgroundWorkerSettingsImpl(
         )
         ListItem(
             headlineContent = {
-                Text(stringResource(Res.string.enable))
+                Text(stringResource(Res.string.headline_enable))
             },
             modifier = Modifier.clickable { setEnabled(!enabled) },
             trailingContent = {

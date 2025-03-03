@@ -36,17 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.NetworkType
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.back
-import findmyip.composeapp.generated.resources.description_network_type
-import findmyip.composeapp.generated.resources.headline_history_settings
-import findmyip.composeapp.generated.resources.headline_network_type
-import findmyip.composeapp.generated.resources.history_disabled_description
-import findmyip.composeapp.generated.resources.mobile
-import findmyip.composeapp.generated.resources.off
-import findmyip.composeapp.generated.resources.on
-import findmyip.composeapp.generated.resources.vpn
-import findmyip.composeapp.generated.resources.wi_fi
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -104,7 +95,7 @@ private fun AdvancedHistorySettingsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.back)
+                            contentDescription = stringResource(Res.string.action_go_back)
                         )
                     }
                 }
@@ -132,9 +123,9 @@ private fun AdvancedHistorySettingsScreen(
                 ),
                 headlineContent = {
                     if (enabled) {
-                        Text(stringResource(Res.string.on))
+                        Text(stringResource(Res.string.headline_on))
                     } else {
-                        Text(stringResource(Res.string.off))
+                        Text(stringResource(Res.string.headline_off))
                     }
                 },
                 trailingContent = {
@@ -153,7 +144,7 @@ private fun AdvancedHistorySettingsScreen(
                 if (!it) {
                     Text(
                         modifier = Modifier.padding(8.dp),
-                        text = stringResource(Res.string.history_disabled_description),
+                        text = stringResource(Res.string.description_history_settings_disabled),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.outline
                     )

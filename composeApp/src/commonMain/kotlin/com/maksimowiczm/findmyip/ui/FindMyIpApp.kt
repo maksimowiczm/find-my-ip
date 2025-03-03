@@ -21,14 +21,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.navigation.FindMyIpNavHost
 import com.maksimowiczm.findmyip.navigation.TopRoute
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.action_dont_show_again
-import findmyip.composeapp.generated.resources.action_hide
-import findmyip.composeapp.generated.resources.description_migration_from_version_1
-import findmyip.composeapp.generated.resources.headline_migration_from_version_1
-import findmyip.composeapp.generated.resources.history
-import findmyip.composeapp.generated.resources.home
-import findmyip.composeapp.generated.resources.settings
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -72,10 +66,10 @@ fun FindMyIpApp(modifier: Modifier = Modifier, viewModel: MigrationViewModel = k
                 icon = {
                     Icon(
                         imageVector = Icons.Default.Home,
-                        contentDescription = null
+                        contentDescription = stringResource(Res.string.action_go_to_home)
                     )
                 },
-                label = { Text(stringResource(Res.string.home)) },
+                label = { Text(stringResource(Res.string.headline_home)) },
                 selected = selectedTopRoute == TopRoute.Home,
                 onClick = { appState.navigate(TopRoute.Home) }
             )
@@ -83,10 +77,10 @@ fun FindMyIpApp(modifier: Modifier = Modifier, viewModel: MigrationViewModel = k
                 icon = {
                     Icon(
                         imageVector = Icons.Default.History,
-                        contentDescription = null
+                        contentDescription = stringResource(Res.string.action_go_to_history)
                     )
                 },
-                label = { Text(stringResource(Res.string.history)) },
+                label = { Text(stringResource(Res.string.headline_history)) },
                 selected = selectedTopRoute == TopRoute.History,
                 onClick = { appState.navigate(TopRoute.History) }
             )
@@ -94,10 +88,10 @@ fun FindMyIpApp(modifier: Modifier = Modifier, viewModel: MigrationViewModel = k
                 icon = {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = null
+                        contentDescription = stringResource(Res.string.action_go_to_settings)
                     )
                 },
-                label = { Text(stringResource(Res.string.settings)) },
+                label = { Text(stringResource(Res.string.headline_settings)) },
                 selected = selectedTopRoute == TopRoute.Settings,
                 onClick = { appState.navigate(TopRoute.Settings) }
             )

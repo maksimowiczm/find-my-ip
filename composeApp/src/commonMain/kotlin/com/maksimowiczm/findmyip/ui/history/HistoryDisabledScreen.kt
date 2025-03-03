@@ -18,9 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.history_no_permission_description
-import findmyip.composeapp.generated.resources.tap_to_enable
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -49,7 +48,7 @@ fun HistoryDisabledScreen(onGrantPermission: () -> Unit, modifier: Modifier = Mo
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(Res.string.history_no_permission_description),
+                text = stringResource(Res.string.description_history_no_permission),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
@@ -57,7 +56,7 @@ fun HistoryDisabledScreen(onGrantPermission: () -> Unit, modifier: Modifier = Mo
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = stringResource(Res.string.tap_to_enable),
+                text = stringResource(Res.string.action_tap_to_enable),
                 style = MaterialTheme.typography.labelLarge
             )
         }

@@ -48,14 +48,8 @@ import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.empty
-import findmyip.composeapp.generated.resources.headline_address_history_disabled
-import findmyip.composeapp.generated.resources.headline_ip_version_disabled
-import findmyip.composeapp.generated.resources.ipv4
-import findmyip.composeapp.generated.resources.ipv6
-import findmyip.composeapp.generated.resources.neutral_enable_address_history_in_settings
-import findmyip.composeapp.generated.resources.neutral_enable_ip_version_in_settings
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -275,7 +269,7 @@ private fun HistoryList(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(stringResource(Res.string.empty))
+            Text(stringResource(Res.string.headline_empty))
         }
     } else {
         LazyColumn(

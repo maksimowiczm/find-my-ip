@@ -13,11 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.BuildConfig
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.internet_protocol
-import findmyip.composeapp.generated.resources.internet_protocol_description
-import findmyip.composeapp.generated.resources.ipv4
-import findmyip.composeapp.generated.resources.ipv6
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,12 +46,12 @@ private fun InternetProtocolVersionSettings(
     Column(modifier) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            text = stringResource(Res.string.internet_protocol),
+            text = stringResource(Res.string.headline_internet_protocol),
             style = MaterialTheme.typography.titleMedium
         )
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            text = stringResource(Res.string.internet_protocol_description),
+            text = stringResource(Res.string.description_internet_protocol),
             style = MaterialTheme.typography.bodyMedium
         )
 

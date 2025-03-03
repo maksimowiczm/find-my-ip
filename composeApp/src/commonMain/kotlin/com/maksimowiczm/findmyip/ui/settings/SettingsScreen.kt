@@ -19,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.maksimowiczm.findmyip.ui.settings.history.HistorySettings
 import com.maksimowiczm.findmyip.ui.settings.internetprotocol.InternetProtocolVersionSettings
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.settings
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +41,7 @@ fun SettingsScreen(onAdvancedHistorySettingsClick: () -> Unit, modifier: Modifie
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(Res.string.settings))
+                    Text(stringResource(Res.string.headline_settings))
                 }
             )
         },

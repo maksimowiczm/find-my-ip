@@ -21,14 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.cancel
-import findmyip.composeapp.generated.resources.clear
-import findmyip.composeapp.generated.resources.description_clear_history
-import findmyip.composeapp.generated.resources.description_clear_history_dialog
-import findmyip.composeapp.generated.resources.headline_clear_history
-import findmyip.composeapp.generated.resources.history_save
-import findmyip.composeapp.generated.resources.history_save_description
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -62,11 +56,11 @@ private fun HistorySettings(
     ) {
         ListItem(
             headlineContent = {
-                Text(stringResource(Res.string.history_save))
+                Text(stringResource(Res.string.headline_save_history))
             },
             modifier = Modifier.clickable { onAdvancedSettingsClick() },
             supportingContent = {
-                Text(stringResource(Res.string.history_save_description))
+                Text(stringResource(Res.string.description_save_history))
             },
             trailingContent = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -128,12 +122,12 @@ private fun HistoryClearDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
             TextButton(
                 onClick = onDismiss
             ) {
-                Text(stringResource(Res.string.cancel))
+                Text(stringResource(Res.string.action_cancel))
             }
         },
         confirmButton = {
             TextButton(onConfirm) {
-                Text(stringResource(Res.string.clear))
+                Text(stringResource(Res.string.action_clear))
             }
         }
     )

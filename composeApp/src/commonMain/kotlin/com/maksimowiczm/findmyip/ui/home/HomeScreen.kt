@@ -27,10 +27,8 @@ import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
+import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.tap_to_refresh
-import findmyip.composeapp.generated.resources.unavailable
-import findmyip.composeapp.generated.resources.your_ip_address_is
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -70,7 +68,7 @@ private fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(Res.string.your_ip_address_is),
+                    text = stringResource(Res.string.headline_your_ip_address_is),
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -114,7 +112,7 @@ private fun HomeScreen(
 
                 Text(
                     modifier = Modifier.padding(top = 16.dp),
-                    text = stringResource(Res.string.tap_to_refresh),
+                    text = stringResource(Res.string.action_tap_to_refresh),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
@@ -190,7 +188,7 @@ private fun AddressErrorDisplay(
         protocolVersion = internetProtocolVersion
     ) {
         Text(
-            text = stringResource(Res.string.unavailable),
+            text = stringResource(Res.string.error_unavailable),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.error
         )
