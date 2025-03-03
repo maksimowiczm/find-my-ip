@@ -108,7 +108,7 @@ private fun AdvancedHistorySettingsScreen(
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
         ) {
-            val headerColor by animateColorAsState(
+            val headerContainerColor by animateColorAsState(
                 targetValue = if (enabled) {
                     MaterialTheme.colorScheme.secondaryContainer
                 } else {
@@ -116,10 +116,19 @@ private fun AdvancedHistorySettingsScreen(
                 }
             )
 
+            val headerContentColor by animateColorAsState(
+                targetValue = if (enabled) {
+                    MaterialTheme.colorScheme.onSecondaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
+            )
+
             ListItem(
                 modifier = Modifier.clickable { onEnabledChange(!enabled) },
                 colors = ListItemDefaults.colors(
-                    containerColor = headerColor
+                    containerColor = headerContainerColor,
+                    headlineColor = headerContentColor
                 ),
                 headlineContent = {
                     if (enabled) {
