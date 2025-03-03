@@ -21,6 +21,8 @@ val dataModule = module {
         )
     }.bind<AddressRepository>()
 
+//    addDemoAddressRepository()
+
     factory {
         AppInitializer(
             initializers = listOf(
