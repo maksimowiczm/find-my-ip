@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -91,7 +94,18 @@ private fun HistoryScreen(
     Surface(
         modifier = modifier
     ) {
-        if (!enabled && ipv4History.itemCount == 0 && ipv6History.itemCount == 0) {
+        if (ipv4History.loadState.source.refresh == LoadState.Loading ||
+            ipv6History.loadState.source.refresh == LoadState.Loading
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .safeContentPadding(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (!enabled && ipv4History.itemCount == 0 && ipv6History.itemCount == 0) {
             HistoryDisabledScreen(
                 onGrantPermission = onGrantPermission
             )
