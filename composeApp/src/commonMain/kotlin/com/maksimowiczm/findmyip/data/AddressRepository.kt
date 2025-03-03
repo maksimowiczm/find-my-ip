@@ -20,4 +20,6 @@ interface AddressRepository {
     fun observeAddressesPaged(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<PagingData<Address>>
+
+    suspend fun clearHistory()
 }

@@ -2,7 +2,6 @@ package com.maksimowiczm.findmyip.ui.settings
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,13 +10,22 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.maksimowiczm.findmyip.ui.settings.history.HistorySettings
 import com.maksimowiczm.findmyip.ui.settings.internetprotocol.InternetProtocolVersionSettings
+import findmyip.composeapp.generated.resources.Res
+import findmyip.composeapp.generated.resources.settings
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
+fun SettingsScreen(onAdvancedHistorySettingsClick: () -> Unit, modifier: Modifier = Modifier) {
     val excludedPadding = WindowInsets.systemBars
         .union(WindowInsets.displayCutout)
         .union(WindowInsets.navigationBars)
@@ -28,13 +36,31 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         .union(WindowInsets.navigationBars)
         .exclude(excludedPadding)
 
-    Surface(
-        modifier = modifier
-    ) {
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(stringResource(Res.string.settings))
+                }
+            )
+        },
+        contentWindowInsets = contentPadding
+    ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding.asPaddingValues()
+            contentPadding = paddingValues
         ) {
+            item {
+                HistorySettings(
+                    onAdvancedSettingsClick = onAdvancedHistorySettingsClick
+                )
+            }
+
+            item {
+                HorizontalDivider()
+            }
+
             item {
                 InternetProtocolVersionSettings()
             }

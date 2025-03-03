@@ -105,4 +105,8 @@ class AddressRepositoryImpl(
             data.map { it.toDomain() }
         }
     }
+
+    override suspend fun clearHistory() {
+        dao.deleteAll()
+    }
 }
