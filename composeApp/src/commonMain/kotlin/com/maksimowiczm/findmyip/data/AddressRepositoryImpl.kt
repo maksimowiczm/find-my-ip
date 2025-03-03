@@ -90,9 +90,9 @@ class AddressRepositoryImpl(
 
     private suspend fun insertAddress(address: Address) {
         val shouldInsert = when (address.networkType) {
-            NetworkType.WIFI -> dataStore.get(PreferenceKeys.save_wifi_history) ?: false
-            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.save_mobile_history) ?: false
-            NetworkType.VPN -> dataStore.get(PreferenceKeys.save_vpn_history) ?: false
+            NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory) ?: false
+            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
+            NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
             null -> false
         }
 

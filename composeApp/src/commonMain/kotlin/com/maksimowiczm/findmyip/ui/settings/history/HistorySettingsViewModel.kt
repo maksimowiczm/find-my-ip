@@ -31,9 +31,9 @@ class HistorySettingsViewModel(
         )
 
     val networkTypeSettings = combine(
-        dataStore.observe(PreferenceKeys.save_wifi_history),
-        dataStore.observe(PreferenceKeys.save_mobile_history),
-        dataStore.observe(PreferenceKeys.save_vpn_history)
+        dataStore.observe(PreferenceKeys.saveWifiHistory),
+        dataStore.observe(PreferenceKeys.saveMobileHistory),
+        dataStore.observe(PreferenceKeys.saveVpnHistory)
     ) { wifi, mobile, vpn ->
         mapOf(
             NetworkType.WIFI to (wifi ?: false),
@@ -45,9 +45,9 @@ class HistorySettingsViewModel(
         started = SharingStarted.WhileSubscribed(2_000),
         initialValue = runBlocking {
             mapOf(
-                NetworkType.WIFI to (dataStore.get(PreferenceKeys.save_vpn_history) ?: false),
-                NetworkType.MOBILE to (dataStore.get(PreferenceKeys.save_vpn_history) ?: false),
-                NetworkType.VPN to (dataStore.get(PreferenceKeys.save_vpn_history) ?: false)
+                NetworkType.WIFI to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false),
+                NetworkType.MOBILE to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false),
+                NetworkType.VPN to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false)
             )
         }
     )
@@ -67,9 +67,9 @@ class HistorySettingsViewModel(
     fun onNetworkTypeToggle(networkType: NetworkType, value: Boolean) {
         viewModelScope.launch {
             when (networkType) {
-                NetworkType.WIFI -> dataStore.set(PreferenceKeys.save_wifi_history to value)
-                NetworkType.MOBILE -> dataStore.set(PreferenceKeys.save_mobile_history to value)
-                NetworkType.VPN -> dataStore.set(PreferenceKeys.save_vpn_history to value)
+                NetworkType.WIFI -> dataStore.set(PreferenceKeys.saveWifiHistory to value)
+                NetworkType.MOBILE -> dataStore.set(PreferenceKeys.saveMobileHistory to value)
+                NetworkType.VPN -> dataStore.set(PreferenceKeys.saveVpnHistory to value)
             }
         }
     }
