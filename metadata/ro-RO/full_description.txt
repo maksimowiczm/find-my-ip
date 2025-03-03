@@ -1,0 +1,9 @@
+Find My IP is a straightforward Android app designed to fetch and optionally
+store your current IP address, helping you keep a history of your IP addresses.
+It can automatically log IP changes in the background, so you don't have to open
+the app every time.
+
+The application uses the ipify API to get the IP address of the device. See here
+for more details : https://www.ipify.org
+
+Launcher icon made by Freepik from www.flaticon.com.
