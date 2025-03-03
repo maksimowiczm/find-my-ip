@@ -7,4 +7,8 @@ object PreferenceKeys {
     val ipv6Enabled = booleanPreferencesKey("ipv6Enabled")
 
     val historyEnabled = booleanPreferencesKey("historyEnabled")
+
+    val save_wifi_history = booleanPreferencesKey("save_wifi_history")
+    val save_mobile_history = booleanPreferencesKey("save_mobile_history")
+    val save_vpn_history = booleanPreferencesKey("save_vpn_history")
 }

@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.old.network
+package com.maksimowiczm.findmyip.network
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,13 +7,13 @@ import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
 import android.net.NetworkCapabilities.TRANSPORT_VPN
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
-import com.maksimowiczm.findmyip.old.data.model.NetworkType
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-class ConnectivityObserver(private val context: Context) {
+actual class ConnectivityObserver(private val context: Context) {
     fun getNetworkType(): NetworkType? {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -27,7 +27,7 @@ class ConnectivityObserver(private val context: Context) {
      * Observes network connection changes.
      * Emits the current network type and then emits new network type when it changes.
      */
-    fun observeConnection(): Flow<NetworkType?> = callbackFlow {
+    actual fun observeNetworkType(): Flow<NetworkType?> = callbackFlow {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 

@@ -1,9 +1,9 @@
 package com.maksimowiczm.findmyip.old.domain
 
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.old.data.Keys
 import com.maksimowiczm.findmyip.old.data.UserPreferencesRepository
 import com.maksimowiczm.findmyip.old.data.model.Address
-import com.maksimowiczm.findmyip.old.data.model.NetworkType
 
 class DecideSaveAddressInHistoryUseCase(
     private val userPreferencesRepository: UserPreferencesRepository

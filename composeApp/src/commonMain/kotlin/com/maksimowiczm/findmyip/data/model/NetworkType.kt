@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.old.data.model
+package com.maksimowiczm.findmyip.data.model
 
 enum class NetworkType {
     WIFI,

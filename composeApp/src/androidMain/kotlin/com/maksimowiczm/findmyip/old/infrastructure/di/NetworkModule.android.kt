@@ -2,7 +2,7 @@ package com.maksimowiczm.findmyip.old.infrastructure.di
 
 import com.maksimowiczm.findmyip.BuildConfig
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
-import com.maksimowiczm.findmyip.old.network.ConnectivityObserver
+import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.old.network.CurrentAddressDataSource
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.dsl.singleOf

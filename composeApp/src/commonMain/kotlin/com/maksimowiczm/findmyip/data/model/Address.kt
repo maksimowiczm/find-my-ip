@@ -10,7 +10,8 @@ import kotlinx.datetime.toLocalDateTime
 data class Address(
     val ip: String,
     val protocolVersion: InternetProtocolVersion,
-    val date: LocalDateTime
+    val date: LocalDateTime,
+    val networkType: NetworkType?
 )
 
 fun AddressEntity.toDomain(): Address {
@@ -20,7 +21,8 @@ fun AddressEntity.toDomain(): Address {
     return Address(
         ip = ip,
         protocolVersion = internetProtocolVersion,
-        date = date
+        date = date,
+        networkType = null
     )
 }
 

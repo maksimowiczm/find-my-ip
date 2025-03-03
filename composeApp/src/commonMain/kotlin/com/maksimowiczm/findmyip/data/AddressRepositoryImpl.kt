@@ -8,9 +8,11 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.data.model.toDomain
 import com.maksimowiczm.findmyip.data.model.toEntity
 import com.maksimowiczm.findmyip.database.AddressEntityDao
+import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -66,22 +68,36 @@ class AddressRepositoryImpl(
                     return@map AddressStatus.Error(result.exceptionOrNull())
                 }
 
-                val ip = result.getOrNull() ?: return@map AddressStatus.Loading
+                val (ip, networkType) = result.getOrNull() ?: return@map AddressStatus.Loading
 
                 val address = Address(
                     ip = ip,
                     protocolVersion = internetProtocolVersion,
-                    date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                    date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                    networkType = networkType
                 )
 
                 if (historyEnabled == true) {
                     ioScope.launch {
-                        dao.insertIfDistinct(addressEntity = address.toEntity())
+                        insertAddress(address)
                     }
                 }
 
                 AddressStatus.Success(address)
             }
+        }
+    }
+
+    private suspend fun insertAddress(address: Address) {
+        val shouldInsert = when (address.networkType) {
+            NetworkType.WIFI -> dataStore.get(PreferenceKeys.save_wifi_history) ?: false
+            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.save_mobile_history) ?: false
+            NetworkType.VPN -> dataStore.get(PreferenceKeys.save_vpn_history) ?: false
+            null -> false
+        }
+
+        if (shouldInsert) {
+            dao.insertIfDistinct(addressEntity = address.toEntity())
         }
     }
 

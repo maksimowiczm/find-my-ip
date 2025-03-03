@@ -3,9 +3,11 @@
 
     <string name="headline_history_settings">History settings</string>
     <string name="headline_clear_history">Clear history</string>
+    <string name="headline_network_type">Network type</string>
 
     <string name="description_clear_history">Clear all saved addresses</string>
     <string name="description_clear_history_dialog">Your address history will be permanently deleted</string>
+    <string name="description_network_type">You can choose which network types to store in the history</string>
 
     <string name="tap_to_enable">Tap to enable</string>
     <string name="are_you_sure">Are you sure?</string>
