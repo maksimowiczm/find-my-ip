@@ -1,25 +1,23 @@
-package com.maksimowiczm.findmyip.domain
+package com.maksimowiczm.findmyip.data.initializer
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.maksimowiczm.findmyip.data.AddressRepository
 import com.maksimowiczm.findmyip.data.PreferenceKeys
-import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.set
+import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeout
 
-// TODO
-//  This will fail because address repository will return disabled by default
-class TestInternetProtocolsUseCase(
+class IpFeaturesInitializer(
     private val dataStore: DataStore<Preferences>,
-    private val addressRepository: AddressRepository
-) {
-    suspend operator fun invoke() {
+    private val ipv4Source: NetworkAddressDataSource,
+    private val ipv6Source: NetworkAddressDataSource
+) : Initializer {
+    override suspend fun invoke() {
         val tested = dataStore.get(PreferenceKeys.ipFeaturesTested)
 
         if (tested == true) {
@@ -29,18 +27,10 @@ class TestInternetProtocolsUseCase(
         coroutineScope {
             val (ipv4test, ipv6test) = awaitAll(
                 async {
-                    runCatching {
-                        withTimeout(5_000) {
-                            addressRepository.observeAddress(InternetProtocolVersion.IPv4)
-                        }.first()
-                    }
+                    withTimeout(5_000) { ipv4Source.observeAddress() }.first()
                 },
                 async {
-                    runCatching {
-                        withTimeout(5_000) {
-                            addressRepository.observeAddress(InternetProtocolVersion.IPv6)
-                        }.first()
-                    }
+                    withTimeout(5_000) { ipv6Source.observeAddress() }.first()
                 }
             )
 
