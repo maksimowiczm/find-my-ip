@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
-import com.maksimowiczm.findmyip.FindMyIpApp
 import com.maksimowiczm.findmyip.data.initializer.AppInitializer
+import com.maksimowiczm.findmyip.ui.FindMyIpApp
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject

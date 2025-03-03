@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip
+package com.maksimowiczm.findmyip.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.maksimowiczm.findmyip.navigation.TopRoute
 
 @Composable
 fun rememberFindMyIpAppState(

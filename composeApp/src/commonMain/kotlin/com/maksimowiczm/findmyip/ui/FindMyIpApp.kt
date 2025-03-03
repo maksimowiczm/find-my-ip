@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip
+package com.maksimowiczm.findmyip.ui
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.maksimowiczm.findmyip.navigation.FindMyIpNavHost
+import com.maksimowiczm.findmyip.navigation.TopRoute
 import findmyip.composeapp.generated.resources.Res
 import findmyip.composeapp.generated.resources.action_dont_show_again
 import findmyip.composeapp.generated.resources.action_hide

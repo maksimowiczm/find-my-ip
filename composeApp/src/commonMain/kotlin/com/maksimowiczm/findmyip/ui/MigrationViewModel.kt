@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip
+package com.maksimowiczm.findmyip.ui
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
