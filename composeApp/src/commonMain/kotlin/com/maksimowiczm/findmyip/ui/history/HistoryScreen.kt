@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -142,8 +144,6 @@ private fun HistoryScreenWithList(
         .union(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
         .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
 
-    val padding = topPadding.union(horizontalPadding).asPaddingValues()
-
     val showIpv4 = ipv4Enabled || ipv4History.itemCount > 0
     val showIpv6 = ipv6Enabled || ipv6History.itemCount > 0
 
@@ -157,14 +157,19 @@ private fun HistoryScreenWithList(
         }
     ) { 2 }
 
+    val applyTopPaddingToList = (showIpv4 && showIpv6) || !hasPermission
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(padding)
-            .consumeWindowInsets(padding)
+            .windowInsetsPadding(horizontalPadding)
+            .consumeWindowInsets(horizontalPadding)
     ) {
         if (showIpv4 && showIpv6) {
             TabRow(
+                modifier = Modifier
+                    .windowInsetsPadding(topPadding)
+                    .consumeWindowInsets(topPadding),
                 selectedTabIndex = pagerState.currentPage
             ) {
                 Tab(
@@ -193,6 +198,13 @@ private fun HistoryScreenWithList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
+                    .then(
+                        if (showIpv4 && showIpv6) {
+                            Modifier
+                        } else {
+                            Modifier.windowInsetsPadding(topPadding)
+                        }
+                    )
             )
         }
 
@@ -202,17 +214,25 @@ private fun HistoryScreenWithList(
             verticalAlignment = Alignment.Top,
             userScrollEnabled = showIpv4 && showIpv6
         ) {
+            val contentPadding = if (applyTopPaddingToList) {
+                PaddingValues(0.dp)
+            } else {
+                topPadding.asPaddingValues()
+            }
+
             when (it) {
                 0 -> HistoryList(
                     enabled = ipv4Enabled,
                     items = ipv4History,
-                    formatDate = formatDate
+                    formatDate = formatDate,
+                    contentPadding = contentPadding
                 )
 
                 1 -> HistoryList(
                     enabled = ipv6Enabled,
                     items = ipv6History,
-                    formatDate = formatDate
+                    formatDate = formatDate,
+                    contentPadding = contentPadding
                 )
             }
         }
@@ -249,6 +269,7 @@ private fun HistoryList(
     enabled: Boolean,
     items: LazyPagingItems<Address>,
     formatDate: (LocalDateTime) -> String,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val shimmer = rememberShimmer(
@@ -287,7 +308,8 @@ private fun HistoryList(
         }
     } else {
         LazyColumn(
-            modifier = modifier
+            modifier = modifier,
+            contentPadding = contentPadding
         ) {
             stickyHeader {
                 if (!enabled) {
