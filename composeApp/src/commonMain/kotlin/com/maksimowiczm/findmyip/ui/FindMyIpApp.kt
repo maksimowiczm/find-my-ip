@@ -92,8 +92,8 @@ fun FindMyIpApp(modifier: Modifier = Modifier, viewModel: MigrationViewModel = k
                     )
                 },
                 label = { Text(stringResource(Res.string.headline_settings)) },
-                selected = selectedTopRoute == TopRoute.Settings,
-                onClick = { appState.navigate(TopRoute.Settings) }
+                selected = selectedTopRoute == TopRoute.SettingsNested,
+                onClick = { appState.navigate(TopRoute.SettingsNested) }
             )
         }
     ) {

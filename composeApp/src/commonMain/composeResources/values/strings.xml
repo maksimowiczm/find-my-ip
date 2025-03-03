@@ -22,6 +22,10 @@
     <string name="headline_off" description="Switch is off">Off</string>
     <string name="headline_save_history">Save history</string>
     <string name="headline_internet_protocol">Internet Protocol</string>
+    <string name="headline_language">Language</string>
+    <string name="headline_system">System</string>
+    <string name="headline_authors">Authors</string>
+    <string name="headline_system_language_settings">System language settings</string>
 
     <string name="unit_minutes_short">min</string>
 
@@ -40,6 +44,7 @@
     <string name="neutral_empty">Empty</string>
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
+    <string name="neutral_help_translating_the_app">Help translating the app</string>
 
     <string name="error_unavailable">Unavailable</string>
 
@@ -56,8 +61,10 @@
     <string name="action_tap_to_enable">Tap to enable</string>
     <string name="action_go_back">Go back</string>
     <string name="action_clear">Clear</string>
+    <string name="action_translate">Translate</string>
 
     <string name="link_doze" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
+    <string name="link_translate" translatable="false">https://</string>
 
     <string name="ipv4" translatable="false">IPv4</string>
     <string name="ipv6" translatable="false">IPv6</string>

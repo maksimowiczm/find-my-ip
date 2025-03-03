@@ -19,13 +19,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.maksimowiczm.findmyip.ui.settings.history.HistorySettings
 import com.maksimowiczm.findmyip.ui.settings.internetprotocol.InternetProtocolVersionSettings
+import com.maksimowiczm.findmyip.ui.settings.language.LanguageSettingsListItem
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onAdvancedHistorySettingsClick: () -> Unit, modifier: Modifier = Modifier) {
+fun SettingsScreen(
+    onAdvancedHistorySettingsClick: () -> Unit,
+    onLanguageSettingsClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val excludedPadding = WindowInsets.systemBars
         .union(WindowInsets.displayCutout)
         .union(WindowInsets.navigationBars)
@@ -63,6 +68,16 @@ fun SettingsScreen(onAdvancedHistorySettingsClick: () -> Unit, modifier: Modifie
 
             item {
                 InternetProtocolVersionSettings()
+            }
+
+            item {
+                HorizontalDivider()
+            }
+
+            item {
+                LanguageSettingsListItem(
+                    onClick = onLanguageSettingsClick
+                )
             }
         }
     }

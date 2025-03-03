@@ -2,7 +2,6 @@ package com.maksimowiczm.findmyip.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +15,7 @@ import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
 import com.maksimowiczm.findmyip.ui.settings.SettingsScreen
 import com.maksimowiczm.findmyip.ui.settings.history.AdvancedHistorySettingsScreen
+import com.maksimowiczm.findmyip.ui.settings.language.LanguageScreen
 import kotlinx.serialization.Serializable
 
 sealed interface TopRoute {
@@ -26,12 +26,18 @@ sealed interface TopRoute {
     data object History : TopRoute
 
     @Serializable
-    data object Settings : TopRoute {
+    data object SettingsNested : TopRoute
+
+    @Serializable
+    sealed interface Settings : TopRoute {
         @Serializable
-        data object SettingsHome
+        data object SettingsHome : Settings
 
         @Serializable
-        data object AdvancedHistorySettings
+        data object AdvancedHistorySettings : Settings
+
+        @Serializable
+        data object LanguageSettings : Settings
     }
 }
 
@@ -57,27 +63,10 @@ fun FindMyIpNavHost(
         ) {
             HistoryScreen()
         }
-        navigation<Settings>(
+        navigation<TopRoute.SettingsNested>(
             startDestination = Settings.SettingsHome
         ) {
-            composable<Settings.SettingsHome>(
-                enterTransition = { materialFadeThroughIn() },
-                popEnterTransition = {
-                    if (initialState.destination.hasRoute<Settings.AdvancedHistorySettings>()) {
-                        ForwardBackwardComposableDefaults.popEnterTransition()
-                    } else {
-                        materialFadeThroughIn()
-                    }
-                },
-                exitTransition = {
-                    if (targetState.destination.hasRoute<Settings.AdvancedHistorySettings>()) {
-                        ForwardBackwardComposableDefaults.exitTransition()
-                    } else {
-                        materialFadeThroughOut()
-                    }
-                },
-                popExitTransition = { materialFadeThroughOut() }
-            ) {
+            settingsComposable<Settings.SettingsHome> {
                 SettingsScreen(
                     onAdvancedHistorySettingsClick = {
                         navController.navigate(
@@ -86,28 +75,30 @@ fun FindMyIpNavHost(
                                 launchSingleTop = true
                             }
                         )
+                    },
+                    onLanguageSettingsClick = {
+                        navController.navigate(
+                            route = Settings.LanguageSettings,
+                            navOptions = navOptions {
+                                launchSingleTop = true
+                            }
+                        )
                     }
                 )
             }
-            forwardBackwardComposable<Settings.AdvancedHistorySettings>(
-                enterTransition = {
-                    if (initialState.destination.hasRoute<Settings.SettingsHome>()) {
-                        ForwardBackwardComposableDefaults.enterTransition()
-                    } else {
-                        materialFadeThroughIn()
-                    }
-                },
-                exitTransition = {
-                    if (targetState.destination.hasRoute<Settings.SettingsHome>()) {
-                        ForwardBackwardComposableDefaults.exitTransition()
-                    } else {
-                        materialFadeThroughOut()
-                    }
-                }
-            ) {
+            settingsComposable<Settings.AdvancedHistorySettings> {
                 AdvancedHistorySettingsScreen(
                     onNavigateUp = {
                         navController.popBackStack<Settings.AdvancedHistorySettings>(
+                            inclusive = true
+                        )
+                    }
+                )
+            }
+            settingsComposable<Settings.LanguageSettings> {
+                LanguageScreen(
+                    onNavigateUp = {
+                        navController.popBackStack<Settings.LanguageSettings>(
                             inclusive = true
                         )
                     }
