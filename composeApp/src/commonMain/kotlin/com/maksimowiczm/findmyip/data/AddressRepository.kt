@@ -13,9 +13,14 @@ sealed interface AddressStatus {
 }
 
 interface AddressRepository {
+    /**
+     * Observe the current address status and persist the history if enabled.
+     */
     fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<AddressStatus>
 
-    fun refreshAddresses()
+    suspend fun refreshAddresses()
+
+    suspend fun refreshAddress(internetProtocolVersion: InternetProtocolVersion): AddressStatus
 
     fun observeAddressesPaged(
         internetProtocolVersion: InternetProtocolVersion

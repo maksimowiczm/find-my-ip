@@ -8,6 +8,7 @@ import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class HomeViewModel(private val addressRepository: AddressRepository) : ViewModel() {
     val ipv4Address: StateFlow<AddressStatus> = addressRepository.observeAddress(
@@ -27,6 +28,8 @@ class HomeViewModel(private val addressRepository: AddressRepository) : ViewMode
     )
 
     fun onRefresh() {
-        addressRepository.refreshAddresses()
+        viewModelScope.launch {
+            addressRepository.refreshAddresses()
+        }
     }
 }

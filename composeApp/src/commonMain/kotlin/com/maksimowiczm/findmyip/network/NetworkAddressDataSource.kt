@@ -7,5 +7,5 @@ data class NetworkAddress(val ip: String, val networkType: NetworkType?)
 
 interface NetworkAddressDataSource {
     fun observeAddress(): Flow<Result<NetworkAddress?>>
-    fun refreshAddress()
+    suspend fun refreshAddress(): Result<NetworkAddress>
 }

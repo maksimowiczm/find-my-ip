@@ -1,13 +1,14 @@
 package com.maksimowiczm.findmyip.infrastructure.android
 
 import android.app.Application
-import com.maksimowiczm.findmyip.data.StringFormatRepository
-import com.maksimowiczm.findmyip.infrastructure.di.createDatastore
 import com.maksimowiczm.findmyip.infrastructure.di.initKoin
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import org.koin.androidx.workmanager.koin.workManagerFactory
+import org.koin.core.component.KoinComponent
 
-class FindMyIpApplication : Application() {
+class FindMyIpApplication :
+    Application(),
+    KoinComponent {
     override fun onCreate() {
         super.onCreate()
 
@@ -15,13 +16,7 @@ class FindMyIpApplication : Application() {
 
         initKoin {
             androidContext(context)
-
-            modules(
-                module {
-                    single { createDatastore(androidContext()) }
-                    factory { StringFormatRepository(androidContext()) }
-                }
-            )
+            workManagerFactory()
         }
     }
 }

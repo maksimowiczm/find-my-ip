@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Checkbox
@@ -173,15 +174,23 @@ private fun EnabledContent(
     networkTypeMap: Map<NetworkType, Boolean>,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
     ) {
-        NetworkTypeSettings(
-            onToggle = onNetworkTypeToggle,
-            wifi = networkTypeMap[NetworkType.WIFI]!!,
-            mobile = networkTypeMap[NetworkType.MOBILE]!!,
-            vpn = networkTypeMap[NetworkType.VPN]!!
-        )
+        item {
+            NetworkTypeSettings(
+                onToggle = onNetworkTypeToggle,
+                wifi = networkTypeMap[NetworkType.WIFI]!!,
+                mobile = networkTypeMap[NetworkType.MOBILE]!!,
+                vpn = networkTypeMap[NetworkType.VPN]!!
+            )
+        }
+        item {
+            BackgroundWorkerSettings()
+        }
+        item {
+            Spacer(Modifier.height(8.dp))
+        }
     }
 }
 

@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -101,9 +102,51 @@ class AddressRepositoryImpl(
         }
     }
 
-    override fun refreshAddresses() {
-        ipv4DataSource.refreshAddress()
-        ipv6DataSource.refreshAddress()
+    override suspend fun refreshAddresses() {
+        coroutineScope {
+            launch { ipv4DataSource.refreshAddress() }
+            launch { ipv6DataSource.refreshAddress() }
+        }
+    }
+
+    override suspend fun refreshAddress(
+        internetProtocolVersion: InternetProtocolVersion
+    ): AddressStatus {
+        val preferenceKey = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> PreferenceKeys.ipv4Enabled
+            InternetProtocolVersion.IPv6 -> PreferenceKeys.ipv6Enabled
+        }
+
+        val enabled = dataStore.get(preferenceKey) ?: false
+
+        if (!enabled) {
+            return AddressStatus.Disabled
+        }
+
+        val source = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> ipv4DataSource
+            InternetProtocolVersion.IPv6 -> ipv6DataSource
+        }
+
+        val address = source.refreshAddress().map {
+            Address(
+                ip = it.ip,
+                protocolVersion = internetProtocolVersion,
+                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                networkType = it.networkType
+            )
+        }.getOrElse { exception ->
+            return AddressStatus.Error(exception)
+        }
+
+        val historyEnabled = dataStore.get(PreferenceKeys.historyEnabled) ?: false
+        if (historyEnabled) {
+            ioScope.launch {
+                insertAddress(address)
+            }
+        }
+
+        return AddressStatus.Success(address)
     }
 
     override fun observeAddressesPaged(
