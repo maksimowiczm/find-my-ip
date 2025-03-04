@@ -28,14 +28,16 @@
     <string name="headline_system_language_settings">System language settings</string>
     <string name="headline_platform_settings">Platform settings</string>
     <string name="headline_auto_refresh">Auto refresh</string>
+    <string name="headline_doze" translatable="false">Doze</string>
 
     <string name="unit_minutes_short">min</string>
 
-    <string name="description_background_worker">This allows the app to run in the background and check your public IP address periodically. Note that this is not guaranteed to work if your device goes into doze mode.</string>
+    <string name="description_background_worker">Periodically run in the background to check your IP address</string>
+    <string name="description_doze">Doze mode is a battery saving feature in Android. It can prevent the background worker from running if the device is not used for a long time.</string>
     <string name="description_interval_less_than_15_min">Intervals of less than 15 minutes might not work as expected</string>
     <string name="description_clear_history">Clear all saved addresses</string>
     <string name="description_clear_history_dialog">Your address history will be permanently deleted</string>
-    <string name="description_network_type">You can choose which network types to store in the history</string>
+    <string name="description_network_type">Which network types to store</string>
     <string name="description_migration_from_version_1">Seems like you have migrated from version 1. Unfortunately I have broken all user preferences. Your address history is still here but you have to setup your history and background worker preferences again.</string>
     <string name="description_history_no_permission">Tracking your IP address is disabled by default. Enable it to see your address history. You can always change this setting in the app settings.</string>
     <string name="description_enable_history">Your address history will be saved. You can disable it in settings.</string>

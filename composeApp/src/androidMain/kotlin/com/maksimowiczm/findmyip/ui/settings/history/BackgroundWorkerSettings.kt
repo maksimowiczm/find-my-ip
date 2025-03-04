@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -102,16 +105,18 @@ private fun BackgroundWorkerSettingsImpl(
         )
     }
 
-    val description = stringResource(Res.string.description_background_worker)
-    val link = stringResource(Res.string.link_doze)
+    val dozeLink = stringResource(Res.string.link_doze)
+    val dozeLearn = stringResource(Res.string.action_learn_about_doze)
     val linkColor = MaterialTheme.colorScheme.primary
-    val learn = stringResource(Res.string.action_learn_about_doze)
-    val annotatedLinkString = remember {
+    val dozeLinkString = remember(dozeLink) {
         buildAnnotatedString {
-            append(description)
-            append(" ")
-            withLink(LinkAnnotation.Url(link, TextLinkStyles(SpanStyle(linkColor)))) {
-                append(learn)
+            withLink(
+                link = LinkAnnotation.Url(
+                    url = dozeLink,
+                    styles = TextLinkStyles(SpanStyle(linkColor))
+                )
+            ) {
+                append(dozeLearn)
             }
         }
     }
@@ -127,9 +132,37 @@ private fun BackgroundWorkerSettingsImpl(
         )
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = annotatedLinkString,
+            text = stringResource(Res.string.description_background_worker),
             style = MaterialTheme.typography.bodyMedium
         )
+
+        Spacer(Modifier.height(8.dp))
+
+        Card(
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(Res.string.headline_doze),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(Res.string.description_doze),
+                    textAlign = TextAlign.Justify,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = dozeLinkString,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
         ListItem(
             headlineContent = {
                 Text(stringResource(Res.string.headline_enable))
