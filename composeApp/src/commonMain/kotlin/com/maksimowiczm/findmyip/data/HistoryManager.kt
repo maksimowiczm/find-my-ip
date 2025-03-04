@@ -12,6 +12,7 @@ import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -24,10 +25,23 @@ class HistoryManager(
     private val ipv4DataSource: NetworkAddressDataSource,
     private val ipv6DataSource: NetworkAddressDataSource
 ) {
+    /**
+     * Observes the address for both IPv4 and IPv6 and saves them to the database.
+     */
     suspend fun run() {
         coroutineScope {
             launch { run(InternetProtocolVersion.IPv4) }
             launch { run(InternetProtocolVersion.IPv6) }
+        }
+    }
+
+    /**
+     * Retrieves the address for both IPv4 and IPv6 and saves them to the database.
+     */
+    suspend fun once() {
+        coroutineScope {
+            launch { once(InternetProtocolVersion.IPv4) }
+            launch { once(InternetProtocolVersion.IPv6) }
         }
     }
 
@@ -69,6 +83,39 @@ class HistoryManager(
                     insertAddress(address)
                 }
         }.collect {}
+    }
+
+    private suspend fun once(internetProtocolVersion: InternetProtocolVersion) {
+        val preferenceKey = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> PreferenceKeys.ipv4Enabled
+            InternetProtocolVersion.IPv6 -> PreferenceKeys.ipv6Enabled
+        }
+
+        if (dataStore.get(preferenceKey) != true) {
+            return
+        }
+
+        if (dataStore.get(PreferenceKeys.historyEnabled) != true) {
+            return
+        }
+
+        val source = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> ipv4DataSource
+            InternetProtocolVersion.IPv6 -> ipv6DataSource
+        }
+
+        val result = source.observeAddress().first()
+
+        val (ip, networkType) = result.getOrNull() ?: return
+
+        val address = Address(
+            ip = ip,
+            networkType = networkType,
+            date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+            protocolVersion = internetProtocolVersion
+        )
+
+        insertAddress(address)
     }
 
     private suspend fun insertAddress(address: Address) {
