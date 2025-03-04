@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.maksimowiczm.findmyip.data.AndroidPreferenceKeys.autoRefreshSettingsEnabledKey
+import com.maksimowiczm.findmyip.data.initializer.AppInitializer
 import com.maksimowiczm.findmyip.infrastructure.di.initKoin
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import kotlinx.coroutines.CoroutineScope
@@ -25,18 +26,21 @@ class FindMyIpApplication :
         super.onCreate()
 
         val context = this.applicationContext
+        val coroutineScope = CoroutineScope(Dispatchers.Main)
 
         initKoin {
             androidContext(context)
             workManagerFactory()
         }
 
-        setupNetworkReceiver()
+        coroutineScope.launch {
+            get<AppInitializer>().invoke()
+
+            setupNetworkReceiver(this)
+        }
     }
 
-    private fun setupNetworkReceiver() {
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-
+    private fun setupNetworkReceiver(coroutineScope: CoroutineScope) {
         val networkCallback = FindMyIpNetworkCallback(
             coroutineScope = coroutineScope,
             addressRepository = get()

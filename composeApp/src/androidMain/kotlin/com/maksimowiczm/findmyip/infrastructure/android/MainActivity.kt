@@ -6,7 +6,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.maksimowiczm.findmyip.data.HistoryManager
-import com.maksimowiczm.findmyip.data.initializer.AppInitializer
 import com.maksimowiczm.findmyip.ui.FindMyIpApp
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import kotlinx.coroutines.launch
@@ -19,9 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            val appInitializer by inject<AppInitializer>()
-            appInitializer()
-
             historyManager.run()
         }
 
