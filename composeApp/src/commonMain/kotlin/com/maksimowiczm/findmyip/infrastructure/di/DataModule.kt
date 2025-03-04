@@ -37,9 +37,7 @@ val dataModule = module {
         )
     }
 
-    single(
-        createdAtStart = true
-    ) {
+    factory {
         HistoryManager(
             dataStore = get(),
             dao = get<FindMyIpDatabase>().addressEntityDao(),
