@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+// TODO FIX
 class AddressRefreshWorker(
     context: Context,
     workerParameters: WorkerParameters,
@@ -29,7 +30,7 @@ class AddressRefreshWorker(
     }
 
     private suspend fun refreshAddress(internetProtocolVersion: InternetProtocolVersion) {
-        val status = addressRepository.refreshAddressPersist(internetProtocolVersion)
+        val status = addressRepository.refreshAddress(internetProtocolVersion)
         Log.d(TAG, "Protocol: $internetProtocolVersion, Status: $status")
     }
 

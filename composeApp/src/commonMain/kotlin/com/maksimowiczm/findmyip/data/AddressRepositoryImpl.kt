@@ -8,9 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
-import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.data.model.toDomain
-import com.maksimowiczm.findmyip.data.model.toEntity
 import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
@@ -22,7 +20,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -41,7 +38,7 @@ class AddressRepositoryImpl(
     private val ioScope = CoroutineScope(ioDispatcher + SupervisorJob())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeAddressPersist(
+    override fun observeAddress(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<AddressStatus> {
         val preferenceKey = when (internetProtocolVersion) {
@@ -49,12 +46,7 @@ class AddressRepositoryImpl(
             InternetProtocolVersion.IPv6 -> PreferenceKeys.ipv6Enabled
         }
 
-        return combine(
-            dataStore.observe(preferenceKey),
-            dataStore.observe(PreferenceKeys.historyEnabled)
-        ) { ipvEnabled, historyEnabled ->
-            arrayOf(ipvEnabled, historyEnabled)
-        }.flatMapLatest { (ipvEnabled, historyEnabled) ->
+        return dataStore.observe(preferenceKey).flatMapLatest { ipvEnabled ->
             if (ipvEnabled != true) {
                 return@flatMapLatest flowOf(AddressStatus.Disabled)
             }
@@ -78,27 +70,8 @@ class AddressRepositoryImpl(
                     networkType = networkType
                 )
 
-                if (historyEnabled == true) {
-                    ioScope.launch {
-                        insertAddress(address)
-                    }
-                }
-
                 AddressStatus.Success(address)
             }
-        }
-    }
-
-    private suspend fun insertAddress(address: Address) {
-        val shouldInsert = when (address.networkType) {
-            NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory) ?: false
-            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
-            NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
-            null -> false
-        }
-
-        if (shouldInsert) {
-            dao.insertIfDistinct(addressEntity = address.toEntity())
         }
     }
 
@@ -109,7 +82,7 @@ class AddressRepositoryImpl(
         }
     }
 
-    override suspend fun refreshAddressPersist(
+    override suspend fun refreshAddress(
         internetProtocolVersion: InternetProtocolVersion
     ): AddressStatus {
         val preferenceKey = when (internetProtocolVersion) {
@@ -137,13 +110,6 @@ class AddressRepositoryImpl(
             )
         }.getOrElse { exception ->
             return AddressStatus.Error(exception)
-        }
-
-        val historyEnabled = dataStore.get(PreferenceKeys.historyEnabled) ?: false
-        if (historyEnabled) {
-            ioScope.launch {
-                insertAddress(address)
-            }
         }
 
         return AddressStatus.Success(address)

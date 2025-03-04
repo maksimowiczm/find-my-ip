@@ -13,15 +13,15 @@ class FindMyIpNetworkCallback(
 ) : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
         coroutineScope.launch {
-            addressRepository.refreshAddressPersist(InternetProtocolVersion.IPv4)
-            addressRepository.refreshAddressPersist(InternetProtocolVersion.IPv6)
+            addressRepository.refreshAddress(InternetProtocolVersion.IPv4)
+            addressRepository.refreshAddress(InternetProtocolVersion.IPv6)
         }
     }
 
     override fun onLost(network: Network) {
         coroutineScope.launch {
-            addressRepository.refreshAddressPersist(InternetProtocolVersion.IPv4)
-            addressRepository.refreshAddressPersist(InternetProtocolVersion.IPv6)
+            addressRepository.refreshAddress(InternetProtocolVersion.IPv4)
+            addressRepository.refreshAddress(InternetProtocolVersion.IPv6)
         }
     }
 }

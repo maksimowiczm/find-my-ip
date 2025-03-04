@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val addressRepository: AddressRepository) : ViewModel() {
-    val ipv4Address: StateFlow<AddressStatus> = addressRepository.observeAddressPersist(
+    val ipv4Address: StateFlow<AddressStatus> = addressRepository.observeAddress(
         internetProtocolVersion = InternetProtocolVersion.IPv4
     ).stateIn(
         scope = viewModelScope,
@@ -19,7 +19,7 @@ class HomeViewModel(private val addressRepository: AddressRepository) : ViewMode
         initialValue = AddressStatus.Loading
     )
 
-    val ipv6Address: StateFlow<AddressStatus> = addressRepository.observeAddressPersist(
+    val ipv6Address: StateFlow<AddressStatus> = addressRepository.observeAddress(
         internetProtocolVersion = InternetProtocolVersion.IPv6
     ).stateIn(
         scope = viewModelScope,
