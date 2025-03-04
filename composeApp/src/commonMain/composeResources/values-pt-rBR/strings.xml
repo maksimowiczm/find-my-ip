@@ -28,11 +28,12 @@
     <string name="headline_platform_settings">Platform settings</string>
     <string name="headline_auto_refresh">Auto refresh</string>
     <string name="unit_minutes_short">min</string>
-    <string name="description_background_worker">Isso permite que o app execute em segundo plano e verifique seu endereço IP público periodicamente. É importante notar que isso pode não funcionar se o seu dispositivo entrar em modo de soneca.</string>
+    <string name="description_background_worker">Periodically run in the background to check your IP address</string>
+    <string name="description_doze">Doze mode is a battery saving feature in Android. It can prevent the background worker from running if the device is not used for a long time.</string>
     <string name="description_interval_less_than_15_min">Intervals of less than 15 minutes might not work as expected</string>
     <string name="description_clear_history">Limpar todos os endereços salvos</string>
     <string name="description_clear_history_dialog">Esta ação é irreversível. Você tem certeza que deseja realmente limpar o histórico?</string>
-    <string name="description_network_type">Você pode mudar quais tipos de rede devem ser salvas no histórico.</string>
+    <string name="description_network_type">Which network types to store</string>
     <string name="description_migration_from_version_1">Seems like you have migrated from version 1. Unfortunately I have broken all user preferences. Your address history is still here but you have to setup your history and background worker preferences again.</string>
     <string name="description_history_no_permission">O rastreamento de endereço IP é desativado por padrão. Ative-o para ver seu histórico de endereços. Você pode sempre mudar esta opção nas configurações do app.</string>
     <string name="description_enable_history">Your address history will be saved. You can disable it in settings.</string>
