@@ -2,6 +2,7 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.data.AddressRepository
 import com.maksimowiczm.findmyip.data.AddressRepositoryImpl
+import com.maksimowiczm.findmyip.data.HistoryManager
 import com.maksimowiczm.findmyip.data.initializer.AppInitializer
 import com.maksimowiczm.findmyip.data.initializer.IpFeaturesInitializer
 import com.maksimowiczm.findmyip.data.initializer.NetworkTypeInitializer
@@ -33,6 +34,17 @@ val dataModule = module {
                     ipv6Source = get(named(InternetProtocolVersion.IPv6))
                 )
             )
+        )
+    }
+
+    single(
+        createdAtStart = true
+    ) {
+        HistoryManager(
+            dataStore = get(),
+            dao = get<FindMyIpDatabase>().addressEntityDao(),
+            ipv4DataSource = get(named(InternetProtocolVersion.IPv4)),
+            ipv6DataSource = get(named(InternetProtocolVersion.IPv6))
         )
     }
 }
