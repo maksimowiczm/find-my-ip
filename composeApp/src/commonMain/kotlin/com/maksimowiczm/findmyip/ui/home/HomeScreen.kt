@@ -1,13 +1,14 @@
 package com.maksimowiczm.findmyip.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -60,62 +61,61 @@ private fun HomeScreen(
         onClick = onRefresh,
         modifier = modifier
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .safeDrawingPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(Res.string.headline_your_ip_address_is),
-                    style = MaterialTheme.typography.titleLarge
+            Text(
+                text = stringResource(Res.string.headline_your_ip_address_is),
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            when (ipv4) {
+                AddressStatus.Disabled -> Unit
+                AddressStatus.Loading -> AddressLoadingDisplay(
+                    shimmer = shimmer,
+                    protocolVersion = InternetProtocolVersion.IPv4,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
 
-                when (ipv4) {
-                    AddressStatus.Disabled -> Unit
-                    AddressStatus.Loading -> AddressLoadingDisplay(
-                        shimmer = shimmer,
-                        protocolVersion = InternetProtocolVersion.IPv4,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
+                is AddressStatus.Success -> AddressDisplay(
+                    address = ipv4.address,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
 
-                    is AddressStatus.Success -> AddressDisplay(
-                        address = ipv4.address,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-
-                    is AddressStatus.Error -> AddressErrorDisplay(
-                        modifier = Modifier.padding(top = 8.dp),
-                        internetProtocolVersion = InternetProtocolVersion.IPv4
-                    )
-                }
-
-                when (ipv6) {
-                    AddressStatus.Disabled -> Unit
-                    AddressStatus.Loading -> AddressLoadingDisplay(
-                        shimmer = shimmer,
-                        protocolVersion = InternetProtocolVersion.IPv6,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-
-                    is AddressStatus.Success -> AddressDisplay(
-                        address = ipv6.address,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-
-                    is AddressStatus.Error -> AddressErrorDisplay(
-                        modifier = Modifier.padding(top = 8.dp),
-                        internetProtocolVersion = InternetProtocolVersion.IPv6
-                    )
-                }
-
-                Text(
-                    modifier = Modifier.padding(top = 16.dp),
-                    text = stringResource(Res.string.action_tap_to_refresh),
-                    style = MaterialTheme.typography.bodyLarge
+                is AddressStatus.Error -> AddressErrorDisplay(
+                    modifier = Modifier.padding(top = 8.dp),
+                    internetProtocolVersion = InternetProtocolVersion.IPv4
                 )
             }
+
+            when (ipv6) {
+                AddressStatus.Disabled -> Unit
+                AddressStatus.Loading -> AddressLoadingDisplay(
+                    shimmer = shimmer,
+                    protocolVersion = InternetProtocolVersion.IPv6,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+
+                is AddressStatus.Success -> AddressDisplay(
+                    address = ipv6.address,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+
+                is AddressStatus.Error -> AddressErrorDisplay(
+                    modifier = Modifier.padding(top = 8.dp),
+                    internetProtocolVersion = InternetProtocolVersion.IPv6
+                )
+            }
+
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = stringResource(Res.string.action_tap_to_refresh),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }

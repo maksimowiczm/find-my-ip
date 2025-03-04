@@ -5,11 +5,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navOptions
 import com.maksimowiczm.findmyip.navigation.settingsComposable
+import com.maksimowiczm.findmyip.ui.settings.autorefresh.AutoRefreshSettingsListItem
 import com.maksimowiczm.findmyip.ui.settings.language.LanguageScreen
 import com.maksimowiczm.findmyip.ui.settings.language.LanguageSettingsListItem
 import kotlinx.serialization.Serializable
 
 actual fun buildPlatformSettings(navController: NavController): LazyListScope.() -> Unit = {
+    item {
+        AutoRefreshSettingsListItem()
+    }
+
     item {
         LanguageSettingsListItem(
             onClick = {

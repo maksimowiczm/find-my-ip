@@ -18,8 +18,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.settings.history.HistorySettings
 import com.maksimowiczm.findmyip.ui.settings.internetprotocol.InternetProtocolVersionSettings
@@ -44,19 +46,24 @@ fun SettingsScreen(
         .union(WindowInsets.navigationBars)
         .exclude(excludedPadding)
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
                     Text(stringResource(Res.string.headline_settings))
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         contentWindowInsets = contentPadding
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = paddingValues
         ) {
             item {

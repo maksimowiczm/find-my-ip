@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,7 +28,12 @@ class NetworkAddressDataSourceImpl(
     override suspend fun refreshAddress(): Result<NetworkAddress> = withContext(ioDispatcher) {
         currentAddress.emit(Result.success(null))
 
-        val networkType = connectivityObserver.observeNetworkType().firstOrNull()
+        val networkType = connectivityObserver.getNetworkType()
+
+        if (networkType == null) {
+            return@withContext Result.failure(Exception("Network unavailable"))
+        }
+
         val result = runCatching {
             URL(providerURL).readText()
         }.map {

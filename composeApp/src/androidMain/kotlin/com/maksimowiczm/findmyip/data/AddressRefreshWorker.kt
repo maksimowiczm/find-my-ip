@@ -29,7 +29,7 @@ class AddressRefreshWorker(
     }
 
     private suspend fun refreshAddress(internetProtocolVersion: InternetProtocolVersion) {
-        val status = addressRepository.refreshAddress(internetProtocolVersion)
+        val status = addressRepository.refreshAddressPersist(internetProtocolVersion)
         Log.d(TAG, "Protocol: $internetProtocolVersion, Status: $status")
     }
 

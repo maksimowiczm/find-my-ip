@@ -80,19 +80,19 @@ class DemoAddressRepository : AddressRepository {
     private val v4HistoryFlow = MutableStateFlow<List<Address>>(v4History)
     private val v6HistoryFlow = MutableStateFlow<List<Address>>(v6History)
 
-    override fun observeAddress(
+    override fun observeAddressPersist(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<AddressStatus> {
         CoroutineScope(Dispatchers.Main).launch {
             when (internetProtocolVersion) {
                 InternetProtocolVersion.IPv4 ->
                     if (v4AddressFlow.value == null) {
-                        refreshAddress(internetProtocolVersion)
+                        refreshAddressPersist(internetProtocolVersion)
                     }
 
                 InternetProtocolVersion.IPv6 ->
                     if (v6AddressFlow.value == null) {
-                        refreshAddress(internetProtocolVersion)
+                        refreshAddressPersist(internetProtocolVersion)
                     }
             }
         }
@@ -105,12 +105,12 @@ class DemoAddressRepository : AddressRepository {
 
     override suspend fun refreshAddresses() {
         coroutineScope {
-            launch { refreshAddress(InternetProtocolVersion.IPv4) }
-            launch { refreshAddress(InternetProtocolVersion.IPv6) }
+            launch { refreshAddressPersist(InternetProtocolVersion.IPv4) }
+            launch { refreshAddressPersist(InternetProtocolVersion.IPv6) }
         }
     }
 
-    override suspend fun refreshAddress(
+    override suspend fun refreshAddressPersist(
         internetProtocolVersion: InternetProtocolVersion
     ): AddressStatus {
         val currentAddressFlow = when (internetProtocolVersion) {

@@ -6,6 +6,7 @@ import com.maksimowiczm.findmyip.data.IsMigratedFrom1
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
 import com.maksimowiczm.findmyip.isMigratedFrom1
+import com.maksimowiczm.findmyip.ui.settings.autorefresh.AutoRefreshSettingsViewModel
 import com.maksimowiczm.findmyip.ui.settings.history.BackgroundWorkerViewModel
 import com.maksimowiczm.findmyip.ui.settings.language.LanguageViewModel
 import org.koin.android.ext.koin.androidContext
@@ -36,4 +37,6 @@ actual val platformModule = module {
     factoryOf(::SystemInfoRepository)
 
     viewModelOf(::LanguageViewModel)
+
+    viewModelOf(::AutoRefreshSettingsViewModel)
 }

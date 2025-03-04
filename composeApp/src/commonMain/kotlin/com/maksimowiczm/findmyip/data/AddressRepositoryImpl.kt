@@ -41,7 +41,7 @@ class AddressRepositoryImpl(
     private val ioScope = CoroutineScope(ioDispatcher + SupervisorJob())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeAddress(
+    override fun observeAddressPersist(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<AddressStatus> {
         val preferenceKey = when (internetProtocolVersion) {
@@ -109,7 +109,7 @@ class AddressRepositoryImpl(
         }
     }
 
-    override suspend fun refreshAddress(
+    override suspend fun refreshAddressPersist(
         internetProtocolVersion: InternetProtocolVersion
     ): AddressStatus {
         val preferenceKey = when (internetProtocolVersion) {
