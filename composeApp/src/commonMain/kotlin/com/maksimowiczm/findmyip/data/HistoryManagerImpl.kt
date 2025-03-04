@@ -2,6 +2,7 @@ package com.maksimowiczm.findmyip.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import co.touchlab.kermit.Logger
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.data.model.NetworkType
@@ -29,6 +30,8 @@ class HistoryManagerImpl(
      * Observes the address for both IPv4 and IPv6 and saves them to the database.
      */
     override suspend fun run() {
+        Logger.d(TAG) { "Executing run" }
+
         coroutineScope {
             launch { run(InternetProtocolVersion.IPv4) }
             launch { run(InternetProtocolVersion.IPv6) }
@@ -39,6 +42,8 @@ class HistoryManagerImpl(
      * Retrieves the address for both IPv4 and IPv6 and saves them to the database.
      */
     override suspend fun once() {
+        Logger.d(TAG) { "Executing once" }
+
         coroutineScope {
             launch { once(InternetProtocolVersion.IPv4) }
             launch { once(InternetProtocolVersion.IPv6) }
@@ -119,6 +124,8 @@ class HistoryManagerImpl(
     }
 
     private suspend fun insertAddress(address: Address) {
+        Logger.d(TAG) { "Inserting address: $address" }
+
         val shouldInsert = when (address.networkType) {
             NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory)
             NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory)
@@ -126,13 +133,22 @@ class HistoryManagerImpl(
             else -> false
         } ?: false
 
-        if (!shouldInsert) return
+        if (!shouldInsert) {
+            Logger.d(TAG) { "Skipping address insertion" }
+            return
+        }
 
         val entity = address.toEntity()
         if (dataStore.get(PreferenceKeys.historySaveDuplicates) == true) {
+            Logger.d(TAG) { "Inserting address with duplicates" }
             dao.insertAddress(entity)
         } else {
+            Logger.d(TAG) { "Inserting address without duplicates" }
             dao.insertIfDistinct(entity)
         }
+    }
+
+    private companion object {
+        const val TAG = "HistoryManagerImpl"
     }
 }

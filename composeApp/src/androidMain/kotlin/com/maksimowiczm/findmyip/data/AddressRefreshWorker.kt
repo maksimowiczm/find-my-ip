@@ -8,6 +8,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import co.touchlab.kermit.Logger
 import java.util.concurrent.TimeUnit
 
 class AddressRefreshWorker(
@@ -17,7 +18,7 @@ class AddressRefreshWorker(
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         historyManager.once()
-
+        Logger.d(TAG) { "Address refreshed" }
         return Result.success()
     }
 

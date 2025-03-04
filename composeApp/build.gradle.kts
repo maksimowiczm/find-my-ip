@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
+            implementation(libs.kermit)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
