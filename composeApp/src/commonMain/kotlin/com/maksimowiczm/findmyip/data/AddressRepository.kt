@@ -17,8 +17,6 @@ interface AddressRepository {
 
     suspend fun refreshAddresses()
 
-    suspend fun refreshAddress(internetProtocolVersion: InternetProtocolVersion): AddressStatus
-
     fun observeAddressesPaged(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<PagingData<Address>>

@@ -110,7 +110,7 @@ class DemoAddressRepository : AddressRepository {
         }
     }
 
-    override suspend fun refreshAddress(
+    private suspend fun refreshAddress(
         internetProtocolVersion: InternetProtocolVersion
     ): AddressStatus {
         val currentAddressFlow = when (internetProtocolVersion) {

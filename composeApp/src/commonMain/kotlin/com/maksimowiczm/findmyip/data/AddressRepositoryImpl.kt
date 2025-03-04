@@ -82,39 +82,6 @@ class AddressRepositoryImpl(
         }
     }
 
-    override suspend fun refreshAddress(
-        internetProtocolVersion: InternetProtocolVersion
-    ): AddressStatus {
-        val preferenceKey = when (internetProtocolVersion) {
-            InternetProtocolVersion.IPv4 -> PreferenceKeys.ipv4Enabled
-            InternetProtocolVersion.IPv6 -> PreferenceKeys.ipv6Enabled
-        }
-
-        val enabled = dataStore.get(preferenceKey) ?: false
-
-        if (!enabled) {
-            return AddressStatus.Disabled
-        }
-
-        val source = when (internetProtocolVersion) {
-            InternetProtocolVersion.IPv4 -> ipv4DataSource
-            InternetProtocolVersion.IPv6 -> ipv6DataSource
-        }
-
-        val address = source.refreshAddress().map {
-            Address(
-                ip = it.ip,
-                protocolVersion = internetProtocolVersion,
-                date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                networkType = it.networkType
-            )
-        }.getOrElse { exception ->
-            return AddressStatus.Error(exception)
-        }
-
-        return AddressStatus.Success(address)
-    }
-
     override fun observeAddressesPaged(
         internetProtocolVersion: InternetProtocolVersion
     ): Flow<PagingData<Address>> {
