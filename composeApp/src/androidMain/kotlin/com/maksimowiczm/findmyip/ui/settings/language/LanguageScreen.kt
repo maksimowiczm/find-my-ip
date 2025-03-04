@@ -36,30 +36,22 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import com.maksimowiczm.findmyip.ui.res.languages
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-actual fun LanguageScreen(onNavigateUp: () -> Unit, modifier: Modifier) {
-    LanguageScreen(
-        onBack = onNavigateUp,
-        modifier = modifier,
-        viewModel = koinViewModel()
-    )
-}
-
-@Composable
-private fun LanguageScreen(
-    onBack: () -> Unit,
+fun LanguageScreen(
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AndroidLanguageViewModel = koinViewModel()
+    viewModel: LanguageViewModel = koinViewModel()
 ) {
     val uriHandler = LocalUriHandler.current
     val link = stringResource(Res.string.link_translate)
 
     LanguageScreen(
-        onBack = onBack,
+        onBack = onNavigateUp,
         selectedTag = viewModel.tag,
         onLanguageSelect = viewModel::onLanguageSelect,
         onHelpTranslate = { uriHandler.openUri(link) },

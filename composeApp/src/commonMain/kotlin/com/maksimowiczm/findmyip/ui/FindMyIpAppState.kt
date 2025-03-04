@@ -31,7 +31,7 @@ class FindMyIpAppState(val navController: NavHostController) {
             return when {
                 destination.isRouteInHierarchy<TopRoute.Home>() -> TopRoute.Home
                 destination.isRouteInHierarchy<TopRoute.History>() -> TopRoute.History
-                destination.isRouteInHierarchy<TopRoute.SettingsNested>() -> TopRoute.SettingsNested
+                destination.isRouteInHierarchy<TopRoute.Settings>() -> TopRoute.Settings
                 else -> null
             }
         }

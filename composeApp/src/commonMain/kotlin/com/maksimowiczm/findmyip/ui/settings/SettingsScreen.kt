@@ -7,19 +7,22 @@ import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.settings.history.HistorySettings
 import com.maksimowiczm.findmyip.ui.settings.internetprotocol.InternetProtocolVersionSettings
-import com.maksimowiczm.findmyip.ui.settings.language.LanguageSettingsListItem
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
@@ -28,7 +31,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SettingsScreen(
     onAdvancedHistorySettingsClick: () -> Unit,
-    onLanguageSettingsClick: () -> Unit,
+    platformSettings: LazyListScope.() -> Unit,
     modifier: Modifier = Modifier
 ) {
     val excludedPadding = WindowInsets.systemBars
@@ -75,10 +78,17 @@ fun SettingsScreen(
             }
 
             item {
-                LanguageSettingsListItem(
-                    onClick = onLanguageSettingsClick
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp),
+                    text = stringResource(Res.string.headline_platform_settings),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
+
+            platformSettings()
         }
     }
 }

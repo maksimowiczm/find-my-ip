@@ -43,7 +43,7 @@ I needed a straightforward way to track my IP address history on my phone, so I 
 
 Help translate **Find My IP** on [Crowdin](https://crowdin.com/project/find-my-ip)!
 
-If you'd like to be credited for your contributions, please add your name to the [Languages file](composeApp/src/commonMain/kotlin/com/maksimowiczm/findmyip/ui/settings/language/Languages.kt) or let me know, and I'll add it for you.
+If you'd like to be credited for your contributions, please add your name to the [Languages file](composeApp/src/commonMain/kotlin/com/maksimowiczm/findmyip/ui/res/Languages.kt) or let me know, and I'll add it for you.
 
 ---
 

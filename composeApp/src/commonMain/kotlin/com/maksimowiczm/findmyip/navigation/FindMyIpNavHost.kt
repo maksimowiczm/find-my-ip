@@ -8,14 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.maksimowiczm.findmyip.navigation.TopRoute.Settings
 import com.maksimowiczm.findmyip.ui.history.HistoryScreen
 import com.maksimowiczm.findmyip.ui.home.HomeScreen
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
 import com.maksimowiczm.findmyip.ui.settings.SettingsScreen
+import com.maksimowiczm.findmyip.ui.settings.buildPlatformSettings
 import com.maksimowiczm.findmyip.ui.settings.history.AdvancedHistorySettingsScreen
-import com.maksimowiczm.findmyip.ui.settings.language.LanguageScreen
+import com.maksimowiczm.findmyip.ui.settings.platformSettingsGraph
 import kotlinx.serialization.Serializable
 
 sealed interface TopRoute {
@@ -26,18 +26,12 @@ sealed interface TopRoute {
     data object History : TopRoute
 
     @Serializable
-    data object SettingsNested : TopRoute
-
-    @Serializable
-    sealed interface Settings : TopRoute {
+    data object Settings : TopRoute {
         @Serializable
-        data object SettingsHome : Settings
+        data object SettingsHome
 
         @Serializable
-        data object AdvancedHistorySettings : Settings
-
-        @Serializable
-        data object LanguageSettings : Settings
+        data object AdvancedHistorySettings
     }
 }
 
@@ -63,47 +57,32 @@ fun FindMyIpNavHost(
         ) {
             HistoryScreen()
         }
-        navigation<TopRoute.SettingsNested>(
-            startDestination = Settings.SettingsHome
+        navigation<TopRoute.Settings>(
+            startDestination = TopRoute.Settings.SettingsHome
         ) {
-            settingsComposable<Settings.SettingsHome> {
+            settingsComposable<TopRoute.Settings.SettingsHome> {
                 SettingsScreen(
                     onAdvancedHistorySettingsClick = {
                         navController.navigate(
-                            route = Settings.AdvancedHistorySettings,
+                            route = TopRoute.Settings.AdvancedHistorySettings,
                             navOptions = navOptions {
                                 launchSingleTop = true
                             }
                         )
                     },
-                    onLanguageSettingsClick = {
-                        navController.navigate(
-                            route = Settings.LanguageSettings,
-                            navOptions = navOptions {
-                                launchSingleTop = true
-                            }
-                        )
-                    }
+                    platformSettings = buildPlatformSettings(navController)
                 )
             }
-            settingsComposable<Settings.AdvancedHistorySettings> {
+            settingsComposable<TopRoute.Settings.AdvancedHistorySettings> {
                 AdvancedHistorySettingsScreen(
                     onNavigateUp = {
-                        navController.popBackStack<Settings.AdvancedHistorySettings>(
+                        navController.popBackStack<TopRoute.Settings.AdvancedHistorySettings>(
                             inclusive = true
                         )
                     }
                 )
             }
-            settingsComposable<Settings.LanguageSettings> {
-                LanguageScreen(
-                    onNavigateUp = {
-                        navController.popBackStack<Settings.LanguageSettings>(
-                            inclusive = true
-                        )
-                    }
-                )
-            }
+            platformSettingsGraph(navController)
         }
     }
 }

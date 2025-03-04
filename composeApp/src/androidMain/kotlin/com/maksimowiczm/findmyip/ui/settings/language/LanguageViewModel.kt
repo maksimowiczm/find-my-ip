@@ -2,18 +2,18 @@ package com.maksimowiczm.findmyip.ui.settings.language
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.ViewModel
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
 import java.util.Locale
 
-class AndroidLanguageViewModel(private val systemInfoRepository: SystemInfoRepository) :
-    LanguageViewModel() {
+class LanguageViewModel(private val systemInfoRepository: SystemInfoRepository) : ViewModel() {
     private val locale: Locale
         get() = systemInfoRepository.defaultLocale
 
     val tag: String
         get() = locale.toLanguageTag()
 
-    override val languageName: String
+    val languageName: String
         get() {
             val tag = locale.toLanguageTag()
             return Locale.forLanguageTag(tag).displayName

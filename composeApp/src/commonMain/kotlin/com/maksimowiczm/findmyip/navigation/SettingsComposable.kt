@@ -25,39 +25,41 @@ inline fun <reified T : Any> NavGraphBuilder.settingsComposable(
         typeMap = typeMap,
         deepLinks = deepLinks,
         enterTransition = {
-            if (initialState.destination.hasRoute<TopRoute.Settings.SettingsHome>()) {
-                ForwardBackwardComposableDefaults.enterTransition()
-            } else {
+            if (initialState.destination.hasRoute<TopRoute.Home>() ||
+                initialState.destination.hasRoute<TopRoute.History>()
+            ) {
                 materialFadeThroughIn()
+            } else {
+                ForwardBackwardComposableDefaults.enterTransition()
             }
         },
         exitTransition = {
             if (
-                targetState.destination.hasRoute<TopRoute.Settings.SettingsHome>() ||
-                targetState.destination.hasRoute<TopRoute.Settings.AdvancedHistorySettings>()
+                targetState.destination.hasRoute<TopRoute.Home>() ||
+                targetState.destination.hasRoute<TopRoute.History>()
             ) {
-                ForwardBackwardComposableDefaults.exitTransition()
-            } else {
                 materialFadeThroughOut()
+            } else {
+                ForwardBackwardComposableDefaults.exitTransition()
             }
         },
         popEnterTransition = {
-            if (initialState.destination.hasRoute<TopRoute.Settings.AdvancedHistorySettings>() ||
-                initialState.destination.hasRoute<TopRoute.Settings.LanguageSettings>()
+            if (initialState.destination.hasRoute<TopRoute.Home>() ||
+                initialState.destination.hasRoute<TopRoute.History>()
             ) {
-                ForwardBackwardComposableDefaults.popEnterTransition()
-            } else {
                 materialFadeThroughIn()
+            } else {
+                ForwardBackwardComposableDefaults.popEnterTransition()
             }
         },
         popExitTransition = {
             if (
-                targetState.destination.hasRoute<TopRoute.Settings.SettingsHome>() ||
-                targetState.destination.hasRoute<TopRoute.Settings.AdvancedHistorySettings>()
+                targetState.destination.hasRoute<TopRoute.Home>() ||
+                targetState.destination.hasRoute<TopRoute.History>()
             ) {
-                ForwardBackwardComposableDefaults.popExitTransition()
-            } else {
                 materialFadeThroughOut()
+            } else {
+                ForwardBackwardComposableDefaults.popExitTransition()
             }
         },
         sizeTransform = sizeTransform,

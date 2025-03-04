@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.settings.language
+package com.maksimowiczm.findmyip.ui.res
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme

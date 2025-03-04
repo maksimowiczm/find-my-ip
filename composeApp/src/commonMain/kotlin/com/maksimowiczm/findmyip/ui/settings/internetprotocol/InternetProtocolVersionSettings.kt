@@ -47,10 +47,11 @@ private fun InternetProtocolVersionSettings(
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = stringResource(Res.string.headline_internet_protocol),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
         )
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.description_internet_protocol),
             style = MaterialTheme.typography.bodyMedium
         )
