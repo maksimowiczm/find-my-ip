@@ -25,6 +25,8 @@
     <string name="headline_system">System</string>
     <string name="headline_authors">Authors</string>
     <string name="headline_system_language_settings">System language settings</string>
+    <string name="headline_platform_settings">Platform settings</string>
+    <string name="headline_auto_refresh">Auto refresh</string>
     <string name="unit_minutes_short">min</string>
     <string name="description_background_worker">Isso permite que o app execute em segundo plano e verifique seu endereço IP público periodicamente. É importante notar que isso pode não funcionar se o seu dispositivo entrar em modo de soneca.</string>
     <string name="description_interval_less_than_15_min">Intervals of less than 15 minutes might not work as expected</string>
@@ -37,6 +39,7 @@
     <string name="description_history_settings_disabled" description="Inform the user that he must enable the history settings to see and change them">Para ver e mudar as configurações de histórico, ative o histórico primeiro.</string>
     <string name="description_save_history">Salve seu histórico de endereços IP.</string>
     <string name="description_internet_protocol">Escolha qual protocolo da internet usar. Pelo menos um deve estar ativado.</string>
+    <string name="description_auto_refresh">Refresh address on network change</string>
     <string name="neutral_empty">Vazio</string>
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
