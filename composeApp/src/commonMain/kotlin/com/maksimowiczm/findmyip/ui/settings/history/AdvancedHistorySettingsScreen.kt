@@ -279,7 +279,7 @@ private fun NetworkTypeSettings(
         )
         ListItem(
             modifier = Modifier.clickable(onClick = { onMobileToggle() }),
-            headlineContent = { Text(stringResource(Res.string.mobile)) },
+            headlineContent = { Text(stringResource(Res.string.cellular_data)) },
             leadingContent = { Checkbox(mobile, { onMobileToggle() }) }
         )
         ListItem(

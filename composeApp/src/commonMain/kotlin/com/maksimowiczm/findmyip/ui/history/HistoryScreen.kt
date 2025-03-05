@@ -250,7 +250,7 @@ private fun AddressHistoryDisabledCard(modifier: Modifier = Modifier) {
                 .padding(16.dp)
         ) {
             Text(
-                text = stringResource(Res.string.headline_address_history_disabled),
+                text = stringResource(Res.string.headline_address_history_is_disabled),
                 style = MaterialTheme.typography.titleMedium
             )
             Text(

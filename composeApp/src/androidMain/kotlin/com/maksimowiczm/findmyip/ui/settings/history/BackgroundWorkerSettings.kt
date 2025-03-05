@@ -165,7 +165,7 @@ private fun BackgroundWorkerSettingsImpl(
 
         ListItem(
             headlineContent = {
-                Text(stringResource(Res.string.headline_enable))
+                Text(stringResource(Res.string.action_enable))
             },
             modifier = Modifier.clickable { setEnabled(!enabled) },
             trailingContent = {
