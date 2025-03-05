@@ -3,6 +3,7 @@ package com.maksimowiczm.findmyip.infrastructure.di
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -16,5 +17,9 @@ fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<FindMyIpDatabase>
 actual val databaseModule: Module = module {
     single {
         getRoomDatabase(getDatabaseBuilder(get()))
+    }
+
+    factory<AddressEntityDao> {
+        get<FindMyIpDatabase>().addressEntityDao()
     }
 }

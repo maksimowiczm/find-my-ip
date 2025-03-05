@@ -30,6 +30,15 @@ class HistorySettingsViewModel(
             initialValue = runBlocking { dataStore.get(PreferenceKeys.historyEnabled) ?: false }
         )
 
+    val saveDuplicates = dataStore
+        .observe(PreferenceKeys.historySaveDuplicates)
+        .map { it ?: false }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = runBlocking { dataStore.get(PreferenceKeys.historyEnabled) ?: false }
+        )
+
     val networkTypeSettings = combine(
         dataStore.observe(PreferenceKeys.saveWifiHistory),
         dataStore.observe(PreferenceKeys.saveMobileHistory),
@@ -61,6 +70,12 @@ class HistorySettingsViewModel(
     fun clearHistory() {
         viewModelScope.launch {
             addressRepository.clearHistory()
+        }
+    }
+
+    fun onSaveDuplicatesChange(saveDuplicates: Boolean) {
+        viewModelScope.launch {
+            dataStore.set(PreferenceKeys.historySaveDuplicates to saveDuplicates)
         }
     }
 

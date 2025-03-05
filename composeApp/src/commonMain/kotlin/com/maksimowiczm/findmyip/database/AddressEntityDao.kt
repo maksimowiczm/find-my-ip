@@ -31,6 +31,16 @@ interface AddressEntityDao {
     @Insert
     suspend fun insertAddress(addressEntity: AddressEntity)
 
+    @Transaction
+    suspend fun insertAddressIfOlderThanLatest(addressEntity: AddressEntity, difference: Long) {
+        val latestAddress = getLatestAddress(addressEntity.internetProtocolVersion)
+        if (latestAddress == null ||
+            addressEntity.timestamp - latestAddress.timestamp > difference
+        ) {
+            insertAddress(addressEntity)
+        }
+    }
+
     @Query("DELETE FROM addressentity")
     suspend fun deleteAll()
 

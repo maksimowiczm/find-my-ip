@@ -22,9 +22,7 @@ actual val platformModule = module {
 
     viewModelOf(::BackgroundWorkerViewModel)
 
-    single(
-        createdAtStart = true
-    ) {
+    factory {
         AddressRefreshWorkerManager(
             context = androidContext(),
             dataStore = get()

@@ -1,7 +1,6 @@
 package com.maksimowiczm.findmyip.data
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -9,34 +8,35 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import androidx.work.await
+import co.touchlab.kermit.Logger
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 
 class AddressRefreshWorker(
     context: Context,
     workerParameters: WorkerParameters,
-    private val addressRepository: AddressRepository
+    private val historyManager: HistoryManager
 ) : CoroutineWorker(context, workerParameters) {
-    override suspend fun doWork(): Result {
-        coroutineScope {
-            launch { refreshAddress(InternetProtocolVersion.IPv4) }
-            launch { refreshAddress(InternetProtocolVersion.IPv6) }
+    override suspend fun doWork(): Result = try {
+        withTimeout(5_000) {
+            historyManager.once()
         }
-
-        return Result.success()
-    }
-
-    private suspend fun refreshAddress(internetProtocolVersion: InternetProtocolVersion) {
-        val status = addressRepository.refreshAddressPersist(internetProtocolVersion)
-        Log.d(TAG, "Protocol: $internetProtocolVersion, Status: $status")
+        Logger.d(TAG) { "Address refreshed" }
+        Result.success()
+    } catch (e: TimeoutCancellationException) {
+        Logger.e(TAG, e) { "Operation timed out" }
+        Result.failure()
     }
 
     companion object {
         const val TAG = "AddressRefreshWorker"
 
-        fun cancelAndCreatePeriodicWorkRequest(workManager: WorkManager, intervalInMinutes: Long) {
+        suspend fun cancelAndCreatePeriodicWorkRequest(
+            workManager: WorkManager,
+            intervalInMinutes: Long
+        ) {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
@@ -45,15 +45,21 @@ class AddressRefreshWorker(
                 repeatInterval = intervalInMinutes,
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
             )
+                .setInitialDelay(
+                    duration = intervalInMinutes,
+                    timeUnit = TimeUnit.MINUTES
+                )
                 .setConstraints(constraints)
                 .addTag(TAG)
                 .build()
 
-            workManager.enqueueUniquePeriodicWork(
+            val operation = workManager.enqueueUniquePeriodicWork(
                 uniqueWorkName = TAG,
                 existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
                 request = request
             )
+
+            operation.await()
         }
 
         fun cancelPeriodicWorkRequest(workManager: WorkManager) {

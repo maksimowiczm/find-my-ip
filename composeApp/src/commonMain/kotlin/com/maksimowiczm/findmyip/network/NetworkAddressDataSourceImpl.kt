@@ -1,5 +1,7 @@
 package com.maksimowiczm.findmyip.network
 
+import java.io.IOException
+import java.net.MalformedURLException
 import java.net.URL
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +17,7 @@ class NetworkAddressDataSourceImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NetworkAddressDataSource {
     private val scope = CoroutineScope(ioDispatcher)
-    private val currentAddress = MutableStateFlow<Result<NetworkAddress?>>(Result.success(null))
+    private val currentAddress = MutableStateFlow<AddressStatus>(AddressStatus.Loading)
 
     init {
         scope.launch {
@@ -23,28 +25,34 @@ class NetworkAddressDataSourceImpl(
         }
     }
 
-    override fun observeAddress(): Flow<Result<NetworkAddress?>> = currentAddress
+    override fun observeAddress(): Flow<AddressStatus> = currentAddress
 
     override suspend fun refreshAddress(): Result<NetworkAddress> = withContext(ioDispatcher) {
-        currentAddress.emit(Result.success(null))
+        currentAddress.emit(AddressStatus.Loading)
 
         val networkType = connectivityObserver.getNetworkType()
 
         if (networkType == null) {
-            return@withContext Result.failure(Exception("Network unavailable"))
+            val exception = Exception("Network unavailable")
+            currentAddress.emit(AddressStatus.Error(exception))
+            return@withContext Result.failure(exception)
         }
 
-        val result = runCatching {
-            URL(providerURL).readText()
-        }.map {
-            NetworkAddress(
-                ip = it,
+        return@withContext try {
+            val ip = URL(providerURL).readText()
+            val address = NetworkAddress(
+                ip = ip,
                 networkType = networkType
             )
+
+            currentAddress.emit(AddressStatus.Success(address))
+            Result.success(address)
+        } catch (e: MalformedURLException) {
+            // What a terrible failure, go boom
+            throw IllegalArgumentException("Invalid URL: $providerURL", e)
+        } catch (e: IOException) {
+            currentAddress.emit(AddressStatus.Error(e))
+            Result.failure(e)
         }
-
-        currentAddress.emit(result)
-
-        result
     }
 }

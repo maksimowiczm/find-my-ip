@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import com.maksimowiczm.findmyip.data.PreferenceKeys
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.set
+import com.maksimowiczm.findmyip.network.AddressStatus
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,12 +36,12 @@ class IpFeaturesInitializer(
             )
 
             // If both test fail set IPv4 as default.
-            val ipv4 = if (ipv4test.isFailure && ipv6test.isFailure) {
+            val ipv4 = if (ipv4test is AddressStatus.Error && ipv6test is AddressStatus.Error) {
                 true
             } else {
-                ipv4test.isSuccess
+                ipv4test is AddressStatus.Success
             }
-            val ipv6 = ipv6test.isSuccess
+            val ipv6 = ipv6test is AddressStatus.Success
 
             dataStore.set(
                 PreferenceKeys.ipv4Enabled to ipv4,

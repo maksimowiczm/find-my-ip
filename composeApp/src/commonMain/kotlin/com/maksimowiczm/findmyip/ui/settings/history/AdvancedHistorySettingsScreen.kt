@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,12 +49,15 @@ fun AdvancedHistorySettingsScreen(
     viewModel: HistorySettingsViewModel = koinViewModel()
 ) {
     val isEnabled by viewModel.isEnabled.collectAsStateWithLifecycle()
+    val saveDuplicates by viewModel.saveDuplicates.collectAsStateWithLifecycle()
     val networkTypeMap by viewModel.networkTypeSettings.collectAsStateWithLifecycle()
 
     AdvancedHistorySettingsScreen(
         onNavigateUp = onNavigateUp,
         enabled = isEnabled,
         onEnabledChange = viewModel::onEnableChange,
+        saveDuplicates = saveDuplicates,
+        onSaveDuplicatesChange = viewModel::onSaveDuplicatesChange,
         onNetworkTypeToggle = {
             viewModel.onNetworkTypeToggle(it, !networkTypeMap[it]!!)
         },
@@ -68,6 +72,8 @@ private fun AdvancedHistorySettingsScreen(
     onNavigateUp: () -> Unit,
     enabled: Boolean,
     onEnabledChange: (Boolean) -> Unit,
+    saveDuplicates: Boolean,
+    onSaveDuplicatesChange: (Boolean) -> Unit,
     onNetworkTypeToggle: (NetworkType) -> Unit,
     networkTypeMap: Map<NetworkType, Boolean>,
     modifier: Modifier = Modifier
@@ -145,8 +151,6 @@ private fun AdvancedHistorySettingsScreen(
                 }
             )
 
-            Spacer(Modifier.height(8.dp))
-
             Crossfade(
                 targetState = enabled
             ) {
@@ -159,6 +163,8 @@ private fun AdvancedHistorySettingsScreen(
                     )
                 } else {
                     EnabledContent(
+                        saveDuplicates = saveDuplicates,
+                        onSaveDuplicatesChange = onSaveDuplicatesChange,
                         onNetworkTypeToggle = onNetworkTypeToggle,
                         networkTypeMap = networkTypeMap
                     )
@@ -170,6 +176,8 @@ private fun AdvancedHistorySettingsScreen(
 
 @Composable
 private fun EnabledContent(
+    saveDuplicates: Boolean,
+    onSaveDuplicatesChange: (Boolean) -> Unit,
     onNetworkTypeToggle: (NetworkType) -> Unit,
     networkTypeMap: Map<NetworkType, Boolean>,
     modifier: Modifier = Modifier
@@ -177,6 +185,12 @@ private fun EnabledContent(
     LazyColumn(
         modifier = modifier
     ) {
+        item {
+            DistinctAddressesSettings(
+                enabled = saveDuplicates,
+                onEnabledChange = onSaveDuplicatesChange
+            )
+        }
         item {
             NetworkTypeSettings(
                 onToggle = onNetworkTypeToggle,
@@ -191,6 +205,43 @@ private fun EnabledContent(
         item {
             Spacer(Modifier.height(8.dp))
         }
+    }
+}
+
+@Composable
+private fun DistinctAddressesSettings(
+    enabled: Boolean,
+    onEnabledChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            text = stringResource(Res.string.headline_duplicate_ips),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(Res.string.description_duplicate_ips),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(Res.string.action_save_duplicate_ips)
+                )
+            },
+            modifier = Modifier.clickable { onEnabledChange(!enabled) },
+            trailingContent = {
+                Switch(
+                    checked = enabled,
+                    onCheckedChange = onEnabledChange
+                )
+            }
+        )
     }
 }
 

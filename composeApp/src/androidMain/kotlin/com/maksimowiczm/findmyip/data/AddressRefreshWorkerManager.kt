@@ -5,9 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.work.WorkManager
 import com.maksimowiczm.findmyip.infrastructure.di.observe
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,23 +15,26 @@ import kotlinx.coroutines.flow.onEach
  */
 class AddressRefreshWorkerManager(
     private val context: Context,
-    dataStore: DataStore<Preferences>,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val dataStore: DataStore<Preferences>
 ) {
     private val workManager
         get() = WorkManager.getInstance(context)
 
-    init {
+    /**
+     * Launches a task that observes the historyEnabled preference and cancels the periodic work
+     * request if it is disabled.
+     */
+    fun CoroutineScope.launchCancellationTask() {
         dataStore.observe(PreferenceKeys.historyEnabled).filterNotNull().onEach {
             if (!it) {
                 cancelPeriodicWorkRequest()
             }
-        }.launchIn(CoroutineScope(dispatcher))
+        }.launchIn(this)
     }
 
     fun observeWorkerStatus() = workManager.getWorkInfosByTagFlow(AddressRefreshWorker.TAG)
 
-    fun cancelAndCreatePeriodicWorkRequest(intervalInMinutes: Long) {
+    suspend fun cancelAndCreatePeriodicWorkRequest(intervalInMinutes: Long) {
         AddressRefreshWorker.cancelAndCreatePeriodicWorkRequest(workManager, intervalInMinutes)
     }
 

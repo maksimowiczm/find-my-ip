@@ -5,11 +5,14 @@ import android.net.ConnectivityManager
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.maksimowiczm.findmyip.data.AddressRefreshWorkerManager
 import com.maksimowiczm.findmyip.data.AndroidPreferenceKeys.autoRefreshSettingsEnabledKey
+import com.maksimowiczm.findmyip.data.initializer.AppInitializer
 import com.maksimowiczm.findmyip.infrastructure.di.initKoin
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -25,27 +28,31 @@ class FindMyIpApplication :
         super.onCreate()
 
         val context = this.applicationContext
+        val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
         initKoin {
             androidContext(context)
             workManagerFactory()
         }
 
-        setupNetworkReceiver()
+        coroutineScope.launch {
+            get<AppInitializer>().invoke()
+
+            setupNetworkReceiver()
+            setUpWorkerManager()
+        }
     }
 
-    private fun setupNetworkReceiver() {
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-
+    private fun CoroutineScope.setupNetworkReceiver() {
         val networkCallback = FindMyIpNetworkCallback(
-            coroutineScope = coroutineScope,
+            coroutineScope = this,
             addressRepository = get()
         )
 
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         val dataStore = get<DataStore<Preferences>>()
 
-        coroutineScope.launch {
+        launch {
             dataStore
                 .observe(autoRefreshSettingsEnabledKey)
                 .map { it ?: false }
@@ -61,6 +68,12 @@ class FindMyIpApplication :
                         Log.w(TAG, "Network callback failure", e)
                     }
                 }
+        }
+    }
+
+    private fun CoroutineScope.setUpWorkerManager() {
+        get<AddressRefreshWorkerManager>().run {
+            launchCancellationTask()
         }
     }
 

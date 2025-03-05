@@ -8,7 +8,7 @@ import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 @Entity
 data class AddressEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val ip: String,
     /**
      * Epoch timestamp in milliseconds

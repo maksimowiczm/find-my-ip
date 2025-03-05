@@ -48,9 +48,8 @@ class BackgroundWorkerViewModel(
     fun setRefreshInterval(interval: Long) {
         viewModelScope.launch {
             dataStore.set(intervalPreferenceKey to interval)
+            workerManager.cancelAndCreatePeriodicWorkRequest(interval)
         }
-
-        workerManager.cancelAndCreatePeriodicWorkRequest(interval)
     }
 
     fun setEnabled(isEnabled: Boolean) {

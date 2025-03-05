@@ -18,7 +18,6 @@ kotlin {
     }
 
     sourceSets {
-
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -30,6 +29,8 @@ kotlin {
             implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
+            implementation(libs.kermit)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
