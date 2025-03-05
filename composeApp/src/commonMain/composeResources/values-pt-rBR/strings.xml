@@ -27,6 +27,7 @@
     <string name="headline_system_language_settings">System language settings</string>
     <string name="headline_platform_settings">Platform settings</string>
     <string name="headline_auto_refresh">Auto refresh</string>
+    <string name="headline_duplicate_ips">Duplicate IPs</string>
     <string name="unit_minutes_short">min</string>
     <string name="description_background_worker">Periodically run in the background to check your IP address</string>
     <string name="description_doze">Doze mode is a battery saving feature in Android. It can prevent the background worker from running if the device is not used for a long time.</string>
@@ -41,6 +42,7 @@
     <string name="description_save_history">Salve seu histórico de endereços IP.</string>
     <string name="description_internet_protocol">Escolha qual protocolo da internet usar. Pelo menos um deve estar ativado.</string>
     <string name="description_auto_refresh">Refresh address on network change</string>
+    <string name="description_duplicate_ips">When enabled, the app will log every fetched IP address, even if it matches the last recorded one. If disabled, the app will skip saving duplicate IPs to reduce redundant entries</string>
     <string name="neutral_empty">Vazio</string>
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
@@ -60,6 +62,7 @@
     <string name="action_go_back">Voltar</string>
     <string name="action_clear">Limpar</string>
     <string name="action_translate">Translate</string>
+    <string name="action_save_duplicate_ips">Save duplicate IPs</string>
     <string name="mobile">Redes móveis</string>
     <string name="vpn">VPN</string>
     <string name="unavailable">Indisponível</string>
