@@ -1,0 +1,14 @@
+New features
+- Auto-refresh on network change
+- Save duplicate addresses
+- Language settings (currently only English, though) 😅
+- UI improvements
+  - Follow Material Design guidelines
+  - Add a monochrome icon
+
+Breaking changes
+- pt-BR translation is not available for now
+- User preferences have been reset
+
+Code
+- Migrated to Kotlin Multiplatform and Compose Multiplatform

@@ -76,8 +76,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 4
-        versionName = "v1.2.0"
+        versionCode = 5
+        versionName = "v2.0.0"
 
         buildConfigField("String", "IPV4_PROVIDER", "\"https://api.ipify.org\"")
         buildConfigField("String", "IPV6_PROVIDER", "\"https://api6.ipify.org\"")
@@ -89,7 +89,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
     }
     compileOptions {
