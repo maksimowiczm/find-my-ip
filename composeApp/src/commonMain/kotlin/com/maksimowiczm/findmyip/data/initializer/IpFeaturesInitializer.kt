@@ -5,12 +5,11 @@ import androidx.datastore.preferences.core.Preferences
 import com.maksimowiczm.findmyip.data.PreferenceKeys
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.set
-import com.maksimowiczm.findmyip.network.AddressStatus
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeout
 
 class IpFeaturesInitializer(
@@ -28,20 +27,32 @@ class IpFeaturesInitializer(
         coroutineScope {
             val (ipv4test, ipv6test) = awaitAll(
                 async {
-                    withTimeout(5_000) { ipv4Source.observeAddress() }.first()
+                    try {
+                        withTimeout(5_000) {
+                            ipv4Source.refreshAddress()
+                        }
+                    } catch (e: TimeoutCancellationException) {
+                        Result.failure(e)
+                    }
                 },
                 async {
-                    withTimeout(5_000) { ipv6Source.observeAddress() }.first()
+                    try {
+                        withTimeout(5_000) {
+                            ipv6Source.refreshAddress()
+                        }
+                    } catch (e: TimeoutCancellationException) {
+                        Result.failure(e)
+                    }
                 }
             )
 
             // If both test fail set IPv4 as default.
-            val ipv4 = if (ipv4test is AddressStatus.Error && ipv6test is AddressStatus.Error) {
+            val ipv4 = if (ipv4test.isFailure && ipv6test.isFailure) {
                 true
             } else {
-                ipv4test is AddressStatus.Success
+                ipv4test.isSuccess
             }
-            val ipv6 = ipv6test is AddressStatus.Success
+            val ipv6 = ipv6test.isSuccess
 
             dataStore.set(
                 PreferenceKeys.ipv4Enabled to ipv4,
