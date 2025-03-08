@@ -7,7 +7,7 @@ import com.maksimowiczm.findmyip.ui.FindMyIpApp
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "KotlinProject",
+        title = "KotlinProject"
     ) {
         FindMyIpApp()
     }

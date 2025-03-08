@@ -4,5 +4,5 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-actual fun BackgroundWorkerSettings(modifier: Modifier) {
+actual fun AdvancedHistoryPlatformSettings(modifier: Modifier) {
 }
