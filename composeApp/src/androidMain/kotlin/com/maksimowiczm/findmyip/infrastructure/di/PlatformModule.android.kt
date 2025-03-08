@@ -6,6 +6,7 @@ import com.maksimowiczm.findmyip.data.IsMigratedFrom1
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
 import com.maksimowiczm.findmyip.isMigratedFrom1
+import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.ui.settings.autorefresh.AutoRefreshSettingsViewModel
 import com.maksimowiczm.findmyip.ui.settings.history.BackgroundWorkerViewModel
 import com.maksimowiczm.findmyip.ui.settings.language.LanguageViewModel
@@ -37,4 +38,6 @@ actual val platformModule = module {
     viewModelOf(::LanguageViewModel)
 
     viewModelOf(::AutoRefreshSettingsViewModel)
+
+    factoryOf(::ConnectivityObserver)
 }

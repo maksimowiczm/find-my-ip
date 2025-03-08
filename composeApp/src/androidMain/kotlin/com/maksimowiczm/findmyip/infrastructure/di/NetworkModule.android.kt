@@ -2,10 +2,8 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.BuildConfig
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
-import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSourceImpl
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -24,6 +22,4 @@ actual val networkModule = module {
             connectivityObserver = get()
         )
     }.bind<NetworkAddressDataSource>()
-
-    factoryOf(::ConnectivityObserver)
 }
