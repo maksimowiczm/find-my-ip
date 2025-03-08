@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="headline_history_settings">History settings</string>
-    <string name="headline_clear_history">Clear history</string>
-    <string name="headline_network_type" description="Wi-Fi, Mobile, VPN">Network type</string>
-    <string name="headline_ip_version_disabled">IP version disabled</string>
-    <string name="headline_address_history_is_disabled">Address history is disabled</string>
+    <string name="headline_history_settings">Настройки истории</string>
+    <string name="headline_clear_history">Очистить историю</string>
+    <string name="headline_network_type" description="Wi-Fi, Mobile, VPN">Тип сети</string>
+    <string name="headline_ip_version_disabled">IP-версия отключена</string>
+    <string name="headline_address_history_is_disabled">История адресов отключена</string>
     <string name="headline_background_worker">Background worker</string>
     <string name="headline_run_every" description="Run (worker) every (x minutes)">Run every</string>
     <string name="headline_custom">Custom</string>
