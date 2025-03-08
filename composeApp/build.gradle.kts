@@ -35,19 +35,14 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.koin.androidx.workmanager)
 
-            implementation(libs.androidx.paging.runtime)
-            implementation(libs.androidx.paging.compose)
-
             implementation(libs.androidx.work.runtime.ktx)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.paging.common)
             implementation(libs.androidx.sqlite.bundle)
         }
         commonMain.dependencies {
-            implementation(libs.paging.compose.common)
             implementation(compose.preview)
 
             implementation(libs.kermit)
