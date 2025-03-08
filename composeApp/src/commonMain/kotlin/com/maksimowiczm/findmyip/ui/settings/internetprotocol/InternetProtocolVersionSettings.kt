@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.maksimowiczm.findmyip.BuildConfig
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
@@ -23,13 +22,17 @@ fun InternetProtocolVersionSettings(
     modifier: Modifier = Modifier,
     viewModel: InternetProtocolVersionSettingsViewModel = koinViewModel()
 ) {
+    val ipv4Provider by viewModel.ipv4Provider.collectAsStateWithLifecycle(null)
     val ipv4Enabled by viewModel.ipv4Enabled.collectAsStateWithLifecycle()
+    val ipv6Provider by viewModel.ipv6Provider.collectAsStateWithLifecycle(null)
     val ipv6Enabled by viewModel.ipv6Enabled.collectAsStateWithLifecycle()
 
     InternetProtocolVersionSettings(
         modifier = modifier,
+        ipv4Provider = ipv4Provider,
         ipv4Enabled = ipv4Enabled,
         onIpv4Change = viewModel::onIpv4EnabledChanged,
+        ipv6Provider = ipv6Provider,
         ipv6Enabled = ipv6Enabled,
         onIpv6Change = viewModel::onIpv6EnabledChanged
     )
@@ -37,8 +40,10 @@ fun InternetProtocolVersionSettings(
 
 @Composable
 private fun InternetProtocolVersionSettings(
+    ipv4Provider: String?,
     ipv4Enabled: Boolean?,
     onIpv4Change: (Boolean) -> Unit,
+    ipv6Provider: String?,
     ipv6Enabled: Boolean?,
     onIpv6Change: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -66,7 +71,7 @@ private fun InternetProtocolVersionSettings(
         ListItem(
             headlineContent = { Text(stringResource(Res.string.ipv4)) },
             modifier = Modifier.clickable { ipv4onCheckedChange() },
-            supportingContent = { Text(BuildConfig.IPV4_PROVIDER) },
+            supportingContent = { ipv4Provider?.let { Text(it) } },
             trailingContent = {
                 Switch(
                     checked = ipv4Enabled ?: false,
@@ -92,7 +97,7 @@ private fun InternetProtocolVersionSettings(
         ListItem(
             headlineContent = { Text(stringResource(Res.string.ipv6)) },
             modifier = Modifier.clickable { ipv6onCheckedChange() },
-            supportingContent = { Text(BuildConfig.IPV6_PROVIDER) },
+            supportingContent = { ipv6Provider?.let { Text(it) } },
             trailingContent = {
                 Switch(
                     checked = ipv6Enabled ?: false,

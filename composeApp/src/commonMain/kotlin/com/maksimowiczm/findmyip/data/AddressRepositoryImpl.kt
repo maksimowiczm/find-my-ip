@@ -30,6 +30,17 @@ class AddressRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
     private val dao: AddressEntityDao
 ) : AddressRepository {
+    override fun observeAddressProviderUrl(
+        internetProtocolVersion: InternetProtocolVersion
+    ): Flow<String> {
+        val provider = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> ipv4DataSource.providerURL
+            InternetProtocolVersion.IPv6 -> ipv6DataSource.providerURL
+        }
+
+        return flowOf(provider)
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun observeAddress(
         internetProtocolVersion: InternetProtocolVersion

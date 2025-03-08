@@ -13,6 +13,8 @@ sealed interface AddressStatus {
 }
 
 interface AddressRepository {
+    fun observeAddressProviderUrl(internetProtocolVersion: InternetProtocolVersion): Flow<String>
+
     fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<AddressStatus>
 
     suspend fun refreshAddresses()

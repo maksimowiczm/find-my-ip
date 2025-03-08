@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class NetworkAddressDataSourceImpl(
-    private val providerURL: String,
+    override val providerURL: String,
     private val connectivityObserver: ConnectivityObserver,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NetworkAddressDataSource {

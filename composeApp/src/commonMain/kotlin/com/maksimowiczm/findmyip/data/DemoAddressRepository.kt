@@ -14,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -79,6 +80,16 @@ class DemoAddressRepository : AddressRepository {
 
     private val v4HistoryFlow = MutableStateFlow<List<Address>>(v4History)
     private val v6HistoryFlow = MutableStateFlow<List<Address>>(v6History)
+    override fun observeAddressProviderUrl(
+        internetProtocolVersion: InternetProtocolVersion
+    ): Flow<String> {
+        val provider = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> "https://ipv4.provider.com"
+            InternetProtocolVersion.IPv6 -> "https://ipv6.provider.com"
+        }
+
+        return flowOf(provider)
+    }
 
     override fun observeAddress(
         internetProtocolVersion: InternetProtocolVersion

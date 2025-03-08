@@ -12,6 +12,8 @@ sealed interface AddressStatus {
 }
 
 interface NetworkAddressDataSource {
+    val providerURL: String
+
     fun observeAddress(): Flow<AddressStatus>
     suspend fun refreshAddress(): Result<NetworkAddress>
 }
