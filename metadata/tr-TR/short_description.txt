@@ -1,1 +1,1 @@
-Simple app to fetch and log your IP address
+IP adresinizi almak ve kaydetmek için basit bir uygulama
