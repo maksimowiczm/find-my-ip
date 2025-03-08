@@ -6,7 +6,7 @@
     <string name="headline_ip_version_disabled">Protokół wyłączony</string>
     <string name="headline_address_history_is_disabled">Historia adresów jest wyłączona</string>
     <string name="headline_background_worker">Proces w tle</string>
-    <string name="headline_check_every" description="Check every x minutes">Sprawdzaj co</string>
+    <string name="headline_run_every" description="Run (worker) every (x minutes)">Run every</string>
     <string name="headline_custom">Niestandardowe</string>
     <string name="headline_custom_interval">Niestandardowy interwał</string>
     <string name="headline_migration_from_version_1">Migracja z wersji 1</string>
