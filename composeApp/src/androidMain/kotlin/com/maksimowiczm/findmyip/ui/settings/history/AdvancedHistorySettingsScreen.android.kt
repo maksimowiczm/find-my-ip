@@ -43,26 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import findmyip.composeapp.generated.resources.*
-import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.action_cancel
-import findmyip.composeapp.generated.resources.action_confirm
-import findmyip.composeapp.generated.resources.action_learn_about_doze
-import findmyip.composeapp.generated.resources.description_background_worker
-import findmyip.composeapp.generated.resources.description_interval_less_than_15_min
-import findmyip.composeapp.generated.resources.headline_background_worker
-import findmyip.composeapp.generated.resources.headline_check_every
-import findmyip.composeapp.generated.resources.headline_custom
-import findmyip.composeapp.generated.resources.headline_custom_interval
-import findmyip.composeapp.generated.resources.link_doze
-import findmyip.composeapp.generated.resources.unit_minutes_short
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-actual fun BackgroundWorkerSettings(modifier: Modifier) {
-    BackgroundWorkerSettingsImpl(
-        modifier = modifier
-    )
+actual fun AdvancedHistoryPlatformSettings(modifier: Modifier) {
+    BackgroundWorkerSettingsImpl(modifier = modifier)
 }
 
 @Composable
@@ -70,7 +56,7 @@ private fun BackgroundWorkerSettingsImpl(
     modifier: Modifier = Modifier,
     viewModel: BackgroundWorkerViewModel = koinViewModel()
 ) {
-    val isEnabled by viewModel.workerStatus.collectAsStateWithLifecycle(false)
+    val isEnabled by viewModel.workerStatus.collectAsStateWithLifecycle()
 
     val interval by viewModel.interval.collectAsStateWithLifecycle()
 
@@ -125,11 +111,14 @@ private fun BackgroundWorkerSettingsImpl(
         modifier = modifier
     ) {
         Text(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.headline_background_worker),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
+
+        Spacer(Modifier.height(8.dp))
+
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.description_background_worker),
@@ -137,31 +126,6 @@ private fun BackgroundWorkerSettingsImpl(
         )
 
         Spacer(Modifier.height(8.dp))
-
-        Card(
-            modifier = Modifier.padding(horizontal = 8.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(Res.string.headline_doze),
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = stringResource(Res.string.description_doze),
-                    textAlign = TextAlign.Justify,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = dozeLinkString,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
 
         ListItem(
             headlineContent = {
@@ -175,11 +139,13 @@ private fun BackgroundWorkerSettingsImpl(
                 )
             }
         )
+
         if (enabled) {
             Text(
-                stringResource(Res.string.headline_check_every),
+                stringResource(Res.string.headline_run_every),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
+
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -216,6 +182,31 @@ private fun BackgroundWorkerSettingsImpl(
                         }
                     )
                 }
+            }
+        }
+
+        Card(
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(Res.string.headline_doze),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(Res.string.description_doze),
+                    textAlign = TextAlign.Justify,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = dozeLinkString,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

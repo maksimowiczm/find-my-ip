@@ -7,7 +7,7 @@
     <string name="headline_ip_version_disabled">IP version disabled</string>
     <string name="headline_address_history_is_disabled">Address history is disabled</string>
     <string name="headline_background_worker">Background worker</string>
-    <string name="headline_check_every" description="Check every x minutes">Check every</string>
+    <string name="headline_run_every" description="Run (worker) every (x minutes)">Run every</string>
     <string name="headline_custom">Custom</string>
     <string name="headline_custom_interval">Custom interval</string>
     <string name="headline_migration_from_version_1">Migration from version 1</string>

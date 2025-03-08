@@ -13,9 +13,11 @@ import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.infrastructure.di.set
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 private val intervalPreferenceKey = longPreferencesKey("interval")
 private const val DEFAULT_INTERVAL = 240L
@@ -30,8 +32,11 @@ class BackgroundWorkerViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = DEFAULT_INTERVAL
+            initialValue = runBlocking { dataStore.get(intervalPreferenceKey) ?: DEFAULT_INTERVAL }
         )
+
+    private fun WorkInfo.toEnabled() =
+        state in listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
 
     val workerStatus = workerManager.observeWorkerStatus()
         .map { infos ->
@@ -39,11 +44,14 @@ class BackgroundWorkerViewModel(
                 Log.w(TAG, "More than one worker with the same tag")
             }
 
-            infos.firstOrNull()?.state in listOf(
-                WorkInfo.State.ENQUEUED,
-                WorkInfo.State.RUNNING
-            )
-        }.filterNotNull()
+            infos.firstOrNull()?.toEnabled()
+        }.filterNotNull().stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = runBlocking {
+                workerManager.observeWorkerStatus().first().firstOrNull()?.toEnabled() ?: false
+            }
+        )
 
     fun setRefreshInterval(interval: Long) {
         viewModelScope.launch {

@@ -1,21 +1,10 @@
 package com.maksimowiczm.findmyip.ui.settings.history
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,19 +13,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.NetworkType
+import com.maksimowiczm.findmyip.ui.component.ToggleSettingsScaffold
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
@@ -78,18 +65,10 @@ private fun AdvancedHistorySettingsScreen(
     networkTypeMap: Map<NetworkType, Boolean>,
     modifier: Modifier = Modifier
 ) {
-    val excludedPadding = WindowInsets.systemBars
-        .union(WindowInsets.displayCutout)
-        .union(WindowInsets.navigationBars)
-        .only(WindowInsetsSides.Bottom)
-
-    val contentPadding = WindowInsets.systemBars
-        .union(WindowInsets.displayCutout)
-        .union(WindowInsets.navigationBars)
-        .exclude(excludedPadding)
-
-    Scaffold(
-        modifier = modifier,
+    ToggleSettingsScaffold(
+        check = enabled,
+        onCheckedChange = onEnabledChange,
+        enabled = true,
         topBar = {
             TopAppBar(
                 title = {
@@ -107,71 +86,23 @@ private fun AdvancedHistorySettingsScreen(
                 }
             )
         },
-        contentWindowInsets = contentPadding
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .consumeWindowInsets(paddingValues)
-        ) {
-            val headerContainerColor by animateColorAsState(
-                targetValue = if (enabled) {
-                    MaterialTheme.colorScheme.secondaryContainer
-                } else {
-                    MaterialTheme.colorScheme.surfaceContainer
-                }
+        disabledContent = {
+            Text(
+                text = stringResource(Res.string.description_history_settings_disabled),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(16.dp)
             )
-
-            val headerContentColor by animateColorAsState(
-                targetValue = if (enabled) {
-                    MaterialTheme.colorScheme.onSecondaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                }
+        },
+        enabledContent = {
+            EnabledContent(
+                saveDuplicates = saveDuplicates,
+                onSaveDuplicatesChange = onSaveDuplicatesChange,
+                onNetworkTypeToggle = onNetworkTypeToggle,
+                networkTypeMap = networkTypeMap
             )
-
-            ListItem(
-                modifier = Modifier.clickable { onEnabledChange(!enabled) },
-                colors = ListItemDefaults.colors(
-                    containerColor = headerContainerColor,
-                    headlineColor = headerContentColor
-                ),
-                headlineContent = {
-                    if (enabled) {
-                        Text(stringResource(Res.string.headline_on))
-                    } else {
-                        Text(stringResource(Res.string.headline_off))
-                    }
-                },
-                trailingContent = {
-                    Switch(
-                        checked = enabled,
-                        onCheckedChange = onEnabledChange
-                    )
-                }
-            )
-
-            Crossfade(
-                targetState = enabled
-            ) {
-                if (!it) {
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = stringResource(Res.string.description_history_settings_disabled),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                } else {
-                    EnabledContent(
-                        saveDuplicates = saveDuplicates,
-                        onSaveDuplicatesChange = onSaveDuplicatesChange,
-                        onNetworkTypeToggle = onNetworkTypeToggle,
-                        networkTypeMap = networkTypeMap
-                    )
-                }
-            }
-        }
-    }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -200,7 +131,7 @@ private fun EnabledContent(
             )
         }
         item {
-            BackgroundWorkerSettings()
+            AdvancedHistoryPlatformSettings()
         }
         item {
             Spacer(Modifier.height(8.dp))
@@ -289,3 +220,6 @@ private fun NetworkTypeSettings(
         )
     }
 }
+
+@Composable
+expect fun AdvancedHistoryPlatformSettings(modifier: Modifier = Modifier)
