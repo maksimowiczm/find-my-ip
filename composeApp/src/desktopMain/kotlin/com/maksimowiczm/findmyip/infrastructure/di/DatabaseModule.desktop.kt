@@ -1,6 +1,31 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.maksimowiczm.findmyip.database.AddressEntityDao
+import com.maksimowiczm.findmyip.database.FindMyIpDatabase
+import com.maksimowiczm.findmyip.infrastructure.desktop.preferencesDirectory
+import java.io.File
 import org.koin.core.module.Module
+import org.koin.dsl.module
 
-actual val databaseModule: Module
-    get() = TODO("Not yet implemented")
+fun getDatabaseBuilder(): RoomDatabase.Builder<FindMyIpDatabase> {
+    val dbFile = File(preferencesDirectory, "my_room.db")
+
+    return Room.databaseBuilder<FindMyIpDatabase>(
+        name = dbFile.absolutePath
+    ).setDriver(BundledSQLiteDriver())
+}
+
+actual val databaseModule: Module = module {
+    single {
+        val database = getRoomDatabase(getDatabaseBuilder())
+
+        database
+    }
+
+    factory<AddressEntityDao> {
+        get<FindMyIpDatabase>().addressEntityDao()
+    }
+}

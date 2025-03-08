@@ -40,6 +40,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.paging.common)
+            implementation(libs.androidx.sqlite.bundle)
         }
         commonMain.dependencies {
             implementation(libs.paging.compose.common)
@@ -118,13 +119,11 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
-ksp {
-    arg("USE_COMPOSE_VIEWMODEL", "true")
-}
-
 dependencies {
     debugImplementation(compose.uiTooling)
-    add("kspAndroid", libs.androidx.room.compiler)
+    listOf("kspAndroid", "kspDesktop").forEach {
+        add(it, libs.androidx.room.compiler)
+    }
 }
 
 compose.desktop {
