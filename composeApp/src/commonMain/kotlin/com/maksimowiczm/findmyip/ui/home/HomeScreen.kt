@@ -31,7 +31,7 @@ import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {

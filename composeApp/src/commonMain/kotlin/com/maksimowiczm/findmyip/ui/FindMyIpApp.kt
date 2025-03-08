@@ -24,7 +24,7 @@ import com.maksimowiczm.findmyip.navigation.TopRoute
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun FindMyIpApp(modifier: Modifier = Modifier, viewModel: MigrationViewModel = koinViewModel()) {

@@ -25,9 +25,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.ui.component.ToggleSettingsScaffold
 import findmyip.composeapp.generated.resources.*
-import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AdvancedHistorySettingsScreen(

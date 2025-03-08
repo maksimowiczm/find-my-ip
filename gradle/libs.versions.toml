@@ -16,6 +16,7 @@ junit = "4.13.2"
 kermit = "2.0.4"
 kotlin = "2.1.10"
 navigationCompose = "2.8.0-alpha10"
+pagingCommon = "3.3.0-alpha02-0.5.1"
 room = "2.7.0-rc01"
 ksp = "2.1.10-1.0.31"
 koin = "4.0.2"
@@ -26,6 +27,7 @@ composeShimmer = "1.3.2"
 pagingCompose = "3.3.6"
 kotlinxDatetime = "0.6.1"
 workRuntimeKtx = "2.10.0"
+kotlinx-coroutines = "1.10.1"
 
 [libraries]
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
@@ -60,6 +62,9 @@ compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingCompose" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagingCommon" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingCommon" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

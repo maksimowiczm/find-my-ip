@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -17,7 +18,11 @@ kotlin {
         }
     }
 
+    jvm("desktop")
+
     sourceSets {
+        val desktopMain by getting
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -26,9 +31,20 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.koin.androidx.workmanager)
 
+            implementation(libs.androidx.paging.runtime)
+            implementation(libs.androidx.paging.compose)
+
             implementation(libs.androidx.work.runtime.ktx)
         }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.paging.common)
+        }
         commonMain.dependencies {
+            implementation(libs.paging.compose.common)
+            implementation(compose.preview)
+
             implementation(libs.kermit)
 
             implementation(compose.runtime)
@@ -43,7 +59,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
 
             implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.ktx)
             implementation(libs.androidx.room.paging)
 
             implementation(libs.androidx.datastore.preferences)
@@ -59,9 +74,6 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.compose.shimmer)
-
-            implementation(libs.androidx.paging.runtime)
-            implementation(libs.androidx.paging.compose)
 
             implementation(libs.kotlinx.datetime)
         }
@@ -106,7 +118,23 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+ksp {
+    arg("USE_COMPOSE_VIEWMODEL", "true")
+}
+
 dependencies {
     debugImplementation(compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.maksimowiczm.findmyip.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.maksimowiczm.findmyip"
+            packageVersion = "1.0.0"
+        }
+    }
 }
