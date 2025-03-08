@@ -40,7 +40,6 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.androidx.sqlite.bundle)
         }
         commonMain.dependencies {
             implementation(compose.preview)
@@ -60,6 +59,7 @@ kotlin {
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.room.paging)
+            implementation(libs.androidx.sqlite.bundle)
 
             implementation(libs.androidx.datastore.preferences)
 
