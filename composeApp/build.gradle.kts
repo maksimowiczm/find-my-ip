@@ -97,7 +97,7 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
+        versionCode = 6
         versionName = "v" + libs.versions.version.name.get()
     }
     packaging {

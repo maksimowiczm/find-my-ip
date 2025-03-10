@@ -1,0 +1,7 @@
+New Translations
+- Added Polish
+- Added Turkish (thanks to mikropsoft)
+
+Code
+- Minor refactoring
+- Introduced an experimental desktop app (not available yet)
