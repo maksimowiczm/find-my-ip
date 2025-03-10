@@ -11,12 +11,12 @@
 ### 📷 Screenshots
 
 <div align="center">
-    <img src="./metadata/en-US/images/phoneScreenshots/home.png" width="30%" alt="Home Screen"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/history_disabled.png" width="30%" alt="History Disabled"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/history.png" width="30%" alt="History Enabled"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/settings.png" width="30%" alt="Settings"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/history_settings.png" width="30%" alt="History Settings"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/language_settings.png" width="30%" alt="Language Settings"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/100_home.png" width="30%" alt="Home Screen"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/200_history_disabled.png" width="30%" alt="History Disabled"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/300_history.png" width="30%" alt="History Enabled"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/400_settings.png" width="30%" alt="Settings"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/500_history_settings.png" width="30%" alt="History Settings"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/600_language_settings.png" width="30%" alt="Language Settings"/>
 </div>
 
 ---
