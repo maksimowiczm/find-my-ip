@@ -30,6 +30,14 @@ val languages = mapOf(
                 name = "Mateusz Maksimowicz"
             )
         )
+    ),
+    "Polski (Polska)" to Translation(
+        tag = "pl-PL",
+        authorsStrings = listOf(
+            Author(
+                name = "Mateusz Maksimowicz"
+            )
+        )
     )
 )
 
