@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="headline_history_settings">Geçmiş ayarları</string>
+    <string name="headline_clear_history">Geçmişi temizle</string>
+    <string name="headline_network_type" description="Wi-Fi, Mobile, VPN">Ağ türü</string>
+    <string name="headline_ip_version_disabled">IP sürümü devre dışı</string>
+    <string name="headline_address_history_is_disabled">Adres geçmişi devre dışı</string>
+    <string name="headline_background_worker">Arka plan çalışanı</string>
+    <string name="headline_run_every" description="Run (worker) every (x minutes)">Her seferinde çalıştır</string>
+    <string name="headline_custom">Özel</string>
+    <string name="headline_custom_interval">Özel aralık</string>
+    <string name="headline_migration_from_version_1">Sürüm 1\'den geçiş</string>
+    <string name="headline_home" description="In context of 'Home' screen" comment="'Home' bottom app bar">Ana sayfa</string>
+    <string name="headline_history">Geçmiş</string>
+    <string name="headline_settings">Ayarlar</string>
+    <string name="headline_your_ip_address_is" description="Your address is 1.2.3.4">IP adresiniz</string>
+    <string name="headline_enable_history">Geçmişi etkinleştir</string>
+    <string name="headline_empty" description="List is empty">Boş</string>
+    <string name="headline_on" description="Switch is on">Açık</string>
+    <string name="headline_off" description="Switch is off">Kapalı</string>
+    <string name="headline_save_history">Geçmişi kaydet</string>
+    <string name="headline_internet_protocol">İnternet Protokolü</string>
+    <string name="headline_language">Dil</string>
+    <string name="headline_system">Sistem</string>
+    <string name="headline_authors">Yazarlar</string>
+    <string name="headline_system_language_settings">Sistem dil ayarları</string>
+    <string name="headline_platform_settings">Platform ayarları</string>
+    <string name="headline_auto_refresh">Otomatik yenile</string>
+    <string name="headline_duplicate_ips">Yinelenen IP\'ler</string>
+    <string name="unit_minutes_short" description="Abbreviation for minutes">dk</string>
+    <string name="description_background_worker">IP adresinizi periyodik olarak kontrol etmek için arka planda çalışır</string>
+    <string name="description_doze">Doze modu, Android\'de bir pil tasarruf özelliğidir. Cihaz uzun süre kullanılmadığında arka plan çalışanını çalıştırmasını engelleyebilir.</string>
+    <string name="description_interval_less_than_15_min">15 dakikadan kısa aralıklar beklendiği gibi çalışmayabilir</string>
+    <string name="description_clear_history">Kaydedilen tüm adresleri temizle</string>
+    <string name="description_clear_history_dialog">Adres geçmişiniz kalıcı olarak silinecek</string>
+    <string name="description_network_type">Hangi ağ türlerinin saklanacağı</string>
+    <string name="description_migration_from_version_1">Görünüşe göre sürüm 1\'den geçiş yaptınız. Maalesef tüm kullanıcı tercihlerini bozdum. Adres geçmişiniz hâlâ burada, ancak geçmiş ve arka plan çalışanı tercihlerinizi yeniden ayarlamanız gerekiyor.</string>
+    <string name="description_history_no_permission">IP adresinizi izlemek varsayılan olarak devre dışıdır. Adres geçmişinizi görmek için bunu etkinleştirin. Bu ayarı her zaman uygulama ayarlarından değiştirebilirsiniz.</string>
+    <string name="description_enable_history">Adres geçmişiniz kaydedilecek. Bunu ayarlardan devre dışı bırakabilirsiniz.</string>
+    <string name="description_history_settings_disabled" description="Inform the user that he must enable the history settings to see and change them">Geçmiş ayarlarını görmek ve değiştirmek için önce geçmişi etkinleştirin.</string>
+    <string name="description_save_history">IP adresi geçmişinizi kaydedin</string>
+    <string name="description_internet_protocol">Hangi İnternet Protokolü\'nün kullanılacağını seçin. En az biri etkin olmalıdır.</string>
+    <string name="description_auto_refresh">Ağ değişikliğinde adresi yenile</string>
+    <string name="description_duplicate_ips">Etkinleştirildiğinde, uygulama her alınan IP adresini kaydedecektir, hatta son kaydedilen adresle eşleşse bile. Devre dışı bırakıldığında ise uygulama, yinelenen IP\'leri kaydetmeyi atlayarak gereksiz girişleri azaltacaktır.</string>
+    <string name="neutral_enable_ip_version_in_settings">IP sürümünü ayarlardan etkinleştirebilirsiniz</string>
+    <string name="neutral_enable_address_history_in_settings">Adres geçmişini ayarlardan etkinleştirebilirsiniz</string>
+    <string name="neutral_help_translating_the_app">Uygulamayı çevirmeye yardım et</string>
+    <string name="error_unavailable">Kullanılamıyor</string>
+    <string name="action_enable">Etkinleştir</string>
+    <string name="action_confirm">Onayla</string>
+    <string name="action_cancel">İptal</string>
+    <string name="action_learn_about_doze">Doze modu hakkında daha fazla bilgi edinmek için buraya tıklayın</string>
+    <string name="action_hide">Gizle</string>
+    <string name="action_dont_show_again">Tekrar gösterme</string>
+    <string name="action_go_to_home" description="Go to 'Home' screen">Ana ekrana git</string>
+    <string name="action_go_to_history" description="Go to 'History' screen">Geçmişe git</string>
+    <string name="action_go_to_settings" description="Go to 'Settings' screen">Ayarlara git</string>
+    <string name="action_tap_to_refresh">Yenilemek için dokun</string>
+    <string name="action_tap_to_enable">Etkinleştirmek için dokun</string>
+    <string name="action_go_back" description="Go back to previous screen">Geri dön</string>
+    <string name="action_clear">Temizle</string>
+    <string name="action_translate">Çevir</string>
+    <string name="action_save_duplicate_ips">Yinelenen IP\'leri kaydet</string>
+    <string name="cellular_data">Hücresel veri</string>
+    <string name="unavailable">Kullanılamıyor</string>
+</resources>
