@@ -3,6 +3,7 @@ package com.maksimowiczm.findmyip.data
 import androidx.paging.PagingData
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import kotlinx.coroutines.flow.Flow
 
 sealed interface AddressStatus {
@@ -24,4 +25,6 @@ interface AddressRepository {
     ): Flow<PagingData<Address>>
 
     suspend fun clearHistory()
+
+    val availableNetworkTypes: List<NetworkType>
 }

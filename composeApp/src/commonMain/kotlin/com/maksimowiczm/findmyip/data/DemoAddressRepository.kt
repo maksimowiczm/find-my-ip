@@ -49,6 +49,8 @@ private val DEMO_IPS_V6 = listOf(
 )
 
 class DemoAddressRepository : AddressRepository {
+    override val availableNetworkTypes: List<NetworkType> = NetworkType.entries
+
     private val v4AddressFlow = MutableStateFlow<AddressStatus?>(null)
     private val v6AddressFlow = MutableStateFlow<AddressStatus?>(null)
 

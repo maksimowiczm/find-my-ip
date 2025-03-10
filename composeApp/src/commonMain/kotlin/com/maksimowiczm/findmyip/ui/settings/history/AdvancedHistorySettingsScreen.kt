@@ -25,9 +25,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.ui.component.ToggleSettingsScaffold
 import findmyip.composeapp.generated.resources.*
-import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AdvancedHistorySettingsScreen(
@@ -123,12 +122,16 @@ private fun EnabledContent(
             )
         }
         item {
+            Spacer(Modifier.height(8.dp))
+        }
+        item {
             NetworkTypeSettings(
                 onToggle = onNetworkTypeToggle,
-                wifi = networkTypeMap[NetworkType.WIFI]!!,
-                mobile = networkTypeMap[NetworkType.MOBILE]!!,
-                vpn = networkTypeMap[NetworkType.VPN]!!
+                networkTypeMap = networkTypeMap
             )
+        }
+        item {
+            Spacer(Modifier.height(8.dp))
         }
         item {
             AdvancedHistoryPlatformSettings()
@@ -179,20 +182,17 @@ private fun DistinctAddressesSettings(
 @Composable
 private fun NetworkTypeSettings(
     onToggle: (NetworkType) -> Unit,
-    wifi: Boolean,
-    mobile: Boolean,
-    vpn: Boolean,
+    networkTypeMap: Map<NetworkType, Boolean>,
     modifier: Modifier = Modifier
 ) {
-    val onWifiToggle = { onToggle(NetworkType.WIFI) }
-    val onMobileToggle = { onToggle(NetworkType.MOBILE) }
-    val onVpnToggle = { onToggle(NetworkType.VPN) }
+    // Only show the network type settings if there are more than one network types
+    if (networkTypeMap.size < 2) return
 
     Column(
         modifier = modifier
     ) {
         Text(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 8.dp),
             text = stringResource(Res.string.headline_network_type),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
@@ -203,21 +203,36 @@ private fun NetworkTypeSettings(
             style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(8.dp))
-        ListItem(
-            modifier = Modifier.clickable(onClick = { onWifiToggle() }),
-            headlineContent = { Text(stringResource(Res.string.wi_fi)) },
-            leadingContent = { Checkbox(wifi, { onWifiToggle() }) }
-        )
-        ListItem(
-            modifier = Modifier.clickable(onClick = { onMobileToggle() }),
-            headlineContent = { Text(stringResource(Res.string.cellular_data)) },
-            leadingContent = { Checkbox(mobile, { onMobileToggle() }) }
-        )
-        ListItem(
-            modifier = Modifier.clickable(onClick = { onVpnToggle() }),
-            headlineContent = { Text(stringResource(Res.string.vpn)) },
-            leadingContent = { Checkbox(vpn, { onVpnToggle() }) }
-        )
+
+        if (networkTypeMap.containsKey(NetworkType.WIFI)) {
+            val wifi = networkTypeMap[NetworkType.WIFI]!!
+
+            ListItem(
+                modifier = Modifier.clickable(onClick = { onToggle(NetworkType.WIFI) }),
+                headlineContent = { Text(stringResource(Res.string.wi_fi)) },
+                leadingContent = { Checkbox(wifi, { onToggle(NetworkType.WIFI) }) }
+            )
+        }
+
+        if (networkTypeMap.containsKey(NetworkType.MOBILE)) {
+            val mobile = networkTypeMap[NetworkType.MOBILE]!!
+
+            ListItem(
+                modifier = Modifier.clickable(onClick = { onToggle(NetworkType.MOBILE) }),
+                headlineContent = { Text(stringResource(Res.string.cellular_data)) },
+                leadingContent = { Checkbox(mobile, { onToggle(NetworkType.MOBILE) }) }
+            )
+        }
+
+        if (networkTypeMap.containsKey(NetworkType.VPN)) {
+            val vpn = networkTypeMap[NetworkType.VPN]!!
+
+            ListItem(
+                modifier = Modifier.clickable(onClick = { onToggle(NetworkType.VPN) }),
+                headlineContent = { Text(stringResource(Res.string.vpn)) },
+                leadingContent = { Checkbox(vpn, { onToggle(NetworkType.VPN) }) }
+            )
+        }
     }
 }
 

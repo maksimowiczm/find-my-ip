@@ -9,6 +9,12 @@ import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import com.maksimowiczm.findmyip.data.model.NetworkType
 
 actual class ConnectivityObserver(private val context: Context) {
+    actual val availableNetworkTypes: List<NetworkType> = listOf(
+        NetworkType.WIFI,
+        NetworkType.MOBILE,
+        NetworkType.VPN
+    )
+
     actual fun getNetworkType(): NetworkType? {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

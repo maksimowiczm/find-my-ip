@@ -8,10 +8,12 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.data.model.toDomain
 import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.network.AddressStatus as SourceAddressStatus
+import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -28,7 +30,8 @@ class AddressRepositoryImpl(
     private val ipv4DataSource: NetworkAddressDataSource,
     private val ipv6DataSource: NetworkAddressDataSource,
     private val dataStore: DataStore<Preferences>,
-    private val dao: AddressEntityDao
+    private val dao: AddressEntityDao,
+    connectivityObserver: ConnectivityObserver
 ) : AddressRepository {
     override fun observeAddressProviderUrl(
         internetProtocolVersion: InternetProtocolVersion
@@ -113,4 +116,7 @@ class AddressRepositoryImpl(
     override suspend fun clearHistory() {
         dao.deleteAll()
     }
+
+    override val availableNetworkTypes: List<NetworkType> =
+        connectivityObserver.availableNetworkTypes
 }

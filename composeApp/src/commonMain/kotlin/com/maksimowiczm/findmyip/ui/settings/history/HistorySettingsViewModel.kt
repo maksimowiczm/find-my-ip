@@ -11,6 +11,7 @@ import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.infrastructure.di.set
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -39,25 +40,31 @@ class HistorySettingsViewModel(
             initialValue = runBlocking { dataStore.get(PreferenceKeys.historyEnabled) ?: false }
         )
 
-    val networkTypeSettings = combine(
+    private val availableNetworkTypes = addressRepository.availableNetworkTypes
+
+    val networkTypeSettings: StateFlow<Map<NetworkType, Boolean>> = combine(
         dataStore.observe(PreferenceKeys.saveWifiHistory),
         dataStore.observe(PreferenceKeys.saveMobileHistory),
         dataStore.observe(PreferenceKeys.saveVpnHistory)
     ) { wifi, mobile, vpn ->
-        mapOf(
-            NetworkType.WIFI to (wifi ?: false),
-            NetworkType.MOBILE to (mobile ?: false),
-            NetworkType.VPN to (vpn ?: false)
-        )
+        availableNetworkTypes.associateWith {
+            when (it) {
+                NetworkType.WIFI -> wifi ?: false
+                NetworkType.MOBILE -> mobile ?: false
+                NetworkType.VPN -> vpn ?: false
+            }
+        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(2_000),
         initialValue = runBlocking {
-            mapOf(
-                NetworkType.WIFI to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false),
-                NetworkType.MOBILE to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false),
-                NetworkType.VPN to (dataStore.get(PreferenceKeys.saveVpnHistory) ?: false)
-            )
+            availableNetworkTypes.associateWith {
+                when (it) {
+                    NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory) ?: false
+                    NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
+                    NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
+                }
+            }
         }
     )
 

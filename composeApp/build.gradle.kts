@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -8,6 +9,15 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.gmazzo.buildconfig)
+}
+
+buildConfig {
+    packageName("com.maksimowiczm.findmyip")
+    className("BuildConfig")
+
+    buildConfigField("String", "IPV4_PROVIDER", "\"${properties["ipify.api.url"]}\"")
+    buildConfigField("String", "IPV6_PROVIDER", "\"${properties["ipify.api6.url"]}\"")
 }
 
 kotlin {
@@ -17,7 +27,15 @@ kotlin {
         }
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
+    jvm("desktop")
+
     sourceSets {
+        val desktopMain by getting
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -28,7 +46,13 @@ kotlin {
 
             implementation(libs.androidx.work.runtime.ktx)
         }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+        }
         commonMain.dependencies {
+            implementation(compose.preview)
+
             implementation(libs.kermit)
 
             implementation(compose.runtime)
@@ -43,8 +67,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
 
             implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.ktx)
             implementation(libs.androidx.room.paging)
+            implementation(libs.androidx.sqlite.bundle)
 
             implementation(libs.androidx.datastore.preferences)
 
@@ -60,9 +84,6 @@ kotlin {
 
             implementation(libs.compose.shimmer)
 
-            implementation(libs.androidx.paging.runtime)
-            implementation(libs.androidx.paging.compose)
-
             implementation(libs.kotlinx.datetime)
         }
     }
@@ -77,10 +98,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 5
-        versionName = "v2.0.0"
-
-        buildConfigField("String", "IPV4_PROVIDER", "\"https://api.ipify.org\"")
-        buildConfigField("String", "IPV6_PROVIDER", "\"https://api6.ipify.org\"")
+        versionName = "v" + libs.versions.version.name.get()
     }
     packaging {
         resources {
@@ -98,7 +116,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 }
 
@@ -108,5 +125,20 @@ room {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-    add("kspAndroid", libs.androidx.room.compiler)
+    listOf("kspAndroid", "kspDesktop").forEach {
+        add(it, libs.androidx.room.compiler)
+    }
+}
+
+// Experimental and forgotten
+compose.desktop {
+    application {
+        mainClass = "com.maksimowiczm.findmyip.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.maksimowiczm.findmyip"
+            packageVersion = libs.versions.version.name.get()
+        }
+    }
 }

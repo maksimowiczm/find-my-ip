@@ -18,7 +18,8 @@ val dataModule = module {
             ipv4DataSource = get(named(InternetProtocolVersion.IPv4)),
             ipv6DataSource = get(named(InternetProtocolVersion.IPv6)),
             dataStore = get(),
-            dao = get()
+            dao = get(),
+            connectivityObserver = get()
         )
     }.bind<AddressRepository>()
 
@@ -42,7 +43,8 @@ val dataModule = module {
             dataStore = get(),
             dao = get(),
             ipv4DataSource = get(named(InternetProtocolVersion.IPv4)),
-            ipv6DataSource = get(named(InternetProtocolVersion.IPv6))
+            ipv6DataSource = get(named(InternetProtocolVersion.IPv6)),
+            connectivityObserver = get()
         )
     }.bind<HistoryManager>()
 }

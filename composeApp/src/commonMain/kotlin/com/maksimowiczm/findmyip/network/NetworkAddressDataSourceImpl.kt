@@ -32,12 +32,6 @@ class NetworkAddressDataSourceImpl(
 
         val networkType = connectivityObserver.getNetworkType()
 
-        if (networkType == null) {
-            val exception = Exception("Network unavailable")
-            currentAddress.emit(AddressStatus.Error(exception))
-            return@withContext Result.failure(exception)
-        }
-
         return@withContext try {
             val ip = URL(providerURL).readText()
             val address = NetworkAddress(

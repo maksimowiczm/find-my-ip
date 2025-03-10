@@ -11,6 +11,7 @@ import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import com.maksimowiczm.findmyip.network.AddressStatus
+import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.combine
@@ -25,7 +26,8 @@ class HistoryManagerImpl(
     private val dataStore: DataStore<Preferences>,
     private val dao: AddressEntityDao,
     private val ipv4DataSource: NetworkAddressDataSource,
-    private val ipv6DataSource: NetworkAddressDataSource
+    private val ipv6DataSource: NetworkAddressDataSource,
+    private val connectivityObserver: ConnectivityObserver
 ) : HistoryManager {
     /**
      * Observes the address for both IPv4 and IPv6 and saves them to the database.
@@ -132,11 +134,13 @@ class HistoryManagerImpl(
         Logger.d(TAG) { "Inserting address: $address" }
 
         val shouldInsert = when (address.networkType) {
-            NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory)
-            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory)
-            NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory)
-            else -> false
-        } ?: false
+            NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory) ?: false
+            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
+            NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
+            // If the network type is unknown, we check if the available network types is empty.
+            // If so it means that network type will always be unknown.
+            null -> connectivityObserver.availableNetworkTypes.isEmpty()
+        }
 
         if (!shouldInsert) {
             Logger.d(TAG) { "Skipping address insertion" }

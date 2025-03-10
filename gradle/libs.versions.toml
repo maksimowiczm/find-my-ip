@@ -1,5 +1,6 @@
 [versions]
 agp = "8.8.2"
+version-name = "2.0.0"
 android-compileSdk = "35"
 android-minSdk = "26"
 android-targetSdk = "35"
@@ -23,9 +24,11 @@ kotlinResult = "2.0.1"
 datastorePreferences = "1.1.3"
 kotlinxSerializationJson = "1.8.0"
 composeShimmer = "1.3.2"
-pagingCompose = "3.3.6"
 kotlinxDatetime = "0.6.1"
 workRuntimeKtx = "2.10.0"
+kotlinx-coroutines = "1.10.1"
+sqlite = "2.5.0-rc01"
+gmazzoBuildConfig = "5.5.2"
 
 [libraries]
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
@@ -57,9 +60,9 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
-androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingCompose" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+androidx-sqlite-bundle = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -70,3 +73,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+gmazzo-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "gmazzoBuildConfig" }
