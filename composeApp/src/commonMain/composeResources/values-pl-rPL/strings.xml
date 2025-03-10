@@ -6,7 +6,7 @@
     <string name="headline_ip_version_disabled">Protokół wyłączony</string>
     <string name="headline_address_history_is_disabled">Historia adresów jest wyłączona</string>
     <string name="headline_background_worker">Proces w tle</string>
-    <string name="headline_run_every" description="Run (worker) every (x minutes)">Run every</string>
+    <string name="headline_run_every" description="Run (worker) every (x minutes)">Uruchamiaj co</string>
     <string name="headline_custom">Niestandardowe</string>
     <string name="headline_custom_interval">Niestandardowy interwał</string>
     <string name="headline_migration_from_version_1">Migracja z wersji 1</string>
@@ -41,7 +41,7 @@
     <string name="description_save_history">Zapisuj historię swojego IP</string>
     <string name="description_internet_protocol">Wybierz, który protokół internetowy chcesz używać. Co najmniej jeden musi być włączony.</string>
     <string name="description_auto_refresh">Odśwież adres po zmianie sieci</string>
-    <string name="description_duplicate_ips">Po włączeniu aplikacja będzie rejestrować każdy pobrany adres IP, nawet jeśli będzie on identyczny z ostatnio zapisanym. Po wyłączeniu aplikacja pominie zapisywanie duplikujących się adresów IP, aby zredukować zbędne wpisy.</string>
+    <string name="description_duplicate_ips">When enabled, the app will log every fetched IP address, even if it matches the last recorded one. If disabled, the app will skip saving duplicate IPs to reduce redundant entries.</string>
     <string name="neutral_enable_ip_version_in_settings">Możesz włączyć wersję IP w ustawieniach</string>
     <string name="neutral_enable_address_history_in_settings">Możesz włączyć historię adresów w ustawieniach</string>
     <string name="neutral_help_translating_the_app">Pomóż w tłumaczeniu aplikacji</string>
@@ -58,7 +58,7 @@
     <string name="action_tap_to_refresh">Stuknij, aby odświeżyć</string>
     <string name="action_tap_to_enable">Stuknij, aby włączyć</string>
     <string name="action_go_back" description="Go back to previous screen">Wróć</string>
-    <string name="action_clear" description="Clear history">Wyczyść</string>
+    <string name="action_clear">Wyczyść</string>
     <string name="action_translate">Przetłumacz</string>
     <string name="action_save_duplicate_ips">Zapisuj duplikaty IP</string>
     <string name="cellular_data">Dane komórkowe</string>
