@@ -41,7 +41,7 @@
     <string name="description_save_history">IP adresi geçmişinizi kaydedin</string>
     <string name="description_internet_protocol">Hangi İnternet Protokolü\'nün kullanılacağını seçin. En az biri etkin olmalıdır.</string>
     <string name="description_auto_refresh">Ağ değişikliğinde adresi yenile</string>
-    <string name="description_duplicate_ips">Etkinleştirildiğinde, uygulama her alınan IP adresini kaydeder, hatta son kaydedilenle eşleşse bile. Devre dışı bırakıldığında, uygulama yinelenen IP\'leri kaydetmeyi atlayarak gereksiz girişleri azaltır</string>
+    <string name="description_duplicate_ips">When enabled, the app will log every fetched IP address, even if it matches the last recorded one. If disabled, the app will skip saving duplicate IPs to reduce redundant entries.</string>
     <string name="neutral_enable_ip_version_in_settings">IP sürümünü ayarlardan etkinleştirebilirsiniz</string>
     <string name="neutral_enable_address_history_in_settings">Adres geçmişini ayarlardan etkinleştirebilirsiniz</string>
     <string name="neutral_help_translating_the_app">Uygulamayı çevirmeye yardım et</string>
@@ -58,7 +58,7 @@
     <string name="action_tap_to_refresh">Yenilemek için dokun</string>
     <string name="action_tap_to_enable">Etkinleştirmek için dokun</string>
     <string name="action_go_back" description="Go back to previous screen">Geri dön</string>
-    <string name="action_clear" description="Clear history">Temizle</string>
+    <string name="action_clear">Temizle</string>
     <string name="action_translate">Çevir</string>
     <string name="action_save_duplicate_ips">Yinelenen IP\'leri kaydet</string>
     <string name="cellular_data">Hücresel veri</string>
