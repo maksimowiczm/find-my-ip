@@ -48,7 +48,7 @@ val languages = mapOf(
             )
         )
     ),
-    "中文（简体）" to Translation(
+    "简体中文" to Translation(
         tag = "zh-CN",
         authorsStrings = listOf(
             Author(
