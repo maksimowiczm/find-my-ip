@@ -2,6 +2,7 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.maksimowiczm.findmyip.database.AddressEntityDao
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
 import com.maksimowiczm.findmyip.infrastructure.desktop.preferencesDirectory
@@ -18,7 +19,11 @@ fun getDatabaseBuilder(): RoomDatabase.Builder<FindMyIpDatabase> {
 }
 
 actual val databaseModule: Module = module {
-    single { getRoomDatabase(getDatabaseBuilder()) }
+    single {
+        getRoomDatabase(
+            getDatabaseBuilder().setDriver(BundledSQLiteDriver())
+        )
+    }
 
     factory<AddressEntityDao> {
         get<FindMyIpDatabase>().addressEntityDao()
