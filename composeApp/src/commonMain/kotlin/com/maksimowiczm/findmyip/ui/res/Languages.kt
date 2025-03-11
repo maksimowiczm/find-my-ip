@@ -47,6 +47,15 @@ val languages = mapOf(
                 link = "https://github.com/mikropsoft"
             )
         )
+    ),
+    "简体中文" to Translation(
+        tag = "zh-CN",
+        authorsStrings = listOf(
+            Author(
+                name = "南山少帅Felix",
+                link = "https://github.com/felixng1988"
+            )
+        )
     )
 )
 
