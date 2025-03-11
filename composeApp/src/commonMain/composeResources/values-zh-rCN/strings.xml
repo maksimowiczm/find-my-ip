@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="headline_history_settings">历史记录设置</string>
+    <string name="headline_clear_history">清空历史记录</string>
+    <string name="headline_network_type" description="Wi-Fi, Mobile, VPN">网络类型</string>
+    <string name="headline_ip_version_disabled">IP 版本被禁用</string>
+    <string name="headline_address_history_is_disabled">地址历史记录被禁用</string>
+    <string name="headline_background_worker">后台工作线程</string>
+    <string name="headline_run_every" description="Run (worker) every (x minutes)">每次运行</string>
+    <string name="headline_custom">自定义</string>
+    <string name="headline_custom_interval">自定义间隔</string>
+    <string name="headline_migration_from_version_1">从版本 1 迁移</string>
+    <string name="headline_home" description="In context of 'Home' screen" comment="'Home' bottom app bar">主页</string>
+    <string name="headline_history">历史记录</string>
+    <string name="headline_settings">设置</string>
+    <string name="headline_your_ip_address_is" description="Your address is 1.2.3.4">你的 IP 地址是</string>
+    <string name="headline_enable_history">启用历史记录</string>
+    <string name="headline_empty" description="List is empty">啥也没有</string>
+    <string name="headline_on" description="Switch is on">启用</string>
+    <string name="headline_off" description="Switch is off">禁用</string>
+    <string name="headline_save_history">保存历史记录</string>
+    <string name="headline_internet_protocol">网络协议</string>
+    <string name="headline_language">语言</string>
+    <string name="headline_system">系统</string>
+    <string name="headline_authors">作者</string>
+    <string name="headline_system_language_settings">系统语言设置</string>
+    <string name="headline_platform_settings">平台设置</string>
+    <string name="headline_auto_refresh">自动刷新</string>
+    <string name="headline_duplicate_ips">重复的 IP</string>
+    <string name="unit_minutes_short" description="Abbreviation for minutes">分钟</string>
+    <string name="description_background_worker">定期在后台运行以检查您的 IP 地址</string>
+    <string name="description_doze">Doze mode is a battery saving feature in Android. It can prevent the background worker from running if the device is not used for a long time.</string>
+    <string name="description_interval_less_than_15_min">少于 15 分钟的间隔可能无法按预期工作</string>
+    <string name="description_clear_history">清除全部已保存的地址</string>
+    <string name="description_clear_history_dialog">您的地址历史记录将被永久删除</string>
+    <string name="description_network_type">要存储哪些网络类型</string>
+    <string name="description_migration_from_version_1">看起来您已经从版本 1 迁移过来。不幸的是，我破坏了所有用户偏好设置。您的地址历史记录仍然存在，但您需要重新设置历史记录和后台任务的偏好选项。</string>
+    <string name="description_history_no_permission">默认情况下，跟踪您的 IP 地址是禁用的。启用后即可查看您的地址历史记录。您随时可以在应用设置中更改此设置。</string>
+    <string name="description_enable_history">您的地址历史记录将会被保存。您可以在设置中禁用掉。</string>
+    <string name="description_history_settings_disabled" description="Inform the user that he must enable the history settings to see and change them">要查看和更改历史记录设置，请先启用历史记录。</string>
+    <string name="description_save_history">存储您的 IP 地址历史记录</string>
+    <string name="description_internet_protocol">选择要使用的网络协议。必须至少启用一个。</string>
+    <string name="description_auto_refresh">在网络发生变化时刷新地址</string>
+    <string name="description_duplicate_ips">启用后，应用将记录每个获取的 IP 地址，即使其与最后记录的地址相同。如果禁用，应用将跳过保存重复的 IP，以减少冗余条目。</string>
+    <string name="neutral_enable_ip_version_in_settings">您可以在设置中启用 IP 版本</string>
+    <string name="neutral_enable_address_history_in_settings">您可以在设置中启用地址历史记录</string>
+    <string name="neutral_help_translating_the_app">帮助我们翻译这款应用</string>
+    <string name="error_unavailable">不可用</string>
+    <string name="action_enable">启用</string>
+    <string name="action_confirm">确认</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_learn_about_doze">Click here to learn more about Doze mode</string>
+    <string name="action_hide">隐藏</string>
+    <string name="action_dont_show_again">不再显示</string>
+    <string name="action_go_to_home" description="Go to 'Home' screen">跳转到主页</string>
+    <string name="action_go_to_history" description="Go to 'History' screen">跳转到历史记录</string>
+    <string name="action_go_to_settings" description="Go to 'Settings' screen">跳转到设置</string>
+    <string name="action_tap_to_refresh">点击以刷新</string>
+    <string name="action_tap_to_enable">点击以启用</string>
+    <string name="action_go_back" description="Go back to previous screen">返回</string>
+    <string name="action_clear">清除</string>
+    <string name="action_translate">翻译</string>
+    <string name="action_save_duplicate_ips">保存重复的 IP</string>
+    <string name="cellular_data">移动数据</string>
+    <string name="unavailable">不可用</string>
+</resources>
