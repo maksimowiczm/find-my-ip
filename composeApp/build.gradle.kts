@@ -97,8 +97,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 7
-        versionName = "v2.0.2-rc.1"
+        versionCode = 8
+        versionName = "v2.0.2"
     }
     packaging {
         resources {
