@@ -97,8 +97,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 6
-        versionName = "v" + libs.versions.version.name.get()
+        versionCode = 7
+        versionName = "v2.0.2-rc.1"
     }
     packaging {
         resources {
@@ -108,7 +108,6 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            // signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -139,7 +138,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.maksimowiczm.findmyip"
-            packageVersion = libs.versions.version.name.get()
+            packageVersion = "1.0.0"
         }
     }
 }
