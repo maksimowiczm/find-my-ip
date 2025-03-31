@@ -12,7 +12,7 @@
     </queries>
 
     <application
-        android:name=".infrastructure.android.FindMyIpApplication"
+        android:name="._2.infrastructure.android.FindMyIpApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -25,7 +25,7 @@
         android:theme="@style/Theme.FindMyIP"
         tools:targetApi="33">
         <activity
-            android:name=".infrastructure.android.MainActivity"
+            android:name="._2.infrastructure.android.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
