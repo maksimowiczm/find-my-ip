@@ -49,6 +49,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.androidx.sqlite.bundle)
+            implementation(libs.ktor.client.java)
         }
         commonMain.dependencies {
             implementation(libs.kermit)

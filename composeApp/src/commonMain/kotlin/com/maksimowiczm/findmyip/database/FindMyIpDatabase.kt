@@ -9,6 +9,4 @@ import androidx.room.RoomDatabase
     version = 2,
     autoMigrations = [AutoMigration(from = 1, to = 2)]
 )
-abstract class FindMyIpDatabase : RoomDatabase() {
-    abstract fun addressEntityDao(): AddressEntityDao
-}
+abstract class FindMyIpDatabase : RoomDatabase()

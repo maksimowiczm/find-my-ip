@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip._2.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.ext.toDp
 import com.maksimowiczm.findmyip.infrastructure.di.container
 import com.valentinilk.shimmer.Shimmer
