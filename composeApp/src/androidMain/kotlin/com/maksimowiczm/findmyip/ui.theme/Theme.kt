@@ -1,6 +1,4 @@
-@file:Suppress("PackageName")
-
-package com.maksimowiczm.findmyip._2.ui.theme
+package com.maksimowiczm.findmyip.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

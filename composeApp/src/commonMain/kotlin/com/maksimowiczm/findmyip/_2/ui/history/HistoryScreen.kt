@@ -50,7 +50,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.maksimowiczm.findmyip._2.data.model.Address
-import com.maksimowiczm.findmyip._2.ui.ext.toDp
+import com.maksimowiczm.findmyip.ext.toDp
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer

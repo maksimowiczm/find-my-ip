@@ -1,6 +1,4 @@
-@file:Suppress("PackageName")
-
-package com.maksimowiczm.findmyip._2.ui.ext
+package com.maksimowiczm.findmyip.ext
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity

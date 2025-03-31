@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip._2.data.AddressStatus
 import com.maksimowiczm.findmyip._2.data.model.Address
 import com.maksimowiczm.findmyip._2.data.model.InternetProtocolVersion
-import com.maksimowiczm.findmyip._2.ui.ext.toDp
+import com.maksimowiczm.findmyip.ext.toDp
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer

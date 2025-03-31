@@ -42,6 +42,8 @@ kotlin {
             implementation(libs.bundles.koin.android)
 
             implementation(libs.androidx.work.runtime.ktx)
+
+            implementation(libs.ktor.client.okhttp)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -78,6 +80,8 @@ kotlin {
             implementation(libs.compose.shimmer)
 
             implementation(libs.bundles.flowmvi)
+
+            implementation(libs.ktor.client.core)
         }
     }
 }
@@ -134,4 +138,10 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+composeCompiler {
+    stabilityConfigurationFiles.add(
+        rootProject.layout.projectDirectory.file("stability_definitions.txt")
+    )
 }

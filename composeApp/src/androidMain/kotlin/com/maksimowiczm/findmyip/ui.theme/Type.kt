@@ -1,6 +1,4 @@
-@file:Suppress("PackageName")
-
-package com.maksimowiczm.findmyip._2.ui.theme
+package com.maksimowiczm.findmyip.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
