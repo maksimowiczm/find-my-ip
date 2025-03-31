@@ -39,9 +39,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.koin.androidx.workmanager)
+            implementation(libs.bundles.koin.android)
 
             implementation(libs.androidx.work.runtime.ktx)
         }
@@ -60,6 +58,8 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.navigation.compose)
+
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
@@ -72,15 +72,10 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-            implementation(libs.kotlin.result)
-
             implementation(libs.kotlinx.serialization.json)
-
-            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.compose.shimmer)
-
-            implementation(libs.kotlinx.datetime)
         }
     }
 }

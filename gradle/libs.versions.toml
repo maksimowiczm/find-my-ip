@@ -4,22 +4,14 @@ android-compileSdk = "35"
 android-minSdk = "26"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
-androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.1"
-androidx-core-ktx = "1.15.0"
-androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
-androidx-material = "1.12.0"
-androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.0"
-junit = "4.13.2"
 kermit = "2.0.4"
 kotlin = "2.1.10"
 navigationCompose = "2.8.0-alpha10"
 room = "2.7.0-rc01"
 ksp = "2.1.10-1.0.31"
 koin = "4.0.2"
-kotlinResult = "2.0.1"
 datastorePreferences = "1.1.3"
 kotlinxSerializationJson = "1.8.0"
 composeShimmer = "1.3.2"
@@ -32,19 +24,9 @@ gmazzoBuildConfig = "5.5.2"
 [libraries]
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
-androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
@@ -54,7 +36,6 @@ koin-androidx-workmanager = { module = "io.insert-koin:koin-androidx-workmanager
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-kotlin-result = { module = "com.michael-bull.kotlin-result:kotlin-result", version.ref = "kotlinResult" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -62,6 +43,13 @@ compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 androidx-sqlite-bundle = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+[bundles]
+koin-android = [
+    "koin-android",
+    "koin-androidx-compose",
+    "koin-androidx-workmanager"
+]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
