@@ -7,9 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -45,15 +43,4 @@ private fun AutoRefreshSettingsListItem(
             )
         }
     )
-}
-
-@Preview
-@Composable
-private fun AutoRefreshSettingsListItemPreview() {
-    FindMyIpAppTheme {
-        AutoRefreshSettingsListItem(
-            enabled = false,
-            onEnabledChange = {}
-        )
-    }
 }

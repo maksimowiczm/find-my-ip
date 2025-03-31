@@ -38,10 +38,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.maksimowiczm.findmyip.ui.theme.FindMyIpAppTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -272,31 +270,4 @@ private fun CustomIntervalDialog(
             }
         }
     )
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-private fun BackgroundWorkerSettingsPreview() {
-    FindMyIpAppTheme {
-        BackgroundWorkerSettingsImpl(
-            enabled = true,
-            setEnabled = {},
-            selectedInterval = 120,
-            onInterval = {},
-            modifier = Modifier
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun CustomIntervalDialogPreview() {
-    FindMyIpAppTheme {
-        CustomIntervalDialog(
-            onDismissRequest = {},
-            onConfirm = {}
-        )
-    }
 }

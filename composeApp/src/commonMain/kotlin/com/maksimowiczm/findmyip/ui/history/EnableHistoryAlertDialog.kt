@@ -10,7 +10,6 @@ import androidx.compose.ui.text.style.TextAlign
 import findmyip.composeapp.generated.resources.*
 import findmyip.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EnableHistoryAlertDialog(
@@ -39,14 +38,5 @@ fun EnableHistoryAlertDialog(
             }
         },
         modifier = modifier
-    )
-}
-
-@Preview
-@Composable
-private fun EnableHistoryAlertDialogPreview() {
-    EnableHistoryAlertDialog(
-        onDismissRequest = {},
-        onConfirm = {}
     )
 }

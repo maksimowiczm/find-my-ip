@@ -37,7 +37,6 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
             implementation(libs.koin.android)
@@ -52,8 +51,6 @@ kotlin {
             implementation(libs.androidx.sqlite.bundle)
         }
         commonMain.dependencies {
-            implementation(compose.preview)
-
             implementation(libs.kermit)
 
             implementation(compose.runtime)
@@ -63,7 +60,6 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
@@ -124,7 +120,6 @@ room {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
     listOf("kspAndroid", "kspDesktop").forEach {
         add(it, libs.androidx.room.compiler)
     }
