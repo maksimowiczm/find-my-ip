@@ -5,10 +5,10 @@ android-minSdk = "26"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
 androidx-lifecycle = "2.8.4"
-compose-multiplatform = "1.7.3"
+compose-multiplatform = "1.8.0-beta01"
 kermit = "2.0.5"
 kotlin = "2.1.20"
-navigationCompose = "2.8.0-alpha10"
+navigationCompose = "2.9.0-alpha15"
 room = "2.7.0-rc03"
 ksp = "2.1.20-1.0.32"
 koin = "4.0.2"
@@ -20,6 +20,7 @@ workRuntimeKtx = "2.10.0"
 kotlinx-coroutines = "1.10.1"
 sqlite = "2.5.0-rc03"
 gmazzoBuildConfig = "5.5.2"
+flowmvi = "3.2.0-alpha01"
 
 [libraries]
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
@@ -43,12 +44,25 @@ compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 androidx-sqlite-bundle = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+flowmvi-core = { module = "pro.respawn.flowmvi:core", version.ref = "flowmvi" }
+flowmvi-test = { module = "pro.respawn.flowmvi:test", version.ref = "flowmvi" }
+flowmvi-compose = { module = "pro.respawn.flowmvi:compose", version.ref = "flowmvi" }
+flowmvi-android = { module = "pro.respawn.flowmvi:android", version.ref = "flowmvi" }
+flowmvi-savedstate = { module = "pro.respawn.flowmvi:savedstate", version.ref = "flowmvi" }
+flowmvi-debugger = { module = "pro.respawn.flowmvi:debugger-plugin", version.ref = "flowmvi" }
 
 [bundles]
 koin-android = [
     "koin-android",
     "koin-androidx-compose",
     "koin-androidx-workmanager"
+]
+flowmvi = [
+    "flowmvi-core",
+    "flowmvi-test",
+    "flowmvi-compose",
+    "flowmvi-savedstate",
+    "flowmvi-android",
 ]
 
 [plugins]

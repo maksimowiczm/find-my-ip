@@ -76,6 +76,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.compose.shimmer)
+
+            implementation(libs.bundles.flowmvi)
         }
     }
 }
@@ -115,6 +117,7 @@ room {
 }
 
 dependencies {
+    debugImplementation(libs.flowmvi.debugger)
     listOf("kspAndroid", "kspDesktop").forEach {
         add(it, libs.androidx.room.compiler)
     }
