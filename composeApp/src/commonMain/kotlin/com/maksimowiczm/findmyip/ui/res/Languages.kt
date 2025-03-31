@@ -31,6 +31,10 @@ val languages = mapOf(
             )
         )
     ),
+    "Dansk (Danmark)" to Translation(
+        tag = "da-DK",
+        authorsStrings = emptyList()
+    ),
     "Polski (Polska)" to Translation(
         tag = "pl-PL",
         authorsStrings = listOf(

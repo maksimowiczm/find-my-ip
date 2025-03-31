@@ -1,0 +1,5 @@
+Find My IP er en ligetil app designet til at hente og evt. gemme IP-adressehistorikken, hvormed man bedre kan holde styr på sine IP-adresser. Den kan automatisk logge IP-ændringer i baggrunden, så man ikke behøver at åbne appen hver gang.
+
+Appen bruger ipify-API'en til at hente enhedens IP-adresse. For flere detaljer, se here: https://www.ipify.org.
+
+Launcher-ikon kreeret af Freepik fra www.flaticon.com.
