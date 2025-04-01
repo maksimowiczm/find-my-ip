@@ -7,10 +7,10 @@ androidx-activityCompose = "1.10.1"
 androidx-lifecycle = "2.8.4"
 compose-multiplatform = "1.8.0-beta01"
 kermit = "2.0.5"
-kotlin = "2.1.20"
+kotlin = "2.1.10"
 navigationCompose = "2.9.0-alpha15"
 room = "2.7.0-rc03"
-ksp = "2.1.20-1.0.32"
+ksp = "2.1.10-1.0.31"
 koin = "4.0.2"
 datastorePreferences = "1.1.4"
 kotlinxSerializationJson = "1.8.0"
@@ -19,7 +19,6 @@ kotlinxDatetime = "0.6.2"
 workRuntimeKtx = "2.10.0"
 kotlinx-coroutines = "1.10.1"
 sqlite = "2.5.0-rc03"
-gmazzoBuildConfig = "5.5.2"
 flowmvi = "3.2.0-alpha01"
 ktor = "3.1.1"
 
@@ -78,4 +77,3 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-gmazzo-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "gmazzoBuildConfig" }

@@ -9,15 +9,6 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.gmazzo.buildconfig)
-}
-
-buildConfig {
-    packageName("com.maksimowiczm.findmyip")
-    className("BuildConfig")
-
-    buildConfigField("String", "IPV4_PROVIDER", "\"${properties["ipify.api.url"]}\"")
-    buildConfigField("String", "IPV6_PROVIDER", "\"${properties["ipify.api6.url"]}\"")
 }
 
 kotlin {
@@ -29,6 +20,7 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs.add("-Xwhen-guards")
     }
 
     jvm("desktop")

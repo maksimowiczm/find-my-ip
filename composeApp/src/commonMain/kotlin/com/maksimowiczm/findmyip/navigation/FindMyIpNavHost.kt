@@ -9,11 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.feature.currentaddress.CurrentAddressScreen
+import com.maksimowiczm.findmyip.feature.settings.settingsGraph
+import com.maksimowiczm.findmyip.ui.FindMyIpAppState
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
 import com.maksimowiczm.findmyip.ui.rememberFindMyIpAppState
@@ -21,6 +22,7 @@ import findmyip.composeapp.generated.resources.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 
+@Serializable
 sealed interface Destination
 
 @Serializable
@@ -35,9 +37,8 @@ data object Settings : Destination
 @Composable
 fun FindMyIpNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    appState: FindMyIpAppState = rememberFindMyIpAppState(rememberNavController())
 ) {
-    val appState = rememberFindMyIpAppState(navController)
     val selectedTopRoute = appState.currentTopRoute
 
     NavigationSuiteScaffold(
@@ -78,7 +79,7 @@ fun FindMyIpNavHost(
         }
     ) {
         NavHost(
-            navController = navController,
+            navController = appState.navController,
             startDestination = CurrentAddress,
             modifier = modifier
         ) {
@@ -95,13 +96,11 @@ fun FindMyIpNavHost(
                 // TODO
                 Text("History")
             }
-            composable<Settings>(
+            settingsGraph<Settings>(
+                navController = appState.navController,
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() }
-            ) {
-                // TODO
-                Text("Settings")
-            }
+            )
         }
     }
 }

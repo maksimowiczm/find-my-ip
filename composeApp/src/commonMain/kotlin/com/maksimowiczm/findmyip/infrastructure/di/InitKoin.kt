@@ -7,7 +7,9 @@ fun startKoin(config: KoinAppDeclaration? = null) = startKoin {
     config?.invoke(this)
     modules(
         networkModule,
+        dataStoreModule,
         dataModule,
+        platformModule,
         featureModule
     )
 }

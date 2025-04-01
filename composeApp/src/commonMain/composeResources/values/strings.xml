@@ -68,6 +68,7 @@
     <string name="action_clear">Clear</string>
     <string name="action_translate">Translate</string>
     <string name="action_save_duplicate_ips">Save duplicate IPs</string>
+    <string name="action_use_history">Use history</string>
 
     <string name="link_doze" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
     <string name="link_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>

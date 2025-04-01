@@ -96,6 +96,8 @@ private fun Address(state: IpAddressState, internetProtocolVersion: InternetProt
             internetProtocolVersion = internetProtocolVersion,
             address = state.ip
         )
+
+        IpAddressState.Disabled -> Unit
     }
 }
 

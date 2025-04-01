@@ -14,6 +14,7 @@ internal data class CurrentAddressState(
 @Immutable
 internal sealed interface IpAddressState {
     data object Loading : IpAddressState
+    data object Disabled : IpAddressState
     data class Success(val ip: String) : IpAddressState
     data class Error(val message: String) : IpAddressState
 }
