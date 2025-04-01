@@ -11,7 +11,8 @@ val dataModule = module {
     factory {
         AddressRepositoryImpl(
             ipv4source = get(qualifier(InternetProtocolVersion.IPv4)),
-            ipv6source = get(qualifier(InternetProtocolVersion.IPv6))
+            ipv6source = get(qualifier(InternetProtocolVersion.IPv6)),
+            dataStore = get()
         )
     }.bind<AddressRepository>()
 }

@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.network
 
+import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.get
@@ -41,6 +42,7 @@ internal class NetworkAddressDataSourceImpl(
             state.value = AddressStatus.InProgress
 
             val result = try {
+                Logger.d { "Executing network request to $providerURL" }
                 val response = client.get(providerURL)
                 val ip = response.bodyAsText()
                 AddressStatus.Success(NetworkAddress(ip))

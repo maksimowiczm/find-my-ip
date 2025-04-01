@@ -13,13 +13,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.ext.toDp
-import com.maksimowiczm.findmyip.infrastructure.di.container
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -29,32 +30,30 @@ import findmyip.composeapp.generated.resources.action_tap_to_refresh
 import findmyip.composeapp.generated.resources.error_unavailable
 import findmyip.composeapp.generated.resources.headline_your_ip_address_is
 import org.jetbrains.compose.resources.stringResource
-import pro.respawn.flowmvi.api.IntentReceiver
-import pro.respawn.flowmvi.compose.dsl.DefaultLifecycle
-import pro.respawn.flowmvi.compose.dsl.subscribe
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CurrentAddressScreen(modifier: Modifier = Modifier) {
-    val container: CurrentAddressContainer = container()
+    val viewModel = koinViewModel<CurrentAddressViewModel>()
 
-    with(container.store) {
-        val state by subscribe(DefaultLifecycle)
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-        CurrentAddressScreenContent(
-            state = state,
-            modifier = modifier
-        )
-    }
+    CurrentAddressScreenContent(
+        state = state,
+        onRefresh = remember(viewModel) { { viewModel.refresh() } },
+        modifier = modifier
+    )
 }
 
 @Composable
-private fun IntentReceiver<CurrentAddressIntent>.CurrentAddressScreenContent(
+private fun CurrentAddressScreenContent(
     state: CurrentAddressState,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier,
-        onClick = { intent(CurrentAddressIntent.Refresh) }
+        onClick = onRefresh
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

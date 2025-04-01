@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AddressRepository {
     fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address>
-    fun refreshAddresses()
+    suspend fun refreshAddresses()
 }
