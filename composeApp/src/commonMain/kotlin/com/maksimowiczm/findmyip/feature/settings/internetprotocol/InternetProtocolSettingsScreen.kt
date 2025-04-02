@@ -12,44 +12,48 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.IpifyConfig
-import com.maksimowiczm.findmyip.infrastructure.di.container
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
-import pro.respawn.flowmvi.api.IntentReceiver
-import pro.respawn.flowmvi.compose.dsl.subscribe
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun InternetProtocolSettingsScreen(modifier: Modifier = Modifier) {
     InternetProtocolSettingsScreen(
         modifier = modifier,
-        container = container()
+        viewModel = koinViewModel()
     )
 }
 
 @Composable
 internal fun InternetProtocolSettingsScreen(
     modifier: Modifier = Modifier,
-    container: InternetProtocolSettingsContainer = container()
-) = with(container.store) {
-    val state by subscribe()
+    viewModel: InternetProtocolSettingsViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    when (val state = state) {
-        is InternetProtocolSettingsState.Loaded -> InternetProtocolSettingsScreen(
-            state = state,
-            modifier = modifier
-        )
-
-        InternetProtocolSettingsState.Loading -> Unit
-    }
+    InternetProtocolSettingsScreen(
+        state = state,
+        onIpv4Toggle = remember(viewModel) {
+            { enabled: Boolean -> viewModel.toggleIPv4(enabled) }
+        },
+        onIpv6Toggle = remember(viewModel) {
+            { enabled: Boolean -> viewModel.toggleIPv6(enabled) }
+        },
+        modifier = modifier
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun IntentReceiver<InternetProtocolSettingsIntent>.InternetProtocolSettingsScreen(
-    state: InternetProtocolSettingsState.Loaded,
+private fun InternetProtocolSettingsScreen(
+    state: InternetProtocolSettingsState,
+    onIpv4Toggle: (Boolean) -> Unit,
+    onIpv6Toggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -79,17 +83,13 @@ private fun IntentReceiver<InternetProtocolSettingsIntent>.InternetProtocolSetti
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(Res.string.ipv4)) },
-                    modifier = Modifier.clickable {
-                        intent(InternetProtocolSettingsIntent.ToggleIPv4(!state.ipv4))
-                    },
+                    modifier = Modifier.clickable { onIpv4Toggle(!state.ipv4) },
                     supportingContent = { Text(IpifyConfig.IPV4) },
                     trailingContent = {
                         Switch(
                             checked = state.ipv4,
                             enabled = state.canSwitchIpv4,
-                            onCheckedChange = {
-                                intent(InternetProtocolSettingsIntent.ToggleIPv4(it))
-                            }
+                            onCheckedChange = onIpv4Toggle
                         )
                     }
                 )
@@ -98,17 +98,13 @@ private fun IntentReceiver<InternetProtocolSettingsIntent>.InternetProtocolSetti
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(Res.string.ipv6)) },
-                    modifier = Modifier.clickable {
-                        intent(InternetProtocolSettingsIntent.ToggleIPv6(!state.ipv6))
-                    },
+                    modifier = Modifier.clickable { onIpv6Toggle(!state.ipv6) },
                     supportingContent = { Text(IpifyConfig.IPV6) },
                     trailingContent = {
                         Switch(
                             checked = state.ipv6,
                             enabled = state.canSwitchIpv6,
-                            onCheckedChange = {
-                                intent(InternetProtocolSettingsIntent.ToggleIPv6(it))
-                            }
+                            onCheckedChange = onIpv6Toggle
                         )
                     }
                 )
