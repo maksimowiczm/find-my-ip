@@ -14,7 +14,6 @@ import com.maksimowiczm.findmyip.feature.settings.history.HistorySettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.internetprotocol.InternetProtocolSettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.language.LanguageSettingsScreen
 import com.maksimowiczm.findmyip.navigation.ForwardBackwardComposableDefaults
-import com.maksimowiczm.findmyip.navigation.forwardBackwardComposable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -39,49 +38,61 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
     noinline popExitTransition:
     AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = exitTransition
 ) {
+    val enter: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+        if (initialState.destination.hasRoute<GlobalSettings>()) {
+            ForwardBackwardComposableDefaults.enterTransition()
+        } else {
+            enterTransition()
+        }
+    }
+
+    val exit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+        if (
+            targetState.destination.hasRoute<GlobalSettings>() ||
+            targetState.destination.hasRoute<HistorySettings>() ||
+            targetState.destination.hasRoute<InternetProtocolSettings>() ||
+            targetState.destination.hasRoute<LanguageSettings>()
+        ) {
+            ForwardBackwardComposableDefaults.exitTransition()
+        } else {
+            exitTransition()
+        }
+    }
+
+    val popEnter: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+        if (
+            initialState.destination.hasRoute<GlobalSettings>() ||
+            initialState.destination.hasRoute<HistorySettings>() ||
+            initialState.destination.hasRoute<InternetProtocolSettings>() ||
+            initialState.destination.hasRoute<LanguageSettings>()
+        ) {
+            ForwardBackwardComposableDefaults.popEnterTransition()
+        } else {
+            popEnterTransition()
+        }
+    }
+
+    val popExit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+        if (
+            targetState.destination.hasRoute<GlobalSettings>() ||
+            targetState.destination.hasRoute<HistorySettings>() ||
+            targetState.destination.hasRoute<InternetProtocolSettings>() ||
+            targetState.destination.hasRoute<LanguageSettings>()
+        ) {
+            ForwardBackwardComposableDefaults.popExitTransition()
+        } else {
+            popExitTransition()
+        }
+    }
+
     navigation<T>(
         startDestination = GlobalSettings
     ) {
         composable<GlobalSettings>(
-            enterTransition = {
-                enterTransition()
-            },
-            exitTransition = {
-                if (
-                    targetState.destination.hasRoute<GlobalSettings>() ||
-                    targetState.destination.hasRoute<HistorySettings>() ||
-                    targetState.destination.hasRoute<InternetProtocolSettings>() ||
-                    targetState.destination.hasRoute<LanguageSettings>()
-                ) {
-                    ForwardBackwardComposableDefaults.exitTransition()
-                } else {
-                    exitTransition()
-                }
-            },
-            popEnterTransition = {
-                if (
-                    initialState.destination.hasRoute<GlobalSettings>() ||
-                    initialState.destination.hasRoute<HistorySettings>() ||
-                    initialState.destination.hasRoute<InternetProtocolSettings>() ||
-                    initialState.destination.hasRoute<LanguageSettings>()
-                ) {
-                    ForwardBackwardComposableDefaults.popEnterTransition()
-                } else {
-                    popEnterTransition()
-                }
-            },
-            popExitTransition = {
-                if (
-                    targetState.destination.hasRoute<GlobalSettings>() ||
-                    targetState.destination.hasRoute<HistorySettings>() ||
-                    targetState.destination.hasRoute<InternetProtocolSettings>() ||
-                    targetState.destination.hasRoute<LanguageSettings>()
-                ) {
-                    ForwardBackwardComposableDefaults.popExitTransition()
-                } else {
-                    popExitTransition()
-                }
-            }
+            enterTransition = enter,
+            exitTransition = exit,
+            popEnterTransition = popEnter,
+            popExitTransition = popExit
         ) {
             SettingsScreen(
                 onHistorySettings = {
@@ -101,13 +112,28 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
                 }
             )
         }
-        forwardBackwardComposable<HistorySettings> {
+        composable<HistorySettings>(
+            enterTransition = enter,
+            exitTransition = exit,
+            popEnterTransition = popEnter,
+            popExitTransition = popExit
+        ) {
             HistorySettingsScreen()
         }
-        forwardBackwardComposable<InternetProtocolSettings> {
+        composable<InternetProtocolSettings>(
+            enterTransition = enter,
+            exitTransition = exit,
+            popEnterTransition = popEnter,
+            popExitTransition = popExit
+        ) {
             InternetProtocolSettingsScreen()
         }
-        forwardBackwardComposable<LanguageSettings> {
+        composable<LanguageSettings>(
+            enterTransition = enter,
+            exitTransition = exit,
+            popEnterTransition = popEnter,
+            popExitTransition = popExit
+        ) {
             LanguageSettingsScreen()
         }
     }
