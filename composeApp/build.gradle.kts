@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,29 +22,17 @@ kotlin {
         freeCompilerArgs.add("-Xwhen-guards")
     }
 
-    jvm("desktop")
-
     sourceSets {
-        val desktopMain by getting
-
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
 
+            // Koin
             implementation(libs.bundles.koin.android)
 
-            implementation(libs.androidx.work.runtime.ktx)
-
+            // Ktor http engine implementation
             implementation(libs.ktor.client.okhttp)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.androidx.sqlite.bundle)
-            implementation(libs.ktor.client.java)
-        }
         commonMain.dependencies {
-            implementation(libs.kermit)
-
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -58,23 +45,32 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            // Room database
             implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.paging)
 
+            // Datastore
             implementation(libs.androidx.datastore.preferences)
 
+            // Koin
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+            // Kotlinx
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
 
+            // Shimmer animation
             implementation(libs.compose.shimmer)
 
+            // Flowmvi framework
             implementation(libs.bundles.flowmvi)
 
+            // Ktor http client
             implementation(libs.ktor.client.core)
+
+            // Logger kermit
+            implementation(libs.kermit)
         }
     }
 }
@@ -115,21 +111,8 @@ room {
 
 dependencies {
     debugImplementation(libs.flowmvi.debugger)
-    listOf("kspAndroid", "kspDesktop").forEach {
+    listOf("kspAndroid").forEach {
         add(it, libs.androidx.room.compiler)
-    }
-}
-
-// Experimental and forgotten
-compose.desktop {
-    application {
-        mainClass = "com.maksimowiczm.findmyip.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.maksimowiczm.findmyip"
-            packageVersion = "1.0.0"
-        }
     }
 }
 
