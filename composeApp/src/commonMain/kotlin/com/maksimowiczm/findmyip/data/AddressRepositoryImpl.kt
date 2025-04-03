@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.database.AddressDao
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
@@ -91,9 +92,7 @@ internal class AddressRepositoryImpl(
             return
         }
 
-        val save = dataStore.get(PreferenceKeys.historyEnabled) ?: false
-
-        if (!save) {
+        if (!shouldSaveAddress(address)) {
             return
         }
 
@@ -119,12 +118,31 @@ internal class AddressRepositoryImpl(
             )
         }
     }
+
+    private suspend fun shouldSaveAddress(address: Address.Success): Boolean {
+        val save = dataStore.get(PreferenceKeys.historyEnabled) ?: false
+
+        if (!save) {
+            return false
+        }
+
+        return when (address.networkType) {
+            NetworkType.WIFI -> dataStore.get(PreferenceKeys.saveWifiHistory) ?: false
+            NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
+            NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
+            NetworkType.UNKNOWN -> false
+        }
+    }
 }
 
 private fun AddressStatus.toAddress(): Address = when (this) {
     AddressStatus.None,
     AddressStatus.InProgress -> Address.Loading
 
-    is AddressStatus.Success -> Address.Success(address.ip)
+    is AddressStatus.Success -> Address.Success(
+        ip = address.ip,
+        networkType = networkType
+    )
+
     is AddressStatus.Error -> Address.Error(exception.message ?: "Unknown error")
 }

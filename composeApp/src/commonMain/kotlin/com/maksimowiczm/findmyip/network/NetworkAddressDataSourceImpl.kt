@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.network
 
 import co.touchlab.kermit.Logger
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.get
@@ -9,6 +10,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,6 +19,7 @@ import kotlinx.coroutines.sync.Mutex
 
 internal class NetworkAddressDataSourceImpl(
     private val providerURL: String,
+    private val connectivityObserver: ConnectivityObserver,
     ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NetworkAddressDataSource,
     DisposableHandle {
@@ -43,9 +47,27 @@ internal class NetworkAddressDataSourceImpl(
 
             val result = try {
                 Logger.d { "Executing network request to $providerURL" }
-                val response = client.get(providerURL)
-                val ip = response.bodyAsText()
-                AddressStatus.Success(NetworkAddress(ip))
+
+                // Run in parallel
+                val (networkType, ip) = awaitAll(
+                    async {
+                        connectivityObserver.getNetworkType()
+                    },
+                    async {
+                        runCatching {
+                            val response = client.get(providerURL)
+                            response.bodyAsText()
+                        }
+                    }
+                )
+
+                ip as Result<String>
+                networkType as NetworkType
+
+                AddressStatus.Success(
+                    address = NetworkAddress(ip.getOrThrow()),
+                    networkType = networkType
+                )
             } catch (e: Exception) {
                 AddressStatus.Error(e)
             }

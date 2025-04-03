@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.network
 
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import kotlinx.coroutines.flow.Flow
 
 data class NetworkAddress(val ip: String)
@@ -7,7 +8,8 @@ data class NetworkAddress(val ip: String)
 sealed interface AddressStatus {
     data object None : AddressStatus
     data object InProgress : AddressStatus
-    data class Success(val address: NetworkAddress) : AddressStatus
+    data class Success(val address: NetworkAddress, val networkType: NetworkType) : AddressStatus
+
     data class Error(val exception: Exception) : AddressStatus
 }
 

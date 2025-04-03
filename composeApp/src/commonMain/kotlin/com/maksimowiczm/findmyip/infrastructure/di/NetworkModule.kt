@@ -12,7 +12,8 @@ import org.koin.dsl.onClose
 val networkModule = module {
     single(qualifier(InternetProtocolVersion.IPv4)) {
         NetworkAddressDataSourceImpl(
-            providerURL = IpifyConfig.IPV4
+            providerURL = IpifyConfig.IPV4,
+            connectivityObserver = get()
         )
     }.onClose {
         // Does it makes sense to add onClose to singleton?
@@ -21,7 +22,8 @@ val networkModule = module {
 
     single(qualifier(InternetProtocolVersion.IPv6)) {
         NetworkAddressDataSourceImpl(
-            providerURL = IpifyConfig.IPV6
+            providerURL = IpifyConfig.IPV6,
+            connectivityObserver = get()
         )
     }.onClose {
         // Does it makes sense to add onClose to singleton?
