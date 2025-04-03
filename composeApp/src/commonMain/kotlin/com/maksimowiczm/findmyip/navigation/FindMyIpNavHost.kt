@@ -13,6 +13,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.feature.currentaddress.CurrentAddressScreen
+import com.maksimowiczm.findmyip.feature.history.HistoryScreen
+import com.maksimowiczm.findmyip.feature.settings.HistorySettings
+import com.maksimowiczm.findmyip.feature.settings.InternetProtocolSettings
 import com.maksimowiczm.findmyip.feature.settings.settingsGraph
 import com.maksimowiczm.findmyip.ui.FindMyIpAppState
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
@@ -93,8 +96,18 @@ fun FindMyIpNavHost(
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() }
             ) {
-                // TODO
-                Text("History")
+                HistoryScreen(
+                    onHistorySettingsClick = {
+                        appState.navController.navigate(HistorySettings) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onInternetProtocolSettingsClick = {
+                        appState.navController.navigate(InternetProtocolSettings) {
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
             settingsGraph<Settings>(
                 navController = appState.navController,

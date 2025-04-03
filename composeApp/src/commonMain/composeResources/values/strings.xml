@@ -80,4 +80,6 @@
     <string name="vpn" translatable="false">VPN</string>
     <string name="unavailable">Unavailable</string>
 
+    <string name="filter_all">All</string>
+
 </resources>

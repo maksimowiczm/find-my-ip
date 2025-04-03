@@ -47,6 +47,7 @@ kotlin {
 
             // Room database
             implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.paging)
 
             // Datastore
             implementation(libs.androidx.datastore.preferences)
@@ -71,6 +72,10 @@ kotlin {
 
             // Logger kermit
             implementation(libs.kermit)
+
+            // Works only on Android but since there is only Android target leave it here
+            implementation(libs.androidx.paging.runtime)
+            implementation(libs.androidx.paging.compose)
         }
     }
 }

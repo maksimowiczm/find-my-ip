@@ -42,20 +42,19 @@ class FindMyIpAppState(val navController: NavHostController) {
     inline fun <reified T : Destination> navigate(destination: T) {
         val start = navController.graph.findStartDestination().id
 
-        val topDestination = navController.currentDestination?.hierarchy?.first()
-        if (topDestination.isRouteInHierarchy<T>()) {
-            return
-        }
+        // TODO disable animation if destination is already on screen
+//        val topDestination = navController.currentDestination?.hierarchy?.first()
+//        if (topDestination.isRouteInHierarchy<T>()) {
+//            return
+//        }
 
         navController.navigate(
             route = destination,
             navOptions = navOptions {
                 popUpTo(start) {
-                    saveState = true
                 }
 
                 launchSingleTop = true
-                restoreState = true
             }
         )
     }
