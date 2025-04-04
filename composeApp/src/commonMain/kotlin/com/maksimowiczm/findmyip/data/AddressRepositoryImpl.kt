@@ -190,11 +190,9 @@ internal class AddressRepositoryImpl(
         }
     }
 
-    override suspend fun refreshAndGetIfLatest(
-        internetProtocolVersion: InternetProtocolVersion
-    ): AddressResult {
+    override suspend fun refreshAndGetIfLatest(protocol: InternetProtocolVersion): AddressResult {
         // Check if protocol is enabled
-        val enabled = when (internetProtocolVersion) {
+        val enabled = when (protocol) {
             InternetProtocolVersion.IPv4 -> dataStore.get(PreferenceKeys.ipv4Enabled)
             InternetProtocolVersion.IPv6 -> dataStore.get(PreferenceKeys.ipv6Enabled)
         } ?: false
@@ -204,7 +202,7 @@ internal class AddressRepositoryImpl(
         }
 
         // Fetch the address
-        val addressStatus = when (internetProtocolVersion) {
+        val addressStatus = when (protocol) {
             InternetProtocolVersion.IPv4 -> ipv4source.blockingRefreshAddress()
             InternetProtocolVersion.IPv6 -> ipv6source.blockingRefreshAddress()
         }.getOrElse {
@@ -212,27 +210,33 @@ internal class AddressRepositoryImpl(
         }
 
         // Check if the address is already in the database
-        val latest = addressDao.getLatest(internetProtocolVersion)
+        val latest = addressDao.getLatest(protocol)
 
         val address = if (latest != null) {
             if (latest.ip != addressStatus.address.ip) {
                 Address.Success(
                     ip = addressStatus.address.ip,
                     networkType = addressStatus.networkType,
-                    protocol = internetProtocolVersion
+                    protocol = protocol
                 )
             } else {
-                return AddressResult.Skipped
+                return AddressResult.Duplicate(
+                    address = Address.Success(
+                        ip = latest.ip,
+                        networkType = addressStatus.networkType,
+                        protocol = protocol
+                    )
+                )
             }
         } else {
             Address.Success(
                 ip = addressStatus.address.ip,
                 networkType = addressStatus.networkType,
-                protocol = internetProtocolVersion
+                protocol = protocol
             )
         }
 
-        handleAddressEmission(address, internetProtocolVersion)
+        handleAddressEmission(address, protocol)
 
         return AddressResult.Success(address)
     }

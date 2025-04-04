@@ -53,7 +53,7 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
                     Logger.w(TAG, e) { "Error refreshing address" }
                 }
 
-                RefreshAndGetIfLatestUseCase.AddressResult.Skipped -> {
+                is RefreshAndGetIfLatestUseCase.AddressResult.Duplicate -> {
                     Logger.d(TAG) { "Address not changed" }
                 }
 
