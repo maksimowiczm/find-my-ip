@@ -39,9 +39,9 @@ internal class CurrentAddressViewModel(private val addressRepository: AddressRep
     }
 }
 
-private fun Address.toState(): IpAddressState = when (this) {
+private fun Address?.toState(): IpAddressState = when (this) {
+    null -> IpAddressState.Loading
     is Address.Error -> IpAddressState.Error(message)
-    Address.Loading -> IpAddressState.Loading
     is Address.Success -> IpAddressState.Success(ip)
     is Address.Disabled -> IpAddressState.Disabled
 }

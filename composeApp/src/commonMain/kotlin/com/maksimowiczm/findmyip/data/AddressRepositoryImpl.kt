@@ -40,7 +40,7 @@ internal class AddressRepositoryImpl(
     private val addressDao: AddressDao = database.addressDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address> {
+    override fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address?> {
         // Check if the user has already tested the protocols before
         ioApplicationScope.launch {
             val tested = dataStore.get(PreferenceKeys.ipFeaturesTested) ?: false
@@ -103,7 +103,7 @@ internal class AddressRepositoryImpl(
     }
 
     private suspend fun handleAddressEmission(
-        address: Address,
+        address: Address?,
         protocolVersion: InternetProtocolVersion
     ) {
         if (address !is Address.Success) {
@@ -184,9 +184,9 @@ internal class AddressRepositoryImpl(
     }
 }
 
-private fun AddressStatus.toAddress(): Address = when (this) {
+private fun AddressStatus.toAddress(): Address? = when (this) {
     AddressStatus.None,
-    AddressStatus.InProgress -> Address.Loading
+    AddressStatus.InProgress -> null
 
     is AddressStatus.Success -> Address.Success(
         ip = address.ip,
