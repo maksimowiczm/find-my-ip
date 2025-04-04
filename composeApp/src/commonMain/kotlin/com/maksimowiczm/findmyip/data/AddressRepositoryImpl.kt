@@ -57,7 +57,9 @@ internal class AddressRepositoryImpl(
                     .flatMapLatest {
                         if (it == true) {
                             ipv4source.refreshAddress()
-                            ipv4source.addressFlow.map { it.toAddress() }
+                            ipv4source.addressFlow.map {
+                                it.toAddress(InternetProtocolVersion.IPv4)
+                            }
                         } else {
                             flowOf(Address.Disabled)
                         }
@@ -76,7 +78,9 @@ internal class AddressRepositoryImpl(
                     .flatMapLatest {
                         if (it == true) {
                             ipv6source.refreshAddress()
-                            ipv6source.addressFlow.map { it.toAddress() }
+                            ipv6source.addressFlow.map {
+                                it.toAddress(InternetProtocolVersion.IPv6)
+                            }
                         } else {
                             flowOf(Address.Disabled)
                         }
@@ -184,13 +188,14 @@ internal class AddressRepositoryImpl(
     }
 }
 
-private fun AddressStatus.toAddress(): Address? = when (this) {
+private fun AddressStatus.toAddress(protocolVersion: InternetProtocolVersion) = when (this) {
     AddressStatus.None,
     AddressStatus.InProgress -> null
 
     is AddressStatus.Success -> Address.Success(
         ip = address.ip,
-        networkType = networkType
+        networkType = networkType,
+        protocol = protocolVersion
     )
 
     is AddressStatus.Error -> Address.Error(exception.message ?: "Unknown error")

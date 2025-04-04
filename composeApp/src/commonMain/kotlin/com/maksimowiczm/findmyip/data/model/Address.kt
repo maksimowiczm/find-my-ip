@@ -2,6 +2,11 @@ package com.maksimowiczm.findmyip.data.model
 
 sealed interface Address {
     data object Disabled : Address
-    data class Success(val ip: String, val networkType: NetworkType) : Address
+    data class Success(
+        val ip: String,
+        val networkType: NetworkType,
+        val protocol: InternetProtocolVersion
+    ) : Address
+
     data class Error(val message: String) : Address
 }
