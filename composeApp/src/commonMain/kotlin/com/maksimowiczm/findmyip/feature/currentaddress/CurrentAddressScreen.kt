@@ -51,6 +51,8 @@ private fun CurrentAddressScreenContent(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val shimmer = rememberShimmer(ShimmerBounds.Window)
+
     Surface(
         modifier = modifier,
         onClick = onRefresh
@@ -64,14 +66,27 @@ private fun CurrentAddressScreenContent(
                 text = stringResource(Res.string.headline_your_ip_address_is),
                 style = MaterialTheme.typography.titleLarge
             )
-            Address(
-                state = state.ipv4,
-                internetProtocolVersion = InternetProtocolVersion.IPv4
-            )
-            Address(
-                state = state.ipv6,
-                internetProtocolVersion = InternetProtocolVersion.IPv6
-            )
+            if (state.ipv4 is IpAddressState.Disabled && state.ipv6 is IpAddressState.Disabled) {
+                Spacer(
+                    modifier = Modifier
+                        .shimmer(shimmer)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                        .height(MaterialTheme.typography.titleLarge.toDp())
+                        .width(120.dp)
+                )
+            } else {
+                Address(
+                    state = state.ipv4,
+                    internetProtocolVersion = InternetProtocolVersion.IPv4,
+                    shimmer = shimmer
+                )
+                Address(
+                    state = state.ipv6,
+                    internetProtocolVersion = InternetProtocolVersion.IPv6,
+                    shimmer = shimmer
+                )
+            }
             Text(
                 text = stringResource(Res.string.action_tap_to_refresh)
             )
@@ -80,20 +95,28 @@ private fun CurrentAddressScreenContent(
 }
 
 @Composable
-private fun Address(state: IpAddressState, internetProtocolVersion: InternetProtocolVersion) {
+private fun Address(
+    state: IpAddressState,
+    internetProtocolVersion: InternetProtocolVersion,
+    shimmer: Shimmer,
+    modifier: Modifier = Modifier
+) {
     when (state) {
         is IpAddressState.Loading -> AddressLoadingDisplay(
             internetProtocolVersion = internetProtocolVersion,
-            shimmer = rememberShimmer(ShimmerBounds.Window)
+            shimmer = shimmer,
+            modifier = modifier
         )
 
         is IpAddressState.Error -> AddressErrorDisplay(
-            internetProtocolVersion = internetProtocolVersion
+            internetProtocolVersion = internetProtocolVersion,
+            modifier = modifier
         )
 
         is IpAddressState.Success -> AddressDisplay(
             internetProtocolVersion = internetProtocolVersion,
-            address = state.ip
+            address = state.ip,
+            modifier = modifier
         )
 
         IpAddressState.Disabled -> Unit

@@ -9,3 +9,9 @@ internal data class InternetProtocolSettingsState(
     val canSwitchIpv6: Boolean,
     val ipv6: Boolean
 )
+
+@Immutable
+sealed interface InternetProtocolSettingsEvent {
+    data object StartTest : InternetProtocolSettingsEvent
+    data object StopTest : InternetProtocolSettingsEvent
+}

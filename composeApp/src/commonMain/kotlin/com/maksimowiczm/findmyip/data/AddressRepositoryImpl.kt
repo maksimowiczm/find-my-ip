@@ -8,12 +8,17 @@ import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.database.AddressDao
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
+import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
+import com.maksimowiczm.findmyip.infrastructure.di.set
 import com.maksimowiczm.findmyip.network.AddressStatus
 import com.maksimowiczm.findmyip.network.NetworkAddressDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -21,6 +26,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import kotlinx.datetime.Clock
 
 internal class AddressRepositoryImpl(
@@ -29,12 +35,21 @@ internal class AddressRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
     database: FindMyIpDatabase,
     private val ioApplicationScope: CoroutineScope
-) : AddressRepository {
+) : AddressRepository,
+    TestInternetProtocolsUseCase {
     private val addressDao: AddressDao = database.addressDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address> =
-        when (internetProtocolVersion) {
+    override fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address> {
+        // Check if the user has already tested the protocols before
+        ioApplicationScope.launch {
+            val tested = dataStore.get(PreferenceKeys.ipFeaturesTested) ?: false
+            if (!tested) {
+                testInternetProtocols()
+            }
+        }
+
+        return when (internetProtocolVersion) {
             InternetProtocolVersion.IPv4 ->
                 dataStore
                     .observe(PreferenceKeys.ipv4Enabled)
@@ -73,14 +88,17 @@ internal class AddressRepositoryImpl(
                         }
                     }
         }
+    }
 
-    override suspend fun refreshAddresses() {
-        if (dataStore.get(PreferenceKeys.ipv4Enabled) == true) {
-            ipv4source.refreshAddress()
-        }
+    override fun refreshAddresses() {
+        ioApplicationScope.launch {
+            if (dataStore.get(PreferenceKeys.ipv4Enabled) == true) {
+                ipv4source.refreshAddress()
+            }
 
-        if (dataStore.get(PreferenceKeys.ipv6Enabled) == true) {
-            ipv6source.refreshAddress()
+            if (dataStore.get(PreferenceKeys.ipv6Enabled) == true) {
+                ipv6source.refreshAddress()
+            }
         }
     }
 
@@ -131,6 +149,37 @@ internal class AddressRepositoryImpl(
             NetworkType.MOBILE -> dataStore.get(PreferenceKeys.saveMobileHistory) ?: false
             NetworkType.VPN -> dataStore.get(PreferenceKeys.saveVpnHistory) ?: false
             NetworkType.UNKNOWN -> false
+        }
+    }
+
+    override suspend fun testInternetProtocols() {
+        coroutineScope {
+            val (ipv4test, ipv6test) = awaitAll(
+                async {
+                    withTimeout(5_000) {
+                        ipv4source.blockingRefreshAddress()
+                    }
+                },
+                async {
+                    withTimeout(5_000) {
+                        ipv6source.blockingRefreshAddress()
+                    }
+                }
+            )
+
+            // If both test fail set IPv4 as default.
+            val ipv4 = if (ipv4test.isFailure && ipv6test.isFailure) {
+                true
+            } else {
+                ipv4test.isSuccess
+            }
+            val ipv6 = ipv6test.isSuccess
+
+            dataStore.set(
+                PreferenceKeys.ipv4Enabled to ipv4,
+                PreferenceKeys.ipv6Enabled to ipv6,
+                PreferenceKeys.ipFeaturesTested to true
+            )
         }
     }
 }

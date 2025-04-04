@@ -21,4 +21,5 @@ sealed interface AddressRefreshResult {
 interface NetworkAddressDataSource {
     val addressFlow: Flow<AddressStatus>
     fun refreshAddress(): AddressRefreshResult
+    suspend fun blockingRefreshAddress(): Result<AddressStatus.Success>
 }

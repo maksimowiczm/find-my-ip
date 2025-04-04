@@ -46,6 +46,8 @@
     <string name="description_internet_protocol">Choose which Internet Protocol to use. At least one must be enabled.</string>
     <string name="description_auto_refresh">Refresh address on network change</string>
     <string name="description_duplicate_ips">When enabled, the app will log every fetched IP address, even if it matches the last recorded one. If disabled, the app will skip saving duplicate IPs to reduce redundant entries.</string>
+    <string name="description_test_internet_protocols">Automatically choose Internet Protocol</string>
+    <string name="description_test_finished_internet_protocols">Test finished. Internet Protocols settings updated.</string>
 
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
@@ -69,6 +71,7 @@
     <string name="action_translate">Translate</string>
     <string name="action_save_duplicate_ips">Save duplicate IPs</string>
     <string name="action_use_history">Use history</string>
+    <string name="action_test_internet_protocols">Test Internet Protocols</string>
 
     <string name="link_doze" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
     <string name="link_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>

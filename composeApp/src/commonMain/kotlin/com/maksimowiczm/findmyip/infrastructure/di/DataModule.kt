@@ -6,11 +6,11 @@ import com.maksimowiczm.findmyip.data.HistoryRepositoryImpl
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
 import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
+import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.qualifier.qualifier
-import org.koin.dsl.bind
 import org.koin.dsl.binds
 import org.koin.dsl.module
 
@@ -27,7 +27,12 @@ val dataModule = module {
             database = get(),
             ioApplicationScope = get(qualifier("ioScope"))
         )
-    }.bind<AddressRepository>()
+    }.binds(
+        arrayOf(
+            AddressRepository::class,
+            TestInternetProtocolsUseCase::class
+        )
+    )
 
     factory {
         HistoryRepositoryImpl(

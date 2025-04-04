@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal class NetworkAddressDataSourceImpl(
     private val providerURL: String,
@@ -61,6 +62,7 @@ internal class NetworkAddressDataSourceImpl(
                     }
                 )
 
+                @Suppress("UNCHECKED_CAST")
                 ip as Result<String>
                 networkType as NetworkType
 
@@ -78,6 +80,22 @@ internal class NetworkAddressDataSourceImpl(
         }
 
         return AddressRefreshResult.Ok
+    }
+
+    override suspend fun blockingRefreshAddress(): Result<AddressStatus.Success> = mutex.withLock {
+        runCatching {
+            Logger.d { "Executing network request to $providerURL" }
+
+            // Run in parallel
+            val networkType = connectivityObserver.getNetworkType()
+            val response = client.get(providerURL)
+            val ip = response.bodyAsText()
+
+            AddressStatus.Success(
+                address = NetworkAddress(ip),
+                networkType = networkType
+            )
+        }
     }
 
     override fun dispose() {

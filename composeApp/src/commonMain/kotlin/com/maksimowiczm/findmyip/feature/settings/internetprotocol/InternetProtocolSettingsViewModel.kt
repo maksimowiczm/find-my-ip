@@ -6,17 +6,25 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maksimowiczm.findmyip.data.PreferenceKeys
+import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
 import com.maksimowiczm.findmyip.infrastructure.di.observe
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-internal class InternetProtocolSettingsViewModel(private val dataStore: DataStore<Preferences>) :
-    ViewModel() {
+internal class InternetProtocolSettingsViewModel(
+    private val dataStore: DataStore<Preferences>,
+    private val testInternetProtocolsUseCase: TestInternetProtocolsUseCase
+) : ViewModel() {
+    private val _eventBus = Channel<InternetProtocolSettingsEvent>()
+    val eventBus = _eventBus.receiveAsFlow()
+
     private val _state = combine(
         dataStore.observe(PreferenceKeys.ipv4Enabled).map { it ?: false },
         dataStore.observe(PreferenceKeys.ipv6Enabled).map { it ?: false }
@@ -66,6 +74,14 @@ internal class InternetProtocolSettingsViewModel(private val dataStore: DataStor
                     }
                 }
             }
+        }
+    }
+
+    fun testInternetProtocols() {
+        viewModelScope.launch {
+            _eventBus.send(InternetProtocolSettingsEvent.StartTest)
+            testInternetProtocolsUseCase.testInternetProtocols()
+            _eventBus.send(InternetProtocolSettingsEvent.StopTest)
         }
     }
 }

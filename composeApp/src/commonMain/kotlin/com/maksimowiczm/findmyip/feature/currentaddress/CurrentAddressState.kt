@@ -3,10 +3,7 @@ package com.maksimowiczm.findmyip.feature.currentaddress
 import androidx.compose.runtime.Immutable
 
 @Immutable
-internal data class CurrentAddressState(
-    val ipv4: IpAddressState = IpAddressState.Disabled,
-    val ipv6: IpAddressState = IpAddressState.Disabled
-)
+internal data class CurrentAddressState(val ipv4: IpAddressState, val ipv6: IpAddressState)
 
 @Immutable
 internal sealed interface IpAddressState {

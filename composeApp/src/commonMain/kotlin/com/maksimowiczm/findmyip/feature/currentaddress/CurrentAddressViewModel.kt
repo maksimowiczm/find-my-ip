@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 internal class CurrentAddressViewModel(private val addressRepository: AddressRepository) :
@@ -36,9 +35,7 @@ internal class CurrentAddressViewModel(private val addressRepository: AddressRep
     )
 
     fun refresh() {
-        viewModelScope.launch {
-            addressRepository.refreshAddresses()
-        }
+        addressRepository.refreshAddresses()
     }
 }
 
