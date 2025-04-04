@@ -2,10 +2,14 @@ package com.maksimowiczm.findmyip.feature.settings.backgroundservice
 
 import android.os.Build
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +30,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -192,44 +197,70 @@ private fun BackgroundServiceSettingsScreen(
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(Res.string.description_background_worker),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
-
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(Res.string.description_background_service_notification))
-                    },
-                    modifier = Modifier.clickable {
-                        onNotificationsToggle(!notificationsEnabled)
-                    },
-                    leadingContent = {
+            if (!enabled || !inputEnabled) {
+                item {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.MailOutline,
+                            imageVector = Icons.Outlined.Info,
                             contentDescription = null
                         )
-                    },
-                    supportingContent = {
                         Text(
                             text = stringResource(
-                                Res.string.description_background_service_notification
-                            )
-                        )
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = notificationsEnabled,
-                            onCheckedChange = {
-                                onNotificationsToggle(it)
-                            }
+                                Res.string.description_background_service_disabled
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Justify
                         )
                     }
-                )
+                }
+            } else {
+                item {
+                    Text(
+                        text = stringResource(Res.string.description_background_worker),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+
+                item {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                stringResource(
+                                    Res.string.description_background_service_notification
+                                )
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onNotificationsToggle(!notificationsEnabled)
+                        },
+                        leadingContent = {
+                            Icon(
+                                imageVector = Icons.Default.MailOutline,
+                                contentDescription = null
+                            )
+                        },
+                        supportingContent = {
+                            Text(
+                                text = stringResource(
+                                    Res.string.description_background_service_notification
+                                )
+                            )
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = notificationsEnabled,
+                                onCheckedChange = {
+                                    onNotificationsToggle(it)
+                                }
+                            )
+                        }
+                    )
+                }
             }
         }
     }
