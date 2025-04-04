@@ -60,10 +60,7 @@ internal class BackgroundServiceSettingsContainer(private val workManager: WorkM
 
                     delay(1000L)
 
-                    AddressRefreshWorker.cancelAndCreatePeriodicWorkRequest(
-                        workManager = workManager,
-                        intervalInMinutes = 15L
-                    )
+                    AddressRefreshWorker.cancelAndCreatePeriodicWorkRequest(workManager)
                 }
             }
         }

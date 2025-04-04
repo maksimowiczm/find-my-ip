@@ -69,15 +69,12 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
     companion object {
         const val TAG = "AddressRefreshWorker"
 
-        suspend fun cancelAndCreatePeriodicWorkRequest(
-            workManager: WorkManager,
-            intervalInMinutes: Long
-        ) {
+        suspend fun cancelAndCreatePeriodicWorkRequest(workManager: WorkManager) {
             val constraints =
                 Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
             val request = PeriodicWorkRequestBuilder<AddressRefreshWorker>(
-                repeatInterval = intervalInMinutes,
+                repeatInterval = 30,
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
             ).setConstraints(constraints).addTag(TAG).build()
 
