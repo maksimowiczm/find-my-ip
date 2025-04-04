@@ -1,10 +1,11 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
-import com.maksimowiczm.findmyip.data.AddressRepository
 import com.maksimowiczm.findmyip.data.AddressRepositoryImpl
 import com.maksimowiczm.findmyip.data.HistoryRepositoryImpl
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
 import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
 import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
@@ -30,9 +31,10 @@ val dataModule = module {
         )
     }.binds(
         arrayOf(
-            AddressRepository::class,
-            TestInternetProtocolsUseCase::class,
-            RefreshAndGetIfLatestUseCase::class
+            ObserveAddressUseCase::class,
+            RefreshAddressesUseCase::class,
+            RefreshAndGetIfLatestUseCase::class,
+            TestInternetProtocolsUseCase::class
         )
     )
 

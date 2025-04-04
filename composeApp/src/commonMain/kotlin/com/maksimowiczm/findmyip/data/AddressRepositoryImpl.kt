@@ -8,6 +8,8 @@ import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.database.AddressDao
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
+import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase.AddressResult
 import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
@@ -37,13 +39,16 @@ internal class AddressRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
     database: FindMyIpDatabase,
     private val ioApplicationScope: CoroutineScope
-) : AddressRepository,
+) : ObserveAddressUseCase,
+    RefreshAddressesUseCase,
     TestInternetProtocolsUseCase,
     RefreshAndGetIfLatestUseCase {
     private val addressDao: AddressDao = database.addressDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun observeAddress(internetProtocolVersion: InternetProtocolVersion): Flow<Address?> {
+    override fun observeAddress(
+        internetProtocolVersion: InternetProtocolVersion
+    ): Flow<ObserveAddressUseCase.AddressStatus> {
         // Check if the user has already tested the protocols before
         ioApplicationScope.launch {
             val tested = dataStore.get(PreferenceKeys.ipFeaturesTested) ?: false
@@ -64,13 +69,7 @@ internal class AddressRepositoryImpl(
                                 it.toAddress(InternetProtocolVersion.IPv4)
                             }
                         } else {
-                            flowOf(Address.Disabled)
-                        }
-                    }
-                    .onEach {
-                        // Don't block
-                        ioApplicationScope.launch {
-                            handleAddressEmission(it, InternetProtocolVersion.IPv4)
+                            flowOf(ObserveAddressUseCase.AddressStatus.Disabled)
                         }
                     }
 
@@ -85,15 +84,16 @@ internal class AddressRepositoryImpl(
                                 it.toAddress(InternetProtocolVersion.IPv6)
                             }
                         } else {
-                            flowOf(Address.Disabled)
+                            flowOf(ObserveAddressUseCase.AddressStatus.Disabled)
                         }
                     }
-                    .onEach {
-                        // Don't block
-                        ioApplicationScope.launch {
-                            handleAddressEmission(it, InternetProtocolVersion.IPv6)
-                        }
-                    }
+        }.onEach {
+            if (it is ObserveAddressUseCase.AddressStatus.Success) {
+                // Don't block
+                ioApplicationScope.launch {
+                    handleAddressEmission(it.address, InternetProtocolVersion.IPv6)
+                }
+            }
         }
     }
 
@@ -110,13 +110,9 @@ internal class AddressRepositoryImpl(
     }
 
     private suspend fun handleAddressEmission(
-        address: Address?,
+        address: Address,
         protocolVersion: InternetProtocolVersion
     ) {
-        if (address !is Address.Success) {
-            return
-        }
-
         if (!shouldSaveAddress(address)) {
             return
         }
@@ -144,7 +140,7 @@ internal class AddressRepositoryImpl(
         }
     }
 
-    private suspend fun shouldSaveAddress(address: Address.Success): Boolean {
+    private suspend fun shouldSaveAddress(address: Address): Boolean {
         val save = dataStore.get(PreferenceKeys.historyEnabled) ?: false
 
         if (!save) {
@@ -213,15 +209,15 @@ internal class AddressRepositoryImpl(
         val latest = addressDao.getLatest(protocol)
 
         val address = if (latest != null) {
-            if (latest.ip != addressStatus.address.ip) {
-                Address.Success(
-                    ip = addressStatus.address.ip,
+            if (latest.ip != addressStatus.address) {
+                Address(
+                    ip = addressStatus.address,
                     networkType = addressStatus.networkType,
                     protocol = protocol
                 )
             } else {
                 return AddressResult.Duplicate(
-                    address = Address.Success(
+                    address = Address(
                         ip = latest.ip,
                         networkType = addressStatus.networkType,
                         protocol = protocol
@@ -229,8 +225,8 @@ internal class AddressRepositoryImpl(
                 )
             }
         } else {
-            Address.Success(
-                ip = addressStatus.address.ip,
+            Address(
+                ip = addressStatus.address,
                 networkType = addressStatus.networkType,
                 protocol = protocol
             )
@@ -244,13 +240,15 @@ internal class AddressRepositoryImpl(
 
 private fun AddressStatus.toAddress(protocolVersion: InternetProtocolVersion) = when (this) {
     AddressStatus.None,
-    AddressStatus.InProgress -> null
+    AddressStatus.InProgress -> ObserveAddressUseCase.AddressStatus.Loading
 
-    is AddressStatus.Success -> Address.Success(
-        ip = address.ip,
-        networkType = networkType,
-        protocol = protocolVersion
+    is AddressStatus.Success -> ObserveAddressUseCase.AddressStatus.Success(
+        Address(
+            ip = address,
+            networkType = networkType,
+            protocol = protocolVersion
+        )
     )
 
-    is AddressStatus.Error -> Address.Error(exception.message ?: "Unknown error")
+    is AddressStatus.Error -> ObserveAddressUseCase.AddressStatus.Error(exception)
 }

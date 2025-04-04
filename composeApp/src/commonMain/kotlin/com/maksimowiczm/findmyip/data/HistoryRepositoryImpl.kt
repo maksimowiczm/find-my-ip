@@ -8,8 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
-import com.maksimowiczm.findmyip.domain.HistoryItem
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
+import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase.HistoryItem
 import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import kotlinx.coroutines.flow.Flow

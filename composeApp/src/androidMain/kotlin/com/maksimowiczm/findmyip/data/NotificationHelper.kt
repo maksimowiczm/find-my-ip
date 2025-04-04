@@ -18,7 +18,7 @@ class NotificationHelper(
     private val context: Context,
     private val notificationManager: NotificationManagerCompat
 ) {
-    fun notifyAddressChange(address: Address.Success) {
+    fun notifyAddressChange(address: Address) {
         val title = runBlocking { getString(Res.string.notification_title_address_changed) }
         val content =
             runBlocking { getString(Res.string.notification_content_address_changed, address.ip) }

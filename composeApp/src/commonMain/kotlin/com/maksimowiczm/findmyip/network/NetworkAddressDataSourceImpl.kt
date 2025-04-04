@@ -67,7 +67,7 @@ internal class NetworkAddressDataSourceImpl(
                 networkType as NetworkType
 
                 AddressStatus.Success(
-                    address = NetworkAddress(ip.getOrThrow()),
+                    address = ip.getOrThrow(),
                     networkType = networkType
                 )
             } catch (e: Exception) {
@@ -92,7 +92,7 @@ internal class NetworkAddressDataSourceImpl(
             val ip = response.bodyAsText()
 
             AddressStatus.Success(
-                address = NetworkAddress(ip),
+                address = ip,
                 networkType = networkType
             )
         }
