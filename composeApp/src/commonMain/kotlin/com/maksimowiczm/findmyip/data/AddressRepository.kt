@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.datetime.Clock
 
-internal class AddressRepositoryImpl(
+internal class AddressRepository(
     private val ipv4source: NetworkAddressDataSource,
     private val ipv6source: NetworkAddressDataSource,
     private val dataStore: DataStore<Preferences>,

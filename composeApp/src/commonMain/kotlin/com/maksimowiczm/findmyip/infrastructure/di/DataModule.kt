@@ -1,7 +1,7 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
-import com.maksimowiczm.findmyip.data.AddressRepositoryImpl
-import com.maksimowiczm.findmyip.data.HistoryRepositoryImpl
+import com.maksimowiczm.findmyip.data.AddressRepository
+import com.maksimowiczm.findmyip.data.HistoryRepository
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
@@ -22,7 +22,7 @@ val dataModule = module {
     }
 
     factory {
-        AddressRepositoryImpl(
+        AddressRepository(
             ipv4source = get(qualifier(InternetProtocolVersion.IPv4)),
             ipv6source = get(qualifier(InternetProtocolVersion.IPv6)),
             dataStore = get(),
@@ -39,7 +39,7 @@ val dataModule = module {
     )
 
     factory {
-        HistoryRepositoryImpl(
+        HistoryRepository(
             database = get(),
             dataStore = get()
         )

@@ -19,10 +19,8 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class HistoryRepositoryImpl(
-    database: FindMyIpDatabase,
-    private val dataStore: DataStore<Preferences>
-) : ObserveHistoryUseCase,
+class HistoryRepository(database: FindMyIpDatabase, private val dataStore: DataStore<Preferences>) :
+    ObserveHistoryUseCase,
     ShouldShowHistoryUseCase {
     private val addressDao = database.addressDao
 
