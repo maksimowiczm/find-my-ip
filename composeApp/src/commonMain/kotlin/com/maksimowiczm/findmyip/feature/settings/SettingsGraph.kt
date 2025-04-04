@@ -70,7 +70,7 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             initialState.destination.hasRoute<HistorySettings>() ||
             initialState.destination.hasRoute<InternetProtocolSettings>() ||
             initialState.destination.hasRoute<LanguageSettings>() ||
-            targetState.destination.hasRoute<BackgroundServiceSettings>()
+            initialState.destination.hasRoute<BackgroundServiceSettings>()
         ) {
             ForwardBackwardComposableDefaults.popEnterTransition()
         } else {
