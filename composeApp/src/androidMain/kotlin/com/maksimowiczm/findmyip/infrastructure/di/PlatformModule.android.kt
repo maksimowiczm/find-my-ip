@@ -1,9 +1,12 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
+import androidx.work.WorkManager
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
+import com.maksimowiczm.findmyip.feature.settings.backgroundservice.BackgroundServiceSettingsContainer
 import com.maksimowiczm.findmyip.feature.settings.language.LanguageViewModel
 import com.maksimowiczm.findmyip.network.ConnectivityObserver
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -14,4 +17,10 @@ actual val platformModule = module {
     factoryOf(::StringFormatRepository)
     viewModelOf(::LanguageViewModel)
     singleOf(::ConnectivityObserver)
+
+    container {
+        BackgroundServiceSettingsContainer(
+            workManager = WorkManager.getInstance(androidApplication())
+        )
+    }
 }
