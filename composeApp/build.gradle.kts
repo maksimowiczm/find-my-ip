@@ -31,9 +31,6 @@ kotlin {
 
             // Ktor http engine implementation
             implementation(libs.ktor.client.okhttp)
-
-            // WorkManager
-            implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

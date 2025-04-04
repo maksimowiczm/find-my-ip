@@ -1,6 +1,8 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
+import com.maksimowiczm.findmyip.data.NotificationHelper
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
 import com.maksimowiczm.findmyip.feature.settings.backgroundservice.BackgroundServiceSettingsContainer
@@ -17,6 +19,13 @@ actual val platformModule = module {
     factoryOf(::StringFormatRepository)
     viewModelOf(::LanguageViewModel)
     singleOf(::ConnectivityObserver)
+
+    factory {
+        NotificationHelper(
+            context = androidApplication(),
+            notificationManager = NotificationManagerCompat.from(androidApplication())
+        )
+    }
 
     container {
         BackgroundServiceSettingsContainer(

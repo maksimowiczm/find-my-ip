@@ -10,13 +10,30 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.await
 import co.touchlab.kermit.Logger
+import com.maksimowiczm.findmyip.data.model.Address
+import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.TimeoutCancellationException
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters) :
-    CoroutineWorker(context, workerParameters) {
+    CoroutineWorker(context, workerParameters),
+    KoinComponent {
+    private val notificationHelper: NotificationHelper by inject()
+
     override suspend fun doWork(): Result = try {
         Logger.d(TAG) { "Address refreshed" }
+
+        notificationHelper.notifyAddressChange(
+            Address.Success(
+                ip = "Test",
+                networkType = com.maksimowiczm.findmyip.data.model.NetworkType.UNKNOWN,
+                protocol = InternetProtocolVersion.IPv4
+            )
+        )
+
         Result.success()
     } catch (e: TimeoutCancellationException) {
         Logger.e(TAG, e) { "Operation timed out" }
@@ -38,10 +55,6 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
                 repeatInterval = intervalInMinutes,
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
             )
-                .setInitialDelay(
-                    duration = intervalInMinutes,
-                    timeUnit = TimeUnit.MINUTES
-                )
                 .setConstraints(constraints)
                 .addTag(TAG)
                 .build()
@@ -60,3 +73,7 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
         }
     }
 }
+
+private suspend operator fun RefreshAndGetIfLatestUseCase.invoke(
+    protocol: InternetProtocolVersion
+) = refreshAndGetIfLatest(protocol)
