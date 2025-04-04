@@ -9,6 +9,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.maksimowiczm.findmyip.feature.settings.backgroundservice.BackgroundServiceSettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.global.SettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.history.HistorySettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.internetprotocol.InternetProtocolSettingsScreen
@@ -24,6 +25,9 @@ data object HistorySettings
 
 @Serializable
 data object InternetProtocolSettings
+
+@Serializable
+data object BackgroundServiceSettings
 
 @Serializable
 data object LanguageSettings
@@ -51,7 +55,8 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             targetState.destination.hasRoute<GlobalSettings>() ||
             targetState.destination.hasRoute<HistorySettings>() ||
             targetState.destination.hasRoute<InternetProtocolSettings>() ||
-            targetState.destination.hasRoute<LanguageSettings>()
+            targetState.destination.hasRoute<LanguageSettings>() ||
+            targetState.destination.hasRoute<BackgroundServiceSettings>()
         ) {
             ForwardBackwardComposableDefaults.exitTransition()
         } else {
@@ -64,7 +69,8 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             initialState.destination.hasRoute<GlobalSettings>() ||
             initialState.destination.hasRoute<HistorySettings>() ||
             initialState.destination.hasRoute<InternetProtocolSettings>() ||
-            initialState.destination.hasRoute<LanguageSettings>()
+            initialState.destination.hasRoute<LanguageSettings>() ||
+            targetState.destination.hasRoute<BackgroundServiceSettings>()
         ) {
             ForwardBackwardComposableDefaults.popEnterTransition()
         } else {
@@ -77,7 +83,8 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             targetState.destination.hasRoute<GlobalSettings>() ||
             targetState.destination.hasRoute<HistorySettings>() ||
             targetState.destination.hasRoute<InternetProtocolSettings>() ||
-            targetState.destination.hasRoute<LanguageSettings>()
+            targetState.destination.hasRoute<LanguageSettings>() ||
+            targetState.destination.hasRoute<BackgroundServiceSettings>()
         ) {
             ForwardBackwardComposableDefaults.popExitTransition()
         } else {
@@ -105,6 +112,11 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
                         launchSingleTop = true
                     }
                 },
+                onObserveIpSettings = {
+                    navController.navigate(BackgroundServiceSettings) {
+                        launchSingleTop = true
+                    }
+                },
                 onLanguageSettings = {
                     navController.navigate(LanguageSettings) {
                         launchSingleTop = true
@@ -127,6 +139,14 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             popExitTransition = popExit
         ) {
             InternetProtocolSettingsScreen()
+        }
+        composable<BackgroundServiceSettings>(
+            enterTransition = enter,
+            exitTransition = exit,
+            popEnterTransition = popEnter,
+            popExitTransition = popExit
+        ) {
+            BackgroundServiceSettingsScreen()
         }
         composable<LanguageSettings>(
             enterTransition = enter,
