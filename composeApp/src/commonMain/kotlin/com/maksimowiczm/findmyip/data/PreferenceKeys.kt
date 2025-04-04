@@ -17,4 +17,6 @@ object PreferenceKeys {
     val ipFeaturesTested = booleanPreferencesKey("ipFeaturesTested")
 
     val hideMigrationDialog = booleanPreferencesKey("hideMigrationDialog")
+
+    val notificationEnabled = booleanPreferencesKey("notificationEnabled")
 }

@@ -1,10 +1,16 @@
 package com.maksimowiczm.findmyip.feature.settings.backgroundservice
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -14,49 +20,127 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.infrastructure.di.container
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
+import kotlinx.coroutines.flow.drop
 import org.jetbrains.compose.resources.stringResource
-import pro.respawn.flowmvi.api.IntentReceiver
-import pro.respawn.flowmvi.compose.dsl.subscribe
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 actual fun BackgroundServiceSettingsScreen(modifier: Modifier) {
     BackgroundServiceSettingsScreen(
         modifier = modifier,
-        container = container()
+        viewModel = koinViewModel()
     )
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Composable
+private fun onToggleAPI32(viewModel: BackgroundServiceSettingsViewModel): (Boolean) -> Unit {
+    val permissionState = rememberPermissionState(
+        permission = android.Manifest.permission.POST_NOTIFICATIONS
+    )
+
+    // On enable ask for notification permission
+    val onToggle = remember(viewModel, permissionState) {
+        { enable: Boolean ->
+            if (enable) {
+                if (!permissionState.status.isGranted) {
+                    permissionState.launchPermissionRequest()
+                } else {
+                    viewModel.enable()
+                }
+            } else {
+                viewModel.disable()
+            }
+        }
+    }
+
+    // On permission state change enable/disable notifications
+    LaunchedEffect(permissionState, viewModel) {
+        snapshotFlow { permissionState.status }.drop(1).collect {
+            viewModel.enable()
+
+            if (it.isGranted) {
+                viewModel.enableNotifications()
+            } else {
+                viewModel.disableNotifications()
+            }
+        }
+    }
+
+    return onToggle
 }
 
 @Composable
 private fun BackgroundServiceSettingsScreen(
     modifier: Modifier = Modifier,
-    container: BackgroundServiceSettingsContainer = container()
-) = with(container.store) {
-    val state by subscribe()
+    viewModel: BackgroundServiceSettingsViewModel = koinViewModel()
+) {
+    val inputEnabled by viewModel.inputEnabled.collectAsStateWithLifecycle()
+    val enabled by viewModel.enabled.collectAsStateWithLifecycle()
+    val notificationsEnabled by viewModel.notificationsEnabled.collectAsStateWithLifecycle()
+
+    val onToggle = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        onToggleAPI32(viewModel)
+    } else {
+        remember(viewModel) {
+            { enabled: Boolean ->
+                if (enabled) {
+                    viewModel.enableNotifications()
+                    viewModel.enable()
+                } else {
+                    viewModel.disable()
+                }
+            }
+        }
+    }
+
+    val onNotificationsToggle = remember(viewModel) {
+        { enable: Boolean ->
+            if (enable) {
+                viewModel.enableNotifications()
+            } else {
+                viewModel.disableNotifications()
+            }
+        }
+    }
 
     BackgroundServiceSettingsScreen(
-        state = state,
+        inputEnabled = inputEnabled,
+        enabled = enabled ?: return,
+        onToggle = onToggle,
+        notificationsEnabled = notificationsEnabled,
+        onNotificationsToggle = onNotificationsToggle,
         modifier = modifier
     )
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun IntentReceiver<BackgroundServiceSettingsIntent>.BackgroundServiceSettingsScreen(
-    state: BackgroundServiceSettingsState,
+private fun BackgroundServiceSettingsScreen(
+    inputEnabled: Boolean,
+    enabled: Boolean,
+    onToggle: (Boolean) -> Unit,
+    notificationsEnabled: Boolean,
+    onNotificationsToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val interactionEnabled =
-        state !is BackgroundServiceSettingsState.Enabling &&
-            state !is BackgroundServiceSettingsState.Disabling
+    val interactionEnabled = inputEnabled
 
     Scaffold(
         modifier = modifier,
@@ -78,17 +162,7 @@ private fun IntentReceiver<BackgroundServiceSettingsIntent>.BackgroundServiceSet
         ) {
             item {
                 Card(
-                    onClick = {
-                        when (state) {
-                            BackgroundServiceSettingsState.Enabled ->
-                                intent(BackgroundServiceSettingsIntent.Disable)
-
-                            BackgroundServiceSettingsState.Disabled ->
-                                intent(BackgroundServiceSettingsIntent.Enable)
-
-                            else -> Unit
-                        }
-                    },
+                    onClick = { onToggle(!enabled) },
                     enabled = interactionEnabled,
                     modifier = Modifier.padding(16.dp),
                     shape = MaterialTheme.shapes.large,
@@ -112,15 +186,9 @@ private fun IntentReceiver<BackgroundServiceSettingsIntent>.BackgroundServiceSet
                         modifier = Modifier.padding(8.dp),
                         trailingContent = {
                             Switch(
-                                checked = state is BackgroundServiceSettingsState.Enabled ||
-                                    state is BackgroundServiceSettingsState.Enabling,
+                                checked = enabled,
                                 enabled = interactionEnabled,
-                                onCheckedChange = {
-                                    when (it) {
-                                        true -> intent(BackgroundServiceSettingsIntent.Enable)
-                                        false -> intent(BackgroundServiceSettingsIntent.Disable)
-                                    }
-                                }
+                                onCheckedChange = { onToggle(it) }
                             )
                         },
                         colors = ListItemDefaults.colors(
@@ -138,33 +206,37 @@ private fun IntentReceiver<BackgroundServiceSettingsIntent>.BackgroundServiceSet
                 )
             }
 
-//            item {
-//                ListItem(
-//                    headlineContent = {
-//                        Text(stringResource(Res.string.description_background_service_notification))
-//                    },
-//                    modifier = Modifier.clickable { /* TODO */ },
-//                    leadingContent = {
-//                        Icon(
-//                            imageVector = Icons.Default.MailOutline,
-//                            contentDescription = null
-//                        )
-//                    },
-//                    supportingContent = {
-//                        Text(
-//                            text = stringResource(
-//                                Res.string.description_background_service_notification
-//                            )
-//                        )
-//                    },
-//                    trailingContent = {
-//                        Switch(
-//                            checked = false,
-//                            onCheckedChange = {}
-//                        )
-//                    }
-//                )
-//            }
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(Res.string.description_background_service_notification))
+                    },
+                    modifier = Modifier.clickable {
+                        onNotificationsToggle(!notificationsEnabled)
+                    },
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Default.MailOutline,
+                            contentDescription = null
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = stringResource(
+                                Res.string.description_background_service_notification
+                            )
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = notificationsEnabled,
+                            onCheckedChange = {
+                                onNotificationsToggle(it)
+                            }
+                        )
+                    }
+                )
+            }
         }
     }
 }

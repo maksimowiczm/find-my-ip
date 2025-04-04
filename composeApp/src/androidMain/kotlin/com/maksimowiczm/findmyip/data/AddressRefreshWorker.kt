@@ -80,7 +80,7 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
 
             val operation = workManager.enqueueUniquePeriodicWork(
                 TAG,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 request
             )
 
