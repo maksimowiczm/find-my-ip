@@ -1,6 +1,8 @@
 package com.maksimowiczm.findmyip.data
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -12,6 +14,7 @@ import androidx.work.await
 import co.touchlab.kermit.Logger
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
+import com.maksimowiczm.findmyip.infrastructure.di.get
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
@@ -26,6 +29,7 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
     KoinComponent {
     private val notificationHelper: NotificationHelper by inject()
     private val refreshAndGetIfLatestUseCase: RefreshAndGetIfLatestUseCase by inject()
+    private val dataStore: DataStore<Preferences> by inject()
 
     override suspend fun doWork(): Result {
         coroutineScope {
@@ -58,7 +62,9 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
                 }
 
                 is RefreshAndGetIfLatestUseCase.AddressResult.Success -> {
-                    notificationHelper.notifyAddressChange(address)
+                    if (dataStore.get(PreferenceKeys.notificationEnabled) == true) {
+                        notificationHelper.notifyAddressChange(address)
+                    }
                 }
             }
         }
