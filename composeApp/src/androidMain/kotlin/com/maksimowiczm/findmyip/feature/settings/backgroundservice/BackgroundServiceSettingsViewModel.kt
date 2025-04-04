@@ -68,12 +68,11 @@ class BackgroundServiceSettingsViewModel(
 
     val notificationsEnabled = dataStore
         .observe(PreferenceKeys.notificationEnabled)
-        .map { it ?: false }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(2_000),
             initialValue = runBlocking {
-                dataStore.get(PreferenceKeys.notificationEnabled) ?: false
+                dataStore.get(PreferenceKeys.notificationEnabled)
             }
         )
 

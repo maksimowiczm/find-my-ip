@@ -67,9 +67,9 @@ private fun BackgroundServiceSettingsScreen(
 
         LaunchedEffect(permissionState, viewModel) {
             snapshotFlow { permissionState.status }.collectLatest {
-                if (it.isGranted) {
+                if (it.isGranted && notificationsEnabled == null) {
                     viewModel.enableNotifications()
-                } else {
+                } else if (!it.isGranted && notificationsEnabled != null) {
                     viewModel.disableNotifications()
                 }
             }
@@ -122,7 +122,7 @@ private fun BackgroundServiceSettingsScreen(
         inputEnabled = inputEnabled,
         enabled = enabled ?: return,
         onToggle = onToggle,
-        notificationsEnabled = notificationsEnabled,
+        notificationsEnabled = notificationsEnabled ?: false,
         onNotificationsToggle = onNotificationsToggle,
         modifier = modifier
     )
