@@ -6,6 +6,7 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SignalCellular4Bar
+import androidx.compose.material.icons.filled.SignalWifi4Bar
+import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,6 +35,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -299,9 +304,18 @@ private fun LazyListScope.enabledContent(
                 toggle()
             },
             headlineContent = {
-                Text(
-                    text = stringResource(Res.string.wi_fi)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.SignalWifi4Bar,
+                        contentDescription = null
+                    )
+                    Text(
+                        text = stringResource(Res.string.wi_fi)
+                    )
+                }
             },
             leadingContent = {
                 Checkbox(checked = state.wifiEnabled, onCheckedChange = { toggle() })
@@ -321,9 +335,18 @@ private fun LazyListScope.enabledContent(
                 toggle()
             },
             headlineContent = {
-                Text(
-                    text = stringResource(Res.string.cellular_data)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.SignalCellular4Bar,
+                        contentDescription = null
+                    )
+                    Text(
+                        text = stringResource(Res.string.cellular_data)
+                    )
+                }
             },
             leadingContent = {
                 Checkbox(checked = state.cellularDataEnabled, onCheckedChange = { toggle() })
@@ -343,9 +366,18 @@ private fun LazyListScope.enabledContent(
                 toggle()
             },
             headlineContent = {
-                Text(
-                    text = stringResource(Res.string.vpn)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.VpnKey,
+                        contentDescription = null
+                    )
+                    Text(
+                        text = stringResource(Res.string.vpn)
+                    )
+                }
             },
             leadingContent = {
                 Checkbox(checked = state.vpnEnabled, onCheckedChange = { toggle() })
