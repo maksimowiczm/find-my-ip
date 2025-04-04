@@ -1,7 +1,6 @@
 package com.maksimowiczm.findmyip.feature.settings.backgroundservice
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,7 +33,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,44 +46,6 @@ actual fun BackgroundServiceSettingsScreen(modifier: Modifier) {
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Composable
-private fun onToggleAPI32(viewModel: BackgroundServiceSettingsViewModel): (Boolean) -> Unit {
-    val permissionState = rememberPermissionState(
-        permission = android.Manifest.permission.POST_NOTIFICATIONS
-    )
-
-    // On enable ask for notification permission
-    val onToggle = remember(viewModel, permissionState) {
-        { enable: Boolean ->
-            if (enable) {
-                if (!permissionState.status.isGranted) {
-                    permissionState.launchPermissionRequest()
-                } else {
-                    viewModel.enable()
-                }
-            } else {
-                viewModel.disable()
-            }
-        }
-    }
-
-    // On permission state change enable/disable notifications
-    LaunchedEffect(permissionState, viewModel) {
-        snapshotFlow { permissionState.status }.drop(1).collect {
-            viewModel.enable()
-
-            if (it.isGranted) {
-                viewModel.enableNotifications()
-            } else {
-                viewModel.disableNotifications()
-            }
-        }
-    }
-
-    return onToggle
-}
-
 @Composable
 private fun BackgroundServiceSettingsScreen(
     modifier: Modifier = Modifier,
@@ -94,17 +55,40 @@ private fun BackgroundServiceSettingsScreen(
     val enabled by viewModel.enabled.collectAsStateWithLifecycle()
     val notificationsEnabled by viewModel.notificationsEnabled.collectAsStateWithLifecycle()
 
-    val onToggle = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        onToggleAPI32(viewModel)
-    } else {
-        remember(viewModel) {
-            { enabled: Boolean ->
-                if (enabled) {
+    val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val permissionState = rememberPermissionState(
+            permission = android.Manifest.permission.POST_NOTIFICATIONS
+        )
+
+        LaunchedEffect(permissionState, viewModel) {
+            snapshotFlow { permissionState.status }.collectLatest {
+                if (it.isGranted) {
                     viewModel.enableNotifications()
-                    viewModel.enable()
                 } else {
-                    viewModel.disable()
+                    viewModel.disableNotifications()
                 }
+            }
+        }
+
+        permissionState
+    } else {
+        null
+    }
+
+    val onToggle = remember(viewModel) {
+        { enabled: Boolean ->
+            if (enabled) {
+                if (
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    permissionState != null &&
+                    !permissionState.status.isGranted
+                ) {
+                    permissionState.launchPermissionRequest()
+                }
+
+                viewModel.enable()
+            } else {
+                viewModel.disable()
             }
         }
     }
@@ -112,6 +96,16 @@ private fun BackgroundServiceSettingsScreen(
     val onNotificationsToggle = remember(viewModel) {
         { enable: Boolean ->
             if (enable) {
+                if (
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    permissionState != null &&
+                    !permissionState.status.isGranted
+                ) {
+                    if (!permissionState.status.isGranted) {
+                        permissionState.launchPermissionRequest()
+                    }
+                }
+
                 viewModel.enableNotifications()
             } else {
                 viewModel.disableNotifications()
