@@ -20,8 +20,7 @@ class NotificationHelper(
 ) {
     fun notifyAddressChange(address: Address) {
         val title = runBlocking { getString(Res.string.notification_title_address_changed) }
-        val content =
-            runBlocking { getString(Res.string.notification_content_address_changed, address.ip) }
+        val content = address.ip
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)

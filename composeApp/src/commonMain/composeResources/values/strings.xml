@@ -92,6 +92,5 @@
 
     <string name="notification_channel_name_address_changed">Address changed</string>
     <string name="notification_title_address_changed">Your IP address has changed</string>
-    <string name="notification_content_address_changed">Your IP address has changed to %1$s</string>
 
 </resources>
