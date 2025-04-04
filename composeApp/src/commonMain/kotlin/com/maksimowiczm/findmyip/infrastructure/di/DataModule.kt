@@ -5,6 +5,7 @@ import com.maksimowiczm.findmyip.data.AddressRepositoryImpl
 import com.maksimowiczm.findmyip.data.HistoryRepositoryImpl
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
 import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
 import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,8 @@ val dataModule = module {
     }.binds(
         arrayOf(
             AddressRepository::class,
-            TestInternetProtocolsUseCase::class
+            TestInternetProtocolsUseCase::class,
+            RefreshAndGetIfLatestUseCase::class
         )
     )
 

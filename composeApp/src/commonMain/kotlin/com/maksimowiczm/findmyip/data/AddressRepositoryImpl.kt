@@ -8,6 +8,8 @@ import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.database.AddressDao
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
+import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase.AddressResult
 import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
 import com.maksimowiczm.findmyip.infrastructure.di.get
 import com.maksimowiczm.findmyip.infrastructure.di.observe
@@ -36,7 +38,8 @@ internal class AddressRepositoryImpl(
     database: FindMyIpDatabase,
     private val ioApplicationScope: CoroutineScope
 ) : AddressRepository,
-    TestInternetProtocolsUseCase {
+    TestInternetProtocolsUseCase,
+    RefreshAndGetIfLatestUseCase {
     private val addressDao: AddressDao = database.addressDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -185,6 +188,53 @@ internal class AddressRepositoryImpl(
                 PreferenceKeys.ipFeaturesTested to true
             )
         }
+    }
+
+    override suspend fun refreshAndGetIfLatest(
+        internetProtocolVersion: InternetProtocolVersion
+    ): AddressResult {
+        // Check if protocol is enabled
+        val enabled = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> dataStore.get(PreferenceKeys.ipv4Enabled)
+            InternetProtocolVersion.IPv6 -> dataStore.get(PreferenceKeys.ipv6Enabled)
+        } ?: false
+
+        if (!enabled) {
+            return AddressResult.Disabled
+        }
+
+        // Fetch the address
+        val addressStatus = when (internetProtocolVersion) {
+            InternetProtocolVersion.IPv4 -> ipv4source.blockingRefreshAddress()
+            InternetProtocolVersion.IPv6 -> ipv6source.blockingRefreshAddress()
+        }.getOrElse {
+            return AddressResult.Error(it)
+        }
+
+        // Check if the address is already in the database
+        val latest = addressDao.getLatest(internetProtocolVersion)
+
+        val address = if (latest != null) {
+            if (latest.ip != addressStatus.address.ip) {
+                Address.Success(
+                    ip = addressStatus.address.ip,
+                    networkType = addressStatus.networkType,
+                    protocol = internetProtocolVersion
+                )
+            } else {
+                return AddressResult.Skipped
+            }
+        } else {
+            Address.Success(
+                ip = addressStatus.address.ip,
+                networkType = addressStatus.networkType,
+                protocol = internetProtocolVersion
+            )
+        }
+
+        handleAddressEmission(address, internetProtocolVersion)
+
+        return AddressResult.Success(address)
     }
 }
 
