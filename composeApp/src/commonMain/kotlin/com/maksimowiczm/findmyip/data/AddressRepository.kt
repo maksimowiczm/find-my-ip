@@ -91,7 +91,7 @@ internal class AddressRepository(
             if (it is ObserveAddressUseCase.AddressStatus.Success) {
                 // Don't block
                 ioApplicationScope.launch {
-                    handleAddressEmission(it.address, InternetProtocolVersion.IPv6)
+                    handleAddressEmission(it.address, internetProtocolVersion)
                 }
             }
         }
