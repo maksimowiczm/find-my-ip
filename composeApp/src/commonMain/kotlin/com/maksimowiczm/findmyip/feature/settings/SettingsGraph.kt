@@ -26,9 +26,6 @@ data object HistorySettings
 data object InternetProtocolSettings
 
 @Serializable
-data object BackgroundServiceSettings
-
-@Serializable
 data object LanguageSettings
 
 inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
@@ -54,8 +51,7 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             targetState.destination.hasRoute<GlobalSettings>() ||
             targetState.destination.hasRoute<HistorySettings>() ||
             targetState.destination.hasRoute<InternetProtocolSettings>() ||
-            targetState.destination.hasRoute<LanguageSettings>() ||
-            targetState.destination.hasRoute<BackgroundServiceSettings>()
+            targetState.destination.hasRoute<LanguageSettings>()
         ) {
             ForwardBackwardComposableDefaults.exitTransition()
         } else {
@@ -68,8 +64,7 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             initialState.destination.hasRoute<GlobalSettings>() ||
             initialState.destination.hasRoute<HistorySettings>() ||
             initialState.destination.hasRoute<InternetProtocolSettings>() ||
-            initialState.destination.hasRoute<LanguageSettings>() ||
-            initialState.destination.hasRoute<BackgroundServiceSettings>()
+            initialState.destination.hasRoute<LanguageSettings>()
         ) {
             ForwardBackwardComposableDefaults.popEnterTransition()
         } else {
@@ -82,8 +77,7 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             targetState.destination.hasRoute<GlobalSettings>() ||
             targetState.destination.hasRoute<HistorySettings>() ||
             targetState.destination.hasRoute<InternetProtocolSettings>() ||
-            targetState.destination.hasRoute<LanguageSettings>() ||
-            targetState.destination.hasRoute<BackgroundServiceSettings>()
+            targetState.destination.hasRoute<LanguageSettings>()
         ) {
             ForwardBackwardComposableDefaults.popExitTransition()
         } else {
@@ -108,11 +102,6 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
                 },
                 onInternetProtocolSettings = {
                     navController.navigate(InternetProtocolSettings) {
-                        launchSingleTop = true
-                    }
-                },
-                onObserveIpSettings = {
-                    navController.navigate(BackgroundServiceSettings) {
                         launchSingleTop = true
                     }
                 },

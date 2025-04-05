@@ -27,7 +27,6 @@ import org.jetbrains.compose.resources.stringResource
 fun SettingsScreen(
     onHistorySettings: () -> Unit,
     onInternetProtocolSettings: () -> Unit,
-    onObserveIpSettings: () -> Unit,
     onLanguageSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
