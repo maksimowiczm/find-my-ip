@@ -64,9 +64,6 @@ kotlin {
             // Shimmer animation
             implementation(libs.compose.shimmer)
 
-            // Flowmvi framework
-            implementation(libs.bundles.flowmvi)
-
             // Ktor http client
             implementation(libs.ktor.client.core)
 
@@ -115,7 +112,6 @@ room {
 }
 
 dependencies {
-    debugImplementation(libs.flowmvi.debugger)
     listOf("kspAndroid").forEach {
         add(it, libs.androidx.room.compiler)
     }

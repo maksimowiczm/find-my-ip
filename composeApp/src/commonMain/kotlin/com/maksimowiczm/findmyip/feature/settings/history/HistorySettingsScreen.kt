@@ -41,18 +41,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.infrastructure.di.container
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
-import pro.respawn.flowmvi.api.IntentReceiver
-import pro.respawn.flowmvi.compose.dsl.subscribe
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HistorySettingsScreen(modifier: Modifier = Modifier) {
     HistorySettingsScreen(
         modifier = modifier,
-        container = container()
+        viewModel = koinViewModel()
     )
 }
 
@@ -60,19 +59,22 @@ fun HistorySettingsScreen(modifier: Modifier = Modifier) {
 @Composable
 internal fun HistorySettingsScreen(
     modifier: Modifier = Modifier,
-    container: HistorySettingsContainer = container()
-) = with(container.store) {
-    val state by subscribe()
+    viewModel: HistorySettingsViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     HistorySettingsScreen(
         state = state,
+        intent = remember(viewModel) { viewModel::onIntent },
         modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-private fun IntentReceiver<HistorySettingsIntent>.HistorySettingsScreen(
+private fun HistorySettingsScreen(
     state: HistorySettingsState,
+    intent: (HistorySettingsIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val onToggle = remember(state) {
@@ -211,7 +213,7 @@ private fun IntentReceiver<HistorySettingsIntent>.HistorySettingsScreen(
 
                 is HistorySettingsState.Enabled -> enabledContent(
                     state = state,
-                    intentReceiver = this@HistorySettingsScreen
+                    intent = intent
                 )
             }
         }
@@ -220,8 +222,8 @@ private fun IntentReceiver<HistorySettingsIntent>.HistorySettingsScreen(
 
 private fun LazyListScope.enabledContent(
     state: HistorySettingsState.Enabled,
-    intentReceiver: IntentReceiver<HistorySettingsIntent>
-) = with(intentReceiver) {
+    intent: (HistorySettingsIntent) -> Unit
+) {
     item {
         Text(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
