@@ -2,9 +2,10 @@ package com.maksimowiczm.findmyip.feature.currentaddress
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maksimowiczm.findmyip.data.AddressRepository
-import com.maksimowiczm.findmyip.data.model.Address
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
+import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase.AddressStatus
+import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -12,13 +13,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
 
-internal class CurrentAddressViewModel(private val addressRepository: AddressRepository) :
-    ViewModel() {
-    private val ipv4 = addressRepository
+internal class CurrentAddressViewModel(
+    observeAddressUseCase: ObserveAddressUseCase,
+    private val refreshAddressesUseCase: RefreshAddressesUseCase
+) : ViewModel() {
+    private val ipv4 = observeAddressUseCase
         .observeAddress(InternetProtocolVersion.IPv4)
         .map { it.toState() }
 
-    private val ipv6 = addressRepository
+    private val ipv6 = observeAddressUseCase
         .observeAddress(InternetProtocolVersion.IPv6)
         .map { it.toState() }
 
@@ -35,13 +38,13 @@ internal class CurrentAddressViewModel(private val addressRepository: AddressRep
     )
 
     fun refresh() {
-        addressRepository.refreshAddresses()
+        refreshAddressesUseCase.refreshAddresses()
     }
 }
 
-private fun Address.toState(): IpAddressState = when (this) {
-    is Address.Error -> IpAddressState.Error(message)
-    Address.Loading -> IpAddressState.Loading
-    is Address.Success -> IpAddressState.Success(ip)
-    is Address.Disabled -> IpAddressState.Disabled
+private fun AddressStatus.toState(): IpAddressState = when (this) {
+    is AddressStatus.Loading -> IpAddressState.Loading
+    is AddressStatus.Error -> IpAddressState.Error(e.message ?: "Unknown error")
+    is AddressStatus.Success -> IpAddressState.Success(address.ip)
+    is AddressStatus.Disabled -> IpAddressState.Disabled
 }

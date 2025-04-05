@@ -8,8 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
-import com.maksimowiczm.findmyip.domain.HistoryItem
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
+import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase.HistoryItem
 import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
 import com.maksimowiczm.findmyip.infrastructure.di.observe
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +19,8 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class HistoryRepositoryImpl(
-    database: FindMyIpDatabase,
-    private val dataStore: DataStore<Preferences>
-) : ObserveHistoryUseCase,
+class HistoryRepository(database: FindMyIpDatabase, private val dataStore: DataStore<Preferences>) :
+    ObserveHistoryUseCase,
     ShouldShowHistoryUseCase {
     private val addressDao = database.addressDao
 

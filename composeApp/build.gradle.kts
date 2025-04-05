@@ -31,6 +31,8 @@ kotlin {
 
             // Ktor http engine implementation
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.accompanist.permissions)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

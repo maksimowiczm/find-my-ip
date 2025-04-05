@@ -2,14 +2,13 @@ package com.maksimowiczm.findmyip.feature.settings.history
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -42,22 +41,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HistorySettingsScreen(modifier: Modifier = Modifier) {
-    HistorySettingsScreen(
-        modifier = modifier,
-        viewModel = koinViewModel()
-    )
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-internal fun HistorySettingsScreen(
+fun HistorySettingsScreen(
     modifier: Modifier = Modifier,
     viewModel: HistorySettingsViewModel = koinViewModel()
 ) {
@@ -77,20 +68,6 @@ private fun HistorySettingsScreen(
     intent: (HistorySettingsIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val onToggle = remember(state) {
-        {
-            val intent = when (state) {
-                HistorySettingsState.Loading -> null
-                is HistorySettingsState.Disabled -> HistorySettingsIntent.EnableHistory
-                is HistorySettingsState.Enabled -> HistorySettingsIntent.DisableHistory
-            }
-
-            if (intent != null) {
-                intent(intent)
-            }
-        }
-    }
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val transition = updateTransition(state)
 
@@ -113,81 +90,12 @@ private fun HistorySettingsScreen(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
             item {
-                transition.Crossfade(
-                    contentKey = { it is HistorySettingsState.Loading }
-                ) {
-                    when (it) {
-                        HistorySettingsState.Loading -> Card(
-                            onClick = {},
-                            modifier = Modifier
-                                .shimmer()
-                                .padding(16.dp),
-                            shape = MaterialTheme.shapes.large,
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        ) {
-                            ListItem(
-                                headlineContent = {
-                                    Text(
-                                        text = stringResource(Res.string.action_use_history),
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                },
-                                modifier = Modifier.padding(8.dp),
-                                trailingContent = {
-                                    Switch(
-                                        checked = state is HistorySettingsState.Enabled,
-                                        onCheckedChange = {}
-                                    )
-                                },
-                                colors = ListItemDefaults.colors(
-                                    containerColor = Color.Transparent
-                                )
-                            )
-                        }
-
-                        is HistorySettingsState.Loaded -> Card(
-                            onClick = onToggle,
-                            modifier = Modifier.padding(16.dp),
-                            shape = MaterialTheme.shapes.large,
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        ) {
-                            ListItem(
-                                headlineContent = {
-                                    Text(
-                                        text = stringResource(Res.string.action_use_history),
-                                        style = MaterialTheme.typography.bodyLarge
-                                    )
-                                },
-                                modifier = Modifier.padding(8.dp),
-                                trailingContent = {
-                                    Switch(
-                                        checked = state is HistorySettingsState.Enabled,
-                                        onCheckedChange = {
-                                            when (it) {
-                                                true -> intent(
-                                                    HistorySettingsIntent.EnableHistory
-                                                )
-
-                                                false -> intent(
-                                                    HistorySettingsIntent.DisableHistory
-                                                )
-                                            }
-                                        }
-                                    )
-                                },
-                                colors = ListItemDefaults.colors(
-                                    containerColor = Color.Transparent
-                                )
-                            )
-                        }
-                    }
-                }
+                CardButton(
+                    state = state,
+                    intent = intent,
+                    transition = transition,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
 
             when (state) {
@@ -220,33 +128,164 @@ private fun HistorySettingsScreen(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun CardButton(
+    state: HistorySettingsState,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier,
+    transition: Transition<HistorySettingsState> = updateTransition(state)
+) {
+    val onToggle = remember(state) {
+        {
+            val intent = when (state) {
+                HistorySettingsState.Loading -> null
+                is HistorySettingsState.Disabled -> HistorySettingsIntent.EnableHistory
+                is HistorySettingsState.Enabled -> HistorySettingsIntent.DisableHistory
+            }
+
+            if (intent != null) {
+                intent(intent)
+            }
+        }
+    }
+
+    transition.Crossfade(
+        contentKey = { it is HistorySettingsState.Loading },
+        modifier = modifier
+    ) {
+        when (it) {
+            HistorySettingsState.Loading -> Card(
+                onClick = {},
+                modifier = Modifier.shimmer(),
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            ) {
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(Res.string.action_use_history),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    },
+                    modifier = Modifier.padding(8.dp),
+                    trailingContent = {
+                        Switch(
+                            checked = state is HistorySettingsState.Enabled,
+                            onCheckedChange = {}
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = Color.Transparent
+                    )
+                )
+            }
+
+            is HistorySettingsState.Loaded -> Card(
+                onClick = onToggle,
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            ) {
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(Res.string.action_use_history),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    },
+                    modifier = Modifier.padding(8.dp),
+                    trailingContent = {
+                        Switch(
+                            checked = state is HistorySettingsState.Enabled,
+                            onCheckedChange = {
+                                when (it) {
+                                    true -> intent(
+                                        HistorySettingsIntent.EnableHistory
+                                    )
+
+                                    false -> intent(
+                                        HistorySettingsIntent.DisableHistory
+                                    )
+                                }
+                            }
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = Color.Transparent
+                    )
+                )
+            }
+        }
+    }
+}
+
 private fun LazyListScope.enabledContent(
     state: HistorySettingsState.Enabled,
     intent: (HistorySettingsIntent) -> Unit
 ) {
     item {
+        DuplicateIps(
+            state = state,
+            intent = intent
+        )
+    }
+
+    item {
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+    }
+
+    item {
+        NetworkType(
+            state = state,
+            intent = intent
+        )
+    }
+
+    item {
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+    }
+
+    item {
+        Worker(
+            state = state,
+            intent = intent
+        )
+    }
+}
+
+@Composable
+private fun DuplicateIps(
+    state: HistorySettingsState.Enabled,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
         Text(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.headline_duplicate_ips),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
-    }
 
-    item {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = stringResource(Res.string.description_duplicate_ips),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Justify
         )
-    }
 
-    item {
-        Spacer(Modifier.height(8.dp))
-    }
-
-    item {
         val toggle = remember(state) {
             {
                 intent(HistorySettingsIntent.ToggleDuplicates(!state.saveDuplicates))
@@ -268,43 +307,46 @@ private fun LazyListScope.enabledContent(
             }
         )
     }
+}
 
-    item {
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
+@Composable
+private fun NetworkType(
+    state: HistorySettingsState.Enabled,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val toggle = remember(state) {
+        { networkType: NetworkType ->
+            when (networkType) {
+                NetworkType.WIFI -> intent(HistorySettingsIntent.ToggleWifi(!state.wifiEnabled))
+                NetworkType.MOBILE -> intent(
+                    HistorySettingsIntent.ToggleCellularData(!state.cellularDataEnabled)
+                )
+
+                NetworkType.VPN -> intent(HistorySettingsIntent.ToggleVpn(!state.vpnEnabled))
+                NetworkType.UNKNOWN -> Unit
+            }
+        }
     }
 
-    item {
+    Column(
+        modifier = modifier
+    ) {
         Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.headline_network_type),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
-    }
 
-    item {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = stringResource(Res.string.description_network_type),
             style = MaterialTheme.typography.bodyMedium
         )
-    }
-
-    item {
-        val toggle = remember(state) {
-            {
-                intent(HistorySettingsIntent.ToggleWifi(!state.wifiEnabled))
-            }
-        }
 
         ListItem(
-            modifier = Modifier.clickable {
-                toggle()
-            },
+            modifier = Modifier.clickable { toggle(NetworkType.WIFI) },
             headlineContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -320,22 +362,15 @@ private fun LazyListScope.enabledContent(
                 }
             },
             leadingContent = {
-                Checkbox(checked = state.wifiEnabled, onCheckedChange = { toggle() })
+                Checkbox(
+                    checked = state.wifiEnabled,
+                    onCheckedChange = { toggle(NetworkType.WIFI) }
+                )
             }
         )
-    }
-
-    item {
-        val toggle = remember(state) {
-            {
-                intent(HistorySettingsIntent.ToggleCellularData(!state.cellularDataEnabled))
-            }
-        }
 
         ListItem(
-            modifier = Modifier.clickable {
-                toggle()
-            },
+            modifier = Modifier.clickable { toggle(NetworkType.MOBILE) },
             headlineContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -351,22 +386,14 @@ private fun LazyListScope.enabledContent(
                 }
             },
             leadingContent = {
-                Checkbox(checked = state.cellularDataEnabled, onCheckedChange = { toggle() })
+                Checkbox(checked = state.cellularDataEnabled, onCheckedChange = {
+                    toggle(NetworkType.MOBILE)
+                })
             }
         )
-    }
-
-    item {
-        val toggle = remember(state) {
-            {
-                intent(HistorySettingsIntent.ToggleVpn(!state.vpnEnabled))
-            }
-        }
 
         ListItem(
-            modifier = Modifier.clickable {
-                toggle()
-            },
+            modifier = Modifier.clickable { toggle(NetworkType.VPN) },
             headlineContent = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -382,7 +409,59 @@ private fun LazyListScope.enabledContent(
                 }
             },
             leadingContent = {
-                Checkbox(checked = state.vpnEnabled, onCheckedChange = { toggle() })
+                Checkbox(checked = state.vpnEnabled, onCheckedChange = { toggle(NetworkType.VPN) })
+            }
+        )
+    }
+}
+
+@Composable
+private fun Worker(
+    state: HistorySettingsState.Enabled,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val onToggle = remember(intent) {
+        { enabled: Boolean ->
+            if (enabled) {
+                intent(HistorySettingsIntent.ToggleWorker(true))
+            } else {
+                intent(HistorySettingsIntent.ToggleWorker(false))
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(Res.string.headline_background_worker),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Text(
+            text = stringResource(Res.string.description_background_worker),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(Res.string.action_use_background_worker),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
+            modifier = Modifier.clickable {
+                onToggle(!state.workerEnabled)
+            },
+            trailingContent = {
+                Switch(
+                    checked = state.workerEnabled,
+                    onCheckedChange = { onToggle(it) }
+                )
             }
         )
     }

@@ -29,7 +29,7 @@ abstract class AddressDao {
         LIMIT 1
         """
     )
-    protected abstract suspend fun getLatest(protocol: InternetProtocolVersion): AddressEntity?
+    abstract suspend fun getLatest(protocol: InternetProtocolVersion): AddressEntity?
 
     @Insert
     protected abstract suspend fun insert(address: AddressEntity)

@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.37.2"
 agp = "8.9.1"
 android-compileSdk = "35"
 android-minSdk = "26"
@@ -20,6 +21,7 @@ kotlinxDatetime = "0.6.2"
 ktor = "3.1.1"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
