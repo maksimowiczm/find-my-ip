@@ -40,31 +40,24 @@ class HistorySettingsViewModel(private val dataStore: DataStore<Preferences>) : 
     )
 
     fun onIntent(intent: HistorySettingsIntent) {
-        intent.let {
-            viewModelScope.launch {
-                when (it) {
-                    is HistorySettingsIntent.EnableHistory -> dataStore.enableHistory()
+        viewModelScope.launch {
+            when (intent) {
+                is HistorySettingsIntent.EnableHistory -> dataStore.enableHistory()
 
-                    is HistorySettingsIntent.DisableHistory -> {
-                        dataStore.set(PreferenceKeys.historyEnabled to false)
-                    }
+                is HistorySettingsIntent.DisableHistory ->
+                    dataStore.set(PreferenceKeys.historyEnabled to false)
 
-                    is HistorySettingsIntent.ToggleDuplicates -> {
-                        dataStore.set(PreferenceKeys.historySaveDuplicates to it.enabled)
-                    }
+                is HistorySettingsIntent.ToggleDuplicates ->
+                    dataStore.set(PreferenceKeys.historySaveDuplicates to intent.enabled)
 
-                    is HistorySettingsIntent.ToggleCellularData -> {
-                        dataStore.set(PreferenceKeys.saveMobileHistory to it.enabled)
-                    }
+                is HistorySettingsIntent.ToggleCellularData ->
+                    dataStore.set(PreferenceKeys.saveMobileHistory to intent.enabled)
 
-                    is HistorySettingsIntent.ToggleVpn -> {
-                        dataStore.set(PreferenceKeys.saveVpnHistory to it.enabled)
-                    }
+                is HistorySettingsIntent.ToggleVpn ->
+                    dataStore.set(PreferenceKeys.saveVpnHistory to intent.enabled)
 
-                    is HistorySettingsIntent.ToggleWifi -> {
-                        dataStore.set(PreferenceKeys.saveWifiHistory to it.enabled)
-                    }
-                }
+                is HistorySettingsIntent.ToggleWifi ->
+                    dataStore.set(PreferenceKeys.saveWifiHistory to intent.enabled)
             }
         }
     }
@@ -77,6 +70,8 @@ private suspend fun DataStore<Preferences>.enableHistory() {
         prefs[PreferenceKeys.saveWifiHistory].apply {
             if (this == null) {
                 prefs[PreferenceKeys.saveWifiHistory] = true
+                prefs[PreferenceKeys.saveMobileHistory] = true
+                prefs[PreferenceKeys.saveVpnHistory] = true
             }
         }
     }
