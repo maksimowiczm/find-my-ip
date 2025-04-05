@@ -5,13 +5,12 @@ import androidx.work.WorkManager
 import com.maksimowiczm.findmyip.data.NotificationHelper
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
-import com.maksimowiczm.findmyip.feature.settings.backgroundservice.BackgroundServiceSettingsViewModel
+import com.maksimowiczm.findmyip.data.WorkerManager
 import com.maksimowiczm.findmyip.feature.settings.language.LanguageViewModel
 import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -28,10 +27,9 @@ actual val platformModule = module {
         )
     }
 
-    viewModel {
-        BackgroundServiceSettingsViewModel(
-            workManager = WorkManager.getInstance(androidApplication()),
-            dataStore = get()
+    factory {
+        WorkerManager(
+            workManager = WorkManager.getInstance(androidApplication())
         )
     }
 }

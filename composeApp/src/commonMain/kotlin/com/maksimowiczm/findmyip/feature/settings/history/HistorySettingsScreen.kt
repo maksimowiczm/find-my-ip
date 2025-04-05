@@ -248,6 +248,19 @@ private fun LazyListScope.enabledContent(
             intent = intent
         )
     }
+
+    item {
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+    }
+
+    item {
+        Worker(
+            state = state,
+            intent = intent
+        )
+    }
 }
 
 @Composable
@@ -260,7 +273,7 @@ private fun DuplicateIps(
         modifier = modifier
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.headline_duplicate_ips),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
@@ -320,16 +333,14 @@ private fun NetworkType(
         modifier = modifier
     ) {
         Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.headline_network_type),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
 
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = stringResource(Res.string.description_network_type),
             style = MaterialTheme.typography.bodyMedium
         )
@@ -399,6 +410,58 @@ private fun NetworkType(
             },
             leadingContent = {
                 Checkbox(checked = state.vpnEnabled, onCheckedChange = { toggle(NetworkType.VPN) })
+            }
+        )
+    }
+}
+
+@Composable
+private fun Worker(
+    state: HistorySettingsState.Enabled,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val onToggle = remember(intent) {
+        { enabled: Boolean ->
+            if (enabled) {
+                intent(HistorySettingsIntent.ToggleWorker(true))
+            } else {
+                intent(HistorySettingsIntent.ToggleWorker(false))
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(Res.string.headline_background_worker),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Text(
+            text = stringResource(Res.string.description_background_worker),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(Res.string.action_use_background_worker),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
+            modifier = Modifier.clickable {
+                onToggle(!state.workerEnabled)
+            },
+            trailingContent = {
+                Switch(
+                    checked = state.workerEnabled,
+                    onCheckedChange = { onToggle(it) }
+                )
             }
         )
     }

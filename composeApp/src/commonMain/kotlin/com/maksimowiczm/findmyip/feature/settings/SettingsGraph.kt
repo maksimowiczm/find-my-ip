@@ -9,7 +9,6 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.maksimowiczm.findmyip.feature.settings.backgroundservice.BackgroundServiceSettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.global.SettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.history.HistorySettingsScreen
 import com.maksimowiczm.findmyip.feature.settings.internetprotocol.InternetProtocolSettingsScreen
@@ -139,14 +138,6 @@ inline fun <reified T : Any> NavGraphBuilder.settingsGraph(
             popExitTransition = popExit
         ) {
             InternetProtocolSettingsScreen()
-        }
-        composable<BackgroundServiceSettings>(
-            enterTransition = enter,
-            exitTransition = exit,
-            popEnterTransition = popEnter,
-            popExitTransition = popExit
-        ) {
-            BackgroundServiceSettingsScreen()
         }
         composable<LanguageSettings>(
             enterTransition = enter,

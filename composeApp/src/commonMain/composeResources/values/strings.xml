@@ -77,7 +77,7 @@
     <string name="action_save_duplicate_ips">Save duplicate IPs</string>
     <string name="action_use_history">Use history</string>
     <string name="action_test_internet_protocols">Test Internet Protocols</string>
-    <string name="action_use_background_service">Use background service</string>
+    <string name="action_use_background_worker">Use background worker</string>
 
     <string name="link_doze" translatable="false">https://source.android.com/docs/core/power/platform_mgmt</string>
     <string name="link_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>

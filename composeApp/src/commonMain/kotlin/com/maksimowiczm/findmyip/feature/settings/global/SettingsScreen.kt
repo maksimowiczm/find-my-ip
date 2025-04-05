@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.SettingsEthernet
@@ -89,26 +88,6 @@ fun SettingsScreen(
                         }
 
                         Text(text)
-                    }
-                )
-            }
-
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(Res.string.headline_background_service))
-                    },
-                    modifier = Modifier
-                        .clickable { onObserveIpSettings() }
-                        .padding(horizontal = 8.dp),
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Default.Engineering,
-                            contentDescription = null
-                        )
-                    },
-                    supportingContent = {
-                        Text(stringResource(Res.string.description_background_service))
                     }
                 )
             }
