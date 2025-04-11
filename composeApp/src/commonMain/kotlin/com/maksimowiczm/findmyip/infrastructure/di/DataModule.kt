@@ -51,4 +51,18 @@ val dataModule = module {
             ShouldShowHistoryUseCase::class
         )
     )
+
+//    factory {
+//        Fakes
+//    }.binds(
+//        arrayOf(
+//            ClearHistoryUseCase::class,
+//            ObserveAddressUseCase::class,
+//            ObserveHistoryUseCase::class,
+//            RefreshAddressesUseCase::class,
+//            RefreshAndGetIfLatestUseCase::class,
+//            ShouldShowHistoryUseCase::class,
+//            TestInternetProtocolsUseCase::class
+//        )
+//    )
 }
