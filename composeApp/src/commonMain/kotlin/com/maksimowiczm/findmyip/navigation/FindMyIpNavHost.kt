@@ -1,88 +1,119 @@
 package com.maksimowiczm.findmyip.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.maksimowiczm.findmyip.ui.history.HistoryScreen
-import com.maksimowiczm.findmyip.ui.home.HomeScreen
+import com.maksimowiczm.findmyip.feature.currentaddress.CurrentAddressScreen
+import com.maksimowiczm.findmyip.feature.history.HistoryScreen
+import com.maksimowiczm.findmyip.feature.settings.HistorySettings
+import com.maksimowiczm.findmyip.feature.settings.InternetProtocolSettings
+import com.maksimowiczm.findmyip.feature.settings.settingsGraph
+import com.maksimowiczm.findmyip.ui.FindMyIpAppState
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
-import com.maksimowiczm.findmyip.ui.settings.SettingsScreen
-import com.maksimowiczm.findmyip.ui.settings.buildPlatformSettings
-import com.maksimowiczm.findmyip.ui.settings.history.AdvancedHistorySettingsScreen
-import com.maksimowiczm.findmyip.ui.settings.platformSettingsGraph
+import com.maksimowiczm.findmyip.ui.rememberFindMyIpAppState
+import findmyip.composeapp.generated.resources.*
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 
-sealed interface TopRoute {
-    @Serializable
-    data object Home : TopRoute
+@Serializable
+sealed interface Destination
 
-    @Serializable
-    data object History : TopRoute
+@Serializable
+data object CurrentAddress : Destination
 
-    @Serializable
-    data object Settings : TopRoute {
-        @Serializable
-        data object SettingsHome
+@Serializable
+data object History : Destination
 
-        @Serializable
-        data object AdvancedHistorySettings
-    }
-}
+@Serializable
+data object Settings : Destination
 
 @Composable
 fun FindMyIpNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    appState: FindMyIpAppState = rememberFindMyIpAppState(rememberNavController())
 ) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = TopRoute.Home
+    val selectedTopRoute = appState.currentTopRoute
+
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            item(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = stringResource(Res.string.action_go_to_home)
+                    )
+                },
+                label = { Text(stringResource(Res.string.headline_home)) },
+                selected = selectedTopRoute == CurrentAddress,
+                onClick = { appState.navigate(CurrentAddress) }
+            )
+            item(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.History,
+                        contentDescription = stringResource(Res.string.action_go_to_history)
+                    )
+                },
+                label = { Text(stringResource(Res.string.headline_history)) },
+                selected = selectedTopRoute == History,
+                onClick = { appState.navigate(History) }
+            )
+            item(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(Res.string.action_go_to_settings)
+                    )
+                },
+                label = { Text(stringResource(Res.string.headline_settings)) },
+                selected = selectedTopRoute == Settings,
+                onClick = { appState.navigate(Settings) }
+            )
+        }
     ) {
-        composable<TopRoute.Home>(
-            enterTransition = { materialFadeThroughIn() },
-            exitTransition = { materialFadeThroughOut() }
+        NavHost(
+            navController = appState.navController,
+            startDestination = CurrentAddress,
+            modifier = modifier
         ) {
-            HomeScreen()
-        }
-        composable<TopRoute.History>(
-            enterTransition = { materialFadeThroughIn() },
-            exitTransition = { materialFadeThroughOut() }
-        ) {
-            HistoryScreen()
-        }
-        navigation<TopRoute.Settings>(
-            startDestination = TopRoute.Settings.SettingsHome
-        ) {
-            settingsComposable<TopRoute.Settings.SettingsHome> {
-                SettingsScreen(
-                    onAdvancedHistorySettingsClick = {
-                        navController.navigate(
-                            route = TopRoute.Settings.AdvancedHistorySettings,
-                            navOptions = navOptions {
-                                launchSingleTop = true
-                            }
-                        )
-                    },
-                    platformSettings = buildPlatformSettings(navController)
-                )
+            composable<CurrentAddress>(
+                enterTransition = { materialFadeThroughIn() },
+                exitTransition = { materialFadeThroughOut() }
+            ) {
+                CurrentAddressScreen()
             }
-            settingsComposable<TopRoute.Settings.AdvancedHistorySettings> {
-                AdvancedHistorySettingsScreen(
-                    onNavigateUp = {
-                        navController.popBackStack<TopRoute.Settings.AdvancedHistorySettings>(
-                            inclusive = true
-                        )
+            composable<History>(
+                enterTransition = { materialFadeThroughIn() },
+                exitTransition = { materialFadeThroughOut() }
+            ) {
+                HistoryScreen(
+                    onHistorySettingsClick = {
+                        appState.navController.navigate(HistorySettings) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onInternetProtocolSettingsClick = {
+                        appState.navController.navigate(InternetProtocolSettings) {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
-            platformSettingsGraph(navController)
+            settingsGraph<Settings>(
+                navController = appState.navController,
+                enterTransition = { materialFadeThroughIn() },
+                exitTransition = { materialFadeThroughOut() }
+            )
         }
     }
 }

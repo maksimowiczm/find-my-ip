@@ -1,52 +1,104 @@
 package com.maksimowiczm.findmyip.network
 
-import java.io.IOException
-import java.net.MalformedURLException
-import java.net.URL
+import co.touchlab.kermit.Logger
+import com.maksimowiczm.findmyip.data.model.NetworkType
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-class NetworkAddressDataSourceImpl(
-    override val providerURL: String,
+internal class NetworkAddressDataSourceImpl(
+    private val providerURL: String,
     private val connectivityObserver: ConnectivityObserver,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : NetworkAddressDataSource {
-    private val scope = CoroutineScope(ioDispatcher)
-    private val currentAddress = MutableStateFlow<AddressStatus>(AddressStatus.Loading)
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : NetworkAddressDataSource,
+    DisposableHandle {
+    private val mutex = Mutex()
+    private val ioScope = CoroutineScope(ioDispatcher)
 
-    init {
-        scope.launch {
-            refreshAddress()
+    private val client = HttpClient {
+        install(HttpTimeout) {
+            connectTimeoutMillis = 5_000
+            requestTimeoutMillis = 5_000
         }
     }
 
-    override fun observeAddress(): Flow<AddressStatus> = currentAddress
+    private val state = MutableStateFlow<AddressStatus>(AddressStatus.InProgress)
 
-    override suspend fun refreshAddress(): Result<NetworkAddress> = withContext(ioDispatcher) {
-        currentAddress.emit(AddressStatus.Loading)
+    override val addressFlow = state.asStateFlow()
 
-        val networkType = connectivityObserver.getNetworkType()
+    override fun refreshAddress(): AddressRefreshResult = with(ioScope) {
+        if (!mutex.tryLock()) {
+            return AddressRefreshResult.AlreadyInProgress
+        }
 
-        return@withContext try {
-            val ip = URL(providerURL).readText()
-            val address = NetworkAddress(
-                ip = ip,
+        launch {
+            state.value = AddressStatus.InProgress
+
+            val result = try {
+                Logger.d { "Executing network request to $providerURL" }
+
+                // Run in parallel
+                val (networkType, ip) = awaitAll(
+                    async {
+                        connectivityObserver.getNetworkType()
+                    },
+                    async {
+                        runCatching {
+                            val response = client.get(providerURL)
+                            response.bodyAsText()
+                        }
+                    }
+                )
+
+                @Suppress("UNCHECKED_CAST")
+                ip as Result<String>
+                networkType as NetworkType
+
+                AddressStatus.Success(
+                    address = ip.getOrThrow(),
+                    networkType = networkType
+                )
+            } catch (e: Exception) {
+                AddressStatus.Error(e)
+            }
+
+            state.value = result
+        }.invokeOnCompletion {
+            mutex.unlock()
+        }
+
+        return AddressRefreshResult.Ok
+    }
+
+    override suspend fun blockingRefreshAddress(): Result<AddressStatus.Success> = mutex.withLock {
+        runCatching {
+            Logger.d { "Executing network request to $providerURL" }
+
+            // Run in parallel
+            val networkType = connectivityObserver.getNetworkType()
+            val response = client.get(providerURL)
+            val ip = response.bodyAsText()
+
+            AddressStatus.Success(
+                address = ip,
                 networkType = networkType
             )
-
-            currentAddress.emit(AddressStatus.Success(address))
-            Result.success(address)
-        } catch (e: MalformedURLException) {
-            // What a terrible failure, go boom
-            throw IllegalArgumentException("Invalid URL: $providerURL", e)
-        } catch (e: IOException) {
-            currentAddress.emit(AddressStatus.Error(e))
-            Result.failure(e)
         }
+    }
+
+    override fun dispose() {
+        client.close()
     }
 }

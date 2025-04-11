@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import java.util.Locale
 
-class SystemInfoRepository(private val context: Context) {
+internal class SystemInfoRepository(private val context: Context) {
     val defaultLocale: Locale
         get() {
             val compat = AppCompatDelegate.getApplicationLocales().get(0)

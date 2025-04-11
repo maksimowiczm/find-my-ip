@@ -7,3 +7,5 @@ import org.koin.core.module.Module
 fun getRoomDatabase(builder: RoomDatabase.Builder<FindMyIpDatabase>) = builder.build()
 
 expect val databaseModule: Module
+
+const val DATABASE_NAME = "database"

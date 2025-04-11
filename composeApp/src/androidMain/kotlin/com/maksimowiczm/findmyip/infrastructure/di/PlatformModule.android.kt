@@ -1,43 +1,37 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
-import com.maksimowiczm.findmyip.data.AddressRefreshWorker
-import com.maksimowiczm.findmyip.data.AddressRefreshWorkerManager
-import com.maksimowiczm.findmyip.data.IsMigratedFrom1
+import androidx.core.app.NotificationManagerCompat
+import androidx.work.WorkManager
+import com.maksimowiczm.findmyip.data.NotificationHelper
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
-import com.maksimowiczm.findmyip.isMigratedFrom1
+import com.maksimowiczm.findmyip.data.WorkerManager
+import com.maksimowiczm.findmyip.feature.settings.history.AndroidHistorySettingsViewModel
+import com.maksimowiczm.findmyip.feature.settings.language.LanguageViewModel
 import com.maksimowiczm.findmyip.network.ConnectivityObserver
-import com.maksimowiczm.findmyip.ui.settings.autorefresh.AutoRefreshSettingsViewModel
-import com.maksimowiczm.findmyip.ui.settings.history.BackgroundWorkerViewModel
-import com.maksimowiczm.findmyip.ui.settings.language.LanguageViewModel
-import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.workmanager.dsl.workerOf
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 actual val platformModule = module {
-    single { createDatastore(androidContext()) }
-    factory { StringFormatRepository(androidContext()) }
-
-    viewModelOf(::BackgroundWorkerViewModel)
+    factoryOf(::SystemInfoRepository)
+    factoryOf(::StringFormatRepository)
+    viewModelOf(::LanguageViewModel)
+    singleOf(::ConnectivityObserver)
+    viewModelOf(::AndroidHistorySettingsViewModel)
 
     factory {
-        AddressRefreshWorkerManager(
-            context = androidContext(),
-            dataStore = get()
+        NotificationHelper(
+            context = androidApplication(),
+            notificationManager = NotificationManagerCompat.from(androidApplication())
         )
     }
-    workerOf(::AddressRefreshWorker)
 
-    factory { androidContext().isMigratedFrom1 }.bind<IsMigratedFrom1>()
-
-    factoryOf(::SystemInfoRepository)
-
-    viewModelOf(::LanguageViewModel)
-
-    viewModelOf(::AutoRefreshSettingsViewModel)
-
-    factoryOf(::ConnectivityObserver)
+    factory {
+        WorkerManager(
+            workManager = WorkManager.getInstance(androidApplication())
+        )
+    }
 }

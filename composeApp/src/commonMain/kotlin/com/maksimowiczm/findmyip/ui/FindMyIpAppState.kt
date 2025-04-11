@@ -11,7 +11,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.maksimowiczm.findmyip.navigation.TopRoute
+import com.maksimowiczm.findmyip.navigation.CurrentAddress
+import com.maksimowiczm.findmyip.navigation.Destination
+import com.maksimowiczm.findmyip.navigation.History
+import com.maksimowiczm.findmyip.navigation.Settings
 
 @Composable
 fun rememberFindMyIpAppState(
@@ -24,35 +27,34 @@ fun rememberFindMyIpAppState(
 
 @Stable
 class FindMyIpAppState(val navController: NavHostController) {
-    val currentTopRoute: TopRoute?
+    val currentTopRoute: Destination?
         @Composable get() {
             val destination = navController.currentBackStackEntryAsState().value?.destination
 
             return when {
-                destination.isRouteInHierarchy<TopRoute.Home>() -> TopRoute.Home
-                destination.isRouteInHierarchy<TopRoute.History>() -> TopRoute.History
-                destination.isRouteInHierarchy<TopRoute.Settings>() -> TopRoute.Settings
+                destination.isRouteInHierarchy<CurrentAddress>() -> CurrentAddress
+                destination.isRouteInHierarchy<History>() -> History
+                destination.isRouteInHierarchy<Settings>() -> Settings
                 else -> null
             }
         }
 
-    inline fun <reified T : TopRoute> navigate(destination: T) {
+    inline fun <reified T : Destination> navigate(destination: T) {
         val start = navController.graph.findStartDestination().id
 
-        val topDestination = navController.currentDestination?.hierarchy?.first()
-        if (topDestination.isRouteInHierarchy<T>()) {
-            return
-        }
+        // TODO disable animation if destination is already on screen
+//        val topDestination = navController.currentDestination?.hierarchy?.first()
+//        if (topDestination.isRouteInHierarchy<T>()) {
+//            return
+//        }
 
         navController.navigate(
             route = destination,
             navOptions = navOptions {
                 popUpTo(start) {
-                    saveState = true
                 }
 
                 launchSingleTop = true
-                restoreState = true
             }
         )
     }

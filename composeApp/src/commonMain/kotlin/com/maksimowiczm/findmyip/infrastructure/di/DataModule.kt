@@ -1,50 +1,54 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.data.AddressRepository
-import com.maksimowiczm.findmyip.data.AddressRepositoryImpl
-import com.maksimowiczm.findmyip.data.HistoryManager
-import com.maksimowiczm.findmyip.data.HistoryManagerImpl
-import com.maksimowiczm.findmyip.data.initializer.AppInitializer
-import com.maksimowiczm.findmyip.data.initializer.IpFeaturesInitializer
-import com.maksimowiczm.findmyip.data.initializer.NetworkTypeInitializer
+import com.maksimowiczm.findmyip.data.HistoryRepository
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
-import org.koin.core.qualifier.named
-import org.koin.dsl.bind
+import com.maksimowiczm.findmyip.domain.ClearHistoryUseCase
+import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
+import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
+import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
+import com.maksimowiczm.findmyip.domain.ShouldShowHistoryUseCase
+import com.maksimowiczm.findmyip.domain.TestInternetProtocolsUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import org.koin.core.qualifier.qualifier
+import org.koin.dsl.binds
 import org.koin.dsl.module
 
 val dataModule = module {
-    factory {
-        AddressRepositoryImpl(
-            ipv4DataSource = get(named(InternetProtocolVersion.IPv4)),
-            ipv6DataSource = get(named(InternetProtocolVersion.IPv6)),
-            dataStore = get(),
-            dao = get(),
-            connectivityObserver = get()
-        )
-    }.bind<AddressRepository>()
-
-//    addDemoAddressRepository()
-
-    factory {
-        AppInitializer(
-            initializers = listOf(
-                NetworkTypeInitializer(get()),
-                IpFeaturesInitializer(
-                    dataStore = get(),
-                    ipv4Source = get(named(InternetProtocolVersion.IPv4)),
-                    ipv6Source = get(named(InternetProtocolVersion.IPv6))
-                )
-            )
-        )
+    single(qualifier("ioScope")) {
+        CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 
     factory {
-        HistoryManagerImpl(
+        AddressRepository(
+            ipv4source = get(qualifier(InternetProtocolVersion.IPv4)),
+            ipv6source = get(qualifier(InternetProtocolVersion.IPv6)),
             dataStore = get(),
-            dao = get(),
-            ipv4DataSource = get(named(InternetProtocolVersion.IPv4)),
-            ipv6DataSource = get(named(InternetProtocolVersion.IPv6)),
-            connectivityObserver = get()
+            database = get(),
+            ioApplicationScope = get(qualifier("ioScope"))
         )
-    }.bind<HistoryManager>()
+    }.binds(
+        arrayOf(
+            ObserveAddressUseCase::class,
+            RefreshAddressesUseCase::class,
+            RefreshAndGetIfLatestUseCase::class,
+            TestInternetProtocolsUseCase::class,
+            ClearHistoryUseCase::class
+        )
+    )
+
+    factory {
+        HistoryRepository(
+            database = get(),
+            dataStore = get()
+        )
+    }.binds(
+        arrayOf(
+            ObserveHistoryUseCase::class,
+            ShouldShowHistoryUseCase::class
+        )
+    )
 }
