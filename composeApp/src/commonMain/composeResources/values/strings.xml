@@ -62,7 +62,7 @@
 
     <string name="filter_all">All</string>
 
-    <string name="notification_channel_name_address_changed">Address changed</string>
+    <string name="notification_channel_name_address_changed">Address change</string>
     <string name="notification_title_address_changed">Your IP address has changed</string>
 
 </resources>
