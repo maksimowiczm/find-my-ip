@@ -89,8 +89,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 9
-        versionName = "v2.0.3"
+        versionCode = 10
+        versionName = "v3.0.0"
     }
     packaging {
         resources {
@@ -98,7 +98,7 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = true
         }
     }
@@ -119,10 +119,4 @@ dependencies {
     listOf("kspAndroid").forEach {
         add(it, libs.androidx.room.compiler)
     }
-}
-
-composeCompiler {
-    stabilityConfigurationFiles.add(
-        rootProject.layout.projectDirectory.file("stability_definitions.txt")
-    )
 }

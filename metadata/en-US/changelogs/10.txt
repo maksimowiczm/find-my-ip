@@ -1,0 +1,8 @@
+Breaking Changes
+- Background worker has been reset
+- Users can no longer change the worker run interval
+
+New Features
+- New UI
+- Notification on IP change
+- Users can manually test the internet protocol
