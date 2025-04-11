@@ -22,6 +22,8 @@ kotlin {
         freeCompilerArgs.add("-Xwhen-guards")
     }
 
+    jvm("desktop")
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)

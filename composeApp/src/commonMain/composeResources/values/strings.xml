@@ -55,10 +55,13 @@
     <string name="description_background_service_notification">Notify on IP change</string>
     <string name="description_background_service_disabled">To see and change the background service settings, enable the background service first.</string>
     <string name="description_notify_on_new_ip">Notify when your IP address changes</string>
+    <string name="description_translation_warning">Translations are created by volunteers. They may not be perfect and some translations may be missing. If you notice any mistakes don't hesitate to help improving them.</string>
 
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>
     <string name="neutral_help_translating_the_app">Help translate the app</string>
+
+    <string name="positive_ok">OK</string>
 
     <string name="error_unavailable">Unavailable</string>
 

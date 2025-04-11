@@ -28,7 +28,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -76,6 +80,25 @@ internal fun LanguageSettingsScreen(
     onSystemLanguageSelect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showWarningDialog by rememberSaveable { mutableStateOf(false) }
+    val onLanguageSelect = remember(onLanguageSelect) {
+        { tag: String ->
+            showWarningDialog = true
+            onLanguageSelect(tag)
+        }
+    }
+    val onSystemLanguageSelect = remember(onSystemLanguageSelect) {
+        {
+            showWarningDialog = true
+            onSystemLanguageSelect()
+        }
+    }
+    if (showWarningDialog) {
+        LanguageWarningDialog(
+            onDismissRequest = { showWarningDialog = false }
+        )
+    }
+
     val uriHandler = LocalUriHandler.current
     val translateLink = stringResource(Res.string.link_translate)
     val onHelpTranslate = remember(uriHandler, translateLink) {
