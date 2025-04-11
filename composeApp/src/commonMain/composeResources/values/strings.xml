@@ -31,10 +31,11 @@
     <string name="headline_duplicate_ips">Duplicate IPs</string>
     <string name="headline_background_service">Background service</string>
     <string name="headline_notification">Notification</string>
+    <string name="headline_notify_on_new_ip">Notify on new IP</string>
 
     <string name="unit_minutes_short" description="Abbreviation for minutes">min</string>
 
-    <string name="description_background_worker">Periodically run in the background to check your IP address</string>
+    <string name="description_background_worker">Periodically run in the background to fetch your IP address</string>
     <string name="description_doze">Doze mode is a battery saving feature in Android. It can prevent the background worker from running if the device is not used for a long time.</string>
     <string name="description_interval_less_than_15_min">Intervals of less than 15 minutes might not work as expected</string>
     <string name="description_clear_history">Clear all saved addresses</string>
@@ -53,6 +54,7 @@
     <string name="description_background_service">Run while the app is closed</string>
     <string name="description_background_service_notification">Notify on IP change</string>
     <string name="description_background_service_disabled">To see and change the background service settings, enable the background service first.</string>
+    <string name="description_notify_on_new_ip">Notify when your IP address changes</string>
 
     <string name="neutral_enable_ip_version_in_settings">You can enable IP version in settings</string>
     <string name="neutral_enable_address_history_in_settings">You can enable address history in settings</string>

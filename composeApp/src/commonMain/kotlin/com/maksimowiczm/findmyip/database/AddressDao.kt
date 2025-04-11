@@ -59,4 +59,11 @@ abstract class AddressDao {
         """
     )
     abstract fun isNotEmpty(protocol: InternetProtocolVersion): Flow<Boolean>
+
+    @Query(
+        """
+        DELETE FROM AddressEntity
+        """
+    )
+    abstract suspend fun deleteAll()
 }

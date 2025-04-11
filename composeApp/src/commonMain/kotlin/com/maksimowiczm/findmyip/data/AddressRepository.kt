@@ -8,6 +8,7 @@ import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.maksimowiczm.findmyip.database.AddressDao
 import com.maksimowiczm.findmyip.database.AddressEntity
 import com.maksimowiczm.findmyip.database.FindMyIpDatabase
+import com.maksimowiczm.findmyip.domain.ClearHistoryUseCase
 import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAndGetIfLatestUseCase
@@ -42,7 +43,8 @@ internal class AddressRepository(
 ) : ObserveAddressUseCase,
     RefreshAddressesUseCase,
     TestInternetProtocolsUseCase,
-    RefreshAndGetIfLatestUseCase {
+    RefreshAndGetIfLatestUseCase,
+    ClearHistoryUseCase {
     private val addressDao: AddressDao = database.addressDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -235,6 +237,10 @@ internal class AddressRepository(
         handleAddressEmission(address, protocol)
 
         return AddressResult.Success(address)
+    }
+
+    override suspend fun clearHistory() {
+        addressDao.deleteAll()
     }
 }
 

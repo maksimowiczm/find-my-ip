@@ -3,6 +3,7 @@ package com.maksimowiczm.findmyip.infrastructure.di
 import com.maksimowiczm.findmyip.data.AddressRepository
 import com.maksimowiczm.findmyip.data.HistoryRepository
 import com.maksimowiczm.findmyip.data.model.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.ClearHistoryUseCase
 import com.maksimowiczm.findmyip.domain.ObserveAddressUseCase
 import com.maksimowiczm.findmyip.domain.ObserveHistoryUseCase
 import com.maksimowiczm.findmyip.domain.RefreshAddressesUseCase
@@ -34,7 +35,8 @@ val dataModule = module {
             ObserveAddressUseCase::class,
             RefreshAddressesUseCase::class,
             RefreshAndGetIfLatestUseCase::class,
-            TestInternetProtocolsUseCase::class
+            TestInternetProtocolsUseCase::class,
+            ClearHistoryUseCase::class
         )
     )
 

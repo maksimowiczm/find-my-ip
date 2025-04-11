@@ -13,7 +13,8 @@ sealed interface HistorySettingsState {
         val wifiEnabled: Boolean,
         val cellularDataEnabled: Boolean,
         val vpnEnabled: Boolean,
-        val workerEnabled: Boolean
+        val workerEnabled: Boolean,
+        val notificationEnabled: Boolean?
     ) : Loaded
 }
 
@@ -25,4 +26,6 @@ sealed interface HistorySettingsIntent {
     data class ToggleCellularData(val enabled: Boolean) : HistorySettingsIntent
     data class ToggleVpn(val enabled: Boolean) : HistorySettingsIntent
     data class ToggleWorker(val enabled: Boolean) : HistorySettingsIntent
+    data class ToggleNotification(val enabled: Boolean) : HistorySettingsIntent
+    data object ClearHistory : HistorySettingsIntent
 }

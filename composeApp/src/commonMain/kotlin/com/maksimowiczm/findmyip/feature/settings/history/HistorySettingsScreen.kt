@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.SignalCellular4Bar
 import androidx.compose.material.icons.filled.SignalWifi4Bar
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -29,16 +30,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.data.model.NetworkType
@@ -113,8 +117,7 @@ private fun HistorySettingsScreen(
                         Text(
                             text = stringResource(Res.string.description_history_settings_disabled),
                             modifier = Modifier.fillMaxWidth(),
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Justify
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
@@ -282,8 +285,7 @@ private fun DuplicateIps(
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = stringResource(Res.string.description_duplicate_ips),
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Justify
+            style = MaterialTheme.typography.bodyMedium
         )
 
         val toggle = remember(state) {
@@ -464,5 +466,76 @@ private fun Worker(
                 )
             }
         )
+
+        NotificationListItem(
+            state = state,
+            intent = intent
+        )
+
+        HorizontalDivider()
+
+        ClearHistoryListItem(
+            intent = intent
+        )
     }
+}
+
+@Composable
+expect fun NotificationListItem(
+    state: HistorySettingsState.Enabled,
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+)
+
+@Composable
+private fun ClearHistoryListItem(
+    intent: (HistorySettingsIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showDialog) {
+        HistoryClearDialog(
+            onDismiss = { showDialog = false },
+            onConfirm = {
+                intent(HistorySettingsIntent.ClearHistory)
+                showDialog = false
+            }
+        )
+    }
+
+    ListItem(
+        headlineContent = {
+            Text(stringResource(Res.string.headline_clear_history))
+        },
+        modifier = modifier.clickable { showDialog = true },
+        supportingContent = {
+            Text(stringResource(Res.string.description_clear_history))
+        }
+    )
+}
+
+@Composable
+private fun HistoryClearDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(Res.string.headline_clear_history)) },
+        text = {
+            Text(
+                text = stringResource(Res.string.description_clear_history_dialog)
+            )
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(Res.string.action_cancel))
+            }
+        },
+        confirmButton = {
+            TextButton(onConfirm) {
+                Text(stringResource(Res.string.action_clear))
+            }
+        }
+    )
 }
