@@ -14,6 +14,4 @@ object PreferenceKeys {
     val saveVpnHistory = booleanPreferencesKey("saveVpnHistory")
 
     val ipFeaturesTested = booleanPreferencesKey("ipFeaturesTested")
-
-    val notificationEnabled = booleanPreferencesKey("notificationEnabled")
 }

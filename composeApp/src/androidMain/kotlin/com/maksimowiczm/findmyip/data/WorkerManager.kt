@@ -4,8 +4,8 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import kotlinx.coroutines.flow.map
 
-actual class WorkerManager(private val workManager: WorkManager) {
-    actual val isEnabled = workManager
+class WorkerManager(private val workManager: WorkManager) {
+    val isEnabled = workManager
         .getWorkInfosByTagFlow(AddressRefreshWorker.TAG)
         .map { infos ->
             when (infos.firstOrNull()?.state) {
@@ -20,11 +20,11 @@ actual class WorkerManager(private val workManager: WorkManager) {
             }
         }
 
-    actual suspend fun cancel() {
+    fun cancel() {
         AddressRefreshWorker.cancelPeriodicWorkRequest(workManager)
     }
 
-    actual suspend fun start() {
+    suspend fun start() {
         AddressRefreshWorker.cancelAndCreatePeriodicWorkRequest(workManager)
     }
 }

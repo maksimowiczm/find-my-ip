@@ -49,7 +49,7 @@ import com.maksimowiczm.findmyip.data.model.NetworkType
 import com.valentinilk.shimmer.shimmer
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HistorySettingsScreen(
@@ -259,8 +259,15 @@ private fun LazyListScope.enabledContent(
     }
 
     item {
-        Worker(
-            state = state,
+        BackgroundWorker()
+    }
+
+    item {
+        HorizontalDivider()
+    }
+
+    item {
+        ClearHistoryListItem(
             intent = intent
         )
     }
@@ -418,74 +425,7 @@ private fun NetworkType(
 }
 
 @Composable
-private fun Worker(
-    state: HistorySettingsState.Enabled,
-    intent: (HistorySettingsIntent) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val onToggle = remember(intent) {
-        { enabled: Boolean ->
-            if (enabled) {
-                intent(HistorySettingsIntent.ToggleWorker(true))
-            } else {
-                intent(HistorySettingsIntent.ToggleWorker(false))
-            }
-        }
-    }
-
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(Res.string.headline_background_worker),
-            modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
-
-        Text(
-            text = stringResource(Res.string.description_background_worker),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        ListItem(
-            headlineContent = {
-                Text(
-                    text = stringResource(Res.string.action_use_background_worker),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            },
-            modifier = Modifier.clickable {
-                onToggle(!state.workerEnabled)
-            },
-            trailingContent = {
-                Switch(
-                    checked = state.workerEnabled,
-                    onCheckedChange = { onToggle(it) }
-                )
-            }
-        )
-
-        NotificationListItem(
-            state = state,
-            intent = intent
-        )
-
-        HorizontalDivider()
-
-        ClearHistoryListItem(
-            intent = intent
-        )
-    }
-}
-
-@Composable
-expect fun NotificationListItem(
-    state: HistorySettingsState.Enabled,
-    intent: (HistorySettingsIntent) -> Unit,
-    modifier: Modifier = Modifier
-)
+expect fun BackgroundWorker(modifier: Modifier = Modifier)
 
 @Composable
 private fun ClearHistoryListItem(

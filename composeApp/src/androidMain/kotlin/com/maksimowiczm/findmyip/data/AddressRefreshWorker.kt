@@ -62,7 +62,7 @@ class AddressRefreshWorker(context: Context, workerParameters: WorkerParameters)
                 }
 
                 is RefreshAndGetIfLatestUseCase.AddressResult.Success -> {
-                    if (dataStore.get(PreferenceKeys.notificationEnabled) == true) {
+                    if (dataStore.get(NotificationsPreferences.notificationEnabled) == true) {
                         notificationHelper.notifyAddressChange(address)
                     }
                 }

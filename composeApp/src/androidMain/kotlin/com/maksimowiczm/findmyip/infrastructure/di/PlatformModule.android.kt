@@ -6,6 +6,7 @@ import com.maksimowiczm.findmyip.data.NotificationHelper
 import com.maksimowiczm.findmyip.data.StringFormatRepository
 import com.maksimowiczm.findmyip.data.SystemInfoRepository
 import com.maksimowiczm.findmyip.data.WorkerManager
+import com.maksimowiczm.findmyip.feature.settings.history.AndroidHistorySettingsViewModel
 import com.maksimowiczm.findmyip.feature.settings.language.LanguageViewModel
 import com.maksimowiczm.findmyip.network.ConnectivityObserver
 import org.koin.android.ext.koin.androidApplication
@@ -19,6 +20,7 @@ actual val platformModule = module {
     factoryOf(::StringFormatRepository)
     viewModelOf(::LanguageViewModel)
     singleOf(::ConnectivityObserver)
+    viewModelOf(::AndroidHistorySettingsViewModel)
 
     factory {
         NotificationHelper(
