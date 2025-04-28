@@ -42,6 +42,7 @@ android {
 
 dependencies {
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.compose.shimmer)
 
     implementation(libs.androidx.core.ktx)
