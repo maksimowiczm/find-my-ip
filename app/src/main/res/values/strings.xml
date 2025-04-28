@@ -6,6 +6,7 @@
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
+    <string name="neutral_copied">Info copied to clipboard</string>
 
     <string name="action_refresh">Refresh</string>
 

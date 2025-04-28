@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.maksimowiczm.findmyip.ui.FindMyIPApp
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
+import com.maksimowiczm.findmyip.ui.utils.ClipboardManagerProvider
 import com.maksimowiczm.findmyip.ui.utils.DateFormatterProvider
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +18,11 @@ class MainActivity : AppCompatActivity() {
                 DateFormatterProvider(
                     dateFormatter = AndroidDateFormatter(this@MainActivity)
                 ) {
-                    FindMyIPApp()
+                    ClipboardManagerProvider(
+                        clipboardManager = AndroidClipboardManager(this@MainActivity)
+                    ) {
+                        FindMyIPApp()
+                    }
                 }
             }
         }
