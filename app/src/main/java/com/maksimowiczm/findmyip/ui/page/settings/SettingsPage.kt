@@ -14,11 +14,35 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.infrastructure.android.defaultLocale
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
+
+@Composable
+fun SettingsPage(
+    onBackgroundServices: () -> Unit,
+    onNotifications: () -> Unit,
+    onLanguage: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val locale = remember(context) {
+        context.defaultLocale
+    }
+
+    SettingsPage(
+        language = locale.displayName,
+        onBackgroundServices = onBackgroundServices,
+        onNotifications = onNotifications,
+        onLanguage = onLanguage,
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +73,7 @@ fun SettingsPage(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = stringResource(R.string.background_services)
+                            text = stringResource(R.string.headline_background_services)
                         )
                     },
                     modifier = Modifier.clickable { onBackgroundServices() },
@@ -70,7 +94,7 @@ fun SettingsPage(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = stringResource(R.string.notifications)
+                            text = stringResource(R.string.headline_notifications)
                         )
                     },
                     modifier = Modifier.clickable { onNotifications() },
@@ -91,7 +115,7 @@ fun SettingsPage(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = stringResource(R.string.language)
+                            text = stringResource(R.string.headline_language)
                         )
                     },
                     modifier = Modifier.clickable { onLanguage() },

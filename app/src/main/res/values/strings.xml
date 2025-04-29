@@ -13,13 +13,21 @@
     <string name="cellular">Cellular</string>
 
     <string name="date">Date</string>
+    <string name="system">System</string>
+    <string name="system_language_settings">System language settings</string>
 
     <string name="headline_history">History</string>
     <string name="headline_internet_protocols">Internet Protocols</string>
+    <string name="headline_settings">Settings</string>
+    <string name="headline_background_services">Background services</string>
+    <string name="headline_notifications">Notifications</string>
+    <string name="headline_language">Language</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
     <string name="neutral_copied">Info copied to clipboard</string>
+
+    <string name="error_no_internet_connection">No internet connection</string>
 
     <string name="action_refresh">Refresh</string>
     <string name="action_show_search_bar">Show search bar</string>
@@ -34,14 +42,13 @@
     <string name="action_clear">Clear</string>
     <string name="action_close">Close</string>
     <string name="action_confirm">Confirm</string>
+    <string name="action_go_back">Go back</string>
+    <string name="action_translate">Translate</string>
 
     <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
-
-    <string name="error_no_internet_connection">No internet connection</string>
-    <string name="headline_settings">Settings</string>
-    <string name="language">Language</string>
-    <string name="notifications">Notifications</string>
-    <string name="description_notifications">Notify on IP change</string>
-    <string name="background_services">Background services</string>
     <string name="description_background_services">Run while the app is closed</string>
+    <string name="description_notifications">Notify on IP change</string>
+    <string name="description_translate">Help translate the app</string>
+
+    <string name="link_help_translate">https://</string>
 </resources>

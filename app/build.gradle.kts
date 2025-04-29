@@ -8,6 +8,11 @@ android {
     namespace = "com.maksimowiczm.findmyip"
     compileSdk = 36
 
+    androidResources {
+        @Suppress("UnstableApiUsage")
+        generateLocaleConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = 26
