@@ -1,14 +1,41 @@
 <resources>
     <string name="app_name">Find my IP</string>
 
+    <string name="en_dash">–</string>
+
+    <string name="internet_protocol">Internet Protocol</string>
     <string name="ipv4" translatable="false">IPv4</string>
     <string name="ipv6" translatable="false">IPv6</string>
+
+    <string name="network_type">Network Type</string>
+    <string name="wifi" translatable="false">Wi-Fi</string>
+    <string name="vpn" translatable="false">VPN</string>
+    <string name="cellular">Cellular</string>
+
+    <string name="date">Date</string>
+
+    <string name="headline_history">History</string>
+    <string name="headline_internet_protocols">Internet Protocols</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
     <string name="neutral_copied">Info copied to clipboard</string>
 
     <string name="action_refresh">Refresh</string>
+    <string name="action_show_search_bar">Show search bar</string>
+    <string name="action_hide_search_bar">Hide search bar</string>
+    <string name="action_clear_input">Clear input</string>
+    <string name="action_show_filters">Show filters</string>
+    <string name="action_copy_ip">Copy IP</string>
+    <string name="action_delete_entry">Delete entry</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_close">Close</string>
+    <string name="action_confirm">Confirm</string>
+
+    <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
 
     <string name="error_no_internet_connection">No internet connection</string>
 </resources>

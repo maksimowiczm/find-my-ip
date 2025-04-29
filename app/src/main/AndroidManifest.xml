@@ -16,7 +16,8 @@
         <activity
             android:name=".infrastructure.android.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.FindMyIP">
+            android:theme="@style/Theme.FindMyIP"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

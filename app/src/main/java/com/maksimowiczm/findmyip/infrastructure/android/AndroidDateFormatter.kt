@@ -4,7 +4,10 @@ import android.content.Context
 import android.text.format.DateFormat
 import com.maksimowiczm.findmyip.ui.utils.DateFormatter
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 
 class AndroidDateFormatter(private val context: Context) : DateFormatter {
@@ -18,4 +21,9 @@ class AndroidDateFormatter(private val context: Context) : DateFormatter {
                 .ofPattern("d MMMM yyyy hh:mm a", context.defaultLocale)
                 .format(dateTime.toJavaLocalDateTime())
         }
+
+    override fun formatDateShort(dateTime: LocalDate): String = DateTimeFormatter
+        .ofLocalizedDate(FormatStyle.SHORT)
+        .withLocale(context.defaultLocale)
+        .format(dateTime.toJavaLocalDate())
 }
