@@ -38,4 +38,10 @@
     <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
 
     <string name="error_no_internet_connection">No internet connection</string>
+    <string name="headline_settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="description_notifications">Notify on IP change</string>
+    <string name="background_services">Background services</string>
+    <string name="description_background_services">Run while the app is closed</string>
 </resources>
