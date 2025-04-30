@@ -5,6 +5,9 @@ import androidx.compose.runtime.Immutable
 @Immutable
 sealed interface NotificationsPageState {
 
+    val isEnabled: Boolean
+        get() = this is Enabled
+
     @Immutable
     data object Disabled : NotificationsPageState
 

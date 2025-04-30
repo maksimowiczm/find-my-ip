@@ -1,10 +1,10 @@
 package com.maksimowiczm.findmyip.ui.page.settings.notifications
 
 sealed interface NotificationsPageIntent {
-    data object ToggleNotifications : NotificationsPageIntent
-    data object ToggleWifi : NotificationsPageIntent
-    data object ToggleCellular : NotificationsPageIntent
-    data object ToggleVpn : NotificationsPageIntent
-    data object ToggleIpv4 : NotificationsPageIntent
-    data object ToggleIpv6 : NotificationsPageIntent
+    data class ToggleNotifications(val newState: Boolean) : NotificationsPageIntent
+    data class ToggleWifi(val newState: Boolean) : NotificationsPageIntent
+    data class ToggleCellular(val newState: Boolean) : NotificationsPageIntent
+    data class ToggleVpn(val newState: Boolean) : NotificationsPageIntent
+    data class ToggleIpv4(val newState: Boolean) : NotificationsPageIntent
+    data class ToggleIpv6(val newState: Boolean) : NotificationsPageIntent
 }

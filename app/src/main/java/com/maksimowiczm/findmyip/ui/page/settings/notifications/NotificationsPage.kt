@@ -46,12 +46,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
 
+@Composable
+fun NotificationsPage(
+    state: NotificationsPageState,
+    onIntent: (NotificationsPageIntent) -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+    }
+
+    NotificationsPage(
+        state = state,
+        onIntent = onIntent,
+        onBack = onBack,
+        onSystemSettings = { context.startActivity(intent) },
+        modifier = modifier
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun NotificationsPage(
     state: NotificationsPageState,
     onIntent: (NotificationsPageIntent) -> Unit,
     onBack: () -> Unit,
+    onSystemSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val layoutDirection = LocalLayoutDirection.current
@@ -68,7 +90,8 @@ fun NotificationsPage(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = onBack
+                        onClick = onBack,
+                        modifier = Modifier.testTag(NotificationsPageTestTags.BACK_BUTTON)
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -90,8 +113,12 @@ fun NotificationsPage(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Surface(
-                onClick = { onIntent(NotificationsPageIntent.ToggleNotifications) },
-                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {
+                    onIntent(NotificationsPageIntent.ToggleNotifications(!state.isEnabled))
+                },
+                modifier = Modifier
+                    .testTag(NotificationsPageTestTags.SWITCH_SURFACE)
+                    .padding(horizontal = 16.dp),
                 color = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 shape = MaterialTheme.shapes.medium
@@ -111,7 +138,7 @@ fun NotificationsPage(
                     Switch(
                         checked = state is NotificationsPageState.Enabled,
                         onCheckedChange = {
-                            onIntent(NotificationsPageIntent.ToggleNotifications)
+                            onIntent(NotificationsPageIntent.ToggleNotifications(!state.isEnabled))
                         },
                         modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH)
                     )
@@ -148,7 +175,24 @@ fun NotificationsPage(
                     }
 
                     item {
-                        SystemNotificationsSettings()
+                        ListItem(
+                            headlineContent = {
+                                Text(
+                                    stringResource(R.string.headline_system_notifications_settings)
+                                )
+                            },
+                            modifier = Modifier
+                                .testTag(
+                                    NotificationsPageTestTags.SURFACE_SYSTEM_NOTIFICATIONS_SETTINGS
+                                )
+                                .clickable { onSystemSettings() },
+                            trailingContent = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    contentDescription = null
+                                )
+                            }
+                        )
                     }
                 }
             } else {
@@ -205,7 +249,11 @@ private fun NetworkTypeSettings(
                     text = stringResource(R.string.wifi)
                 )
             },
-            modifier = Modifier.clickable { onIntent(NotificationsPageIntent.ToggleWifi) },
+            modifier = Modifier
+                .testTag(NotificationsPageTestTags.SURFACE_WIFI)
+                .clickable {
+                    onIntent(NotificationsPageIntent.ToggleWifi(!state.wifiEnabled))
+                },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -220,7 +268,7 @@ private fun NetworkTypeSettings(
             trailingContent = {
                 Switch(
                     checked = state.wifiEnabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleWifi) },
+                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleWifi(it)) },
                     modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_WIFI)
                 )
             }
@@ -232,7 +280,11 @@ private fun NetworkTypeSettings(
                     text = stringResource(R.string.cellular)
                 )
             },
-            modifier = Modifier.clickable { onIntent(NotificationsPageIntent.ToggleCellular) },
+            modifier = Modifier
+                .testTag(NotificationsPageTestTags.SURFACE_CELLULAR)
+                .clickable {
+                    onIntent(NotificationsPageIntent.ToggleCellular(!state.cellularEnabled))
+                },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -247,7 +299,9 @@ private fun NetworkTypeSettings(
             trailingContent = {
                 Switch(
                     checked = state.cellularEnabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleCellular) },
+                    onCheckedChange = {
+                        onIntent(NotificationsPageIntent.ToggleCellular(it))
+                    },
                     modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_CELLULAR)
                 )
             }
@@ -259,7 +313,11 @@ private fun NetworkTypeSettings(
                     text = stringResource(R.string.vpn)
                 )
             },
-            modifier = Modifier.clickable { onIntent(NotificationsPageIntent.ToggleVpn) },
+            modifier = Modifier
+                .testTag(NotificationsPageTestTags.SURFACE_VPN)
+                .clickable {
+                    onIntent(NotificationsPageIntent.ToggleVpn(!state.vpnEnabled))
+                },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -274,7 +332,9 @@ private fun NetworkTypeSettings(
             trailingContent = {
                 Switch(
                     checked = state.vpnEnabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleVpn) },
+                    onCheckedChange = {
+                        onIntent(NotificationsPageIntent.ToggleVpn(it))
+                    },
                     modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_VPN)
                 )
             }
@@ -314,11 +374,17 @@ private fun InternetProtocolSettings(
                     text = stringResource(R.string.ipv4)
                 )
             },
-            modifier = Modifier.clickable { onIntent(NotificationsPageIntent.ToggleIpv4) },
+            modifier = Modifier
+                .testTag(NotificationsPageTestTags.SURFACE_IPV4)
+                .clickable {
+                    onIntent(NotificationsPageIntent.ToggleIpv4(!state.ipv4Enabled))
+                },
             trailingContent = {
                 Switch(
                     checked = state.ipv4Enabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleIpv4) },
+                    onCheckedChange = {
+                        onIntent(NotificationsPageIntent.ToggleIpv4(it))
+                    },
                     modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_IPV4)
                 )
             }
@@ -330,39 +396,22 @@ private fun InternetProtocolSettings(
                     text = stringResource(R.string.ipv6)
                 )
             },
-            modifier = Modifier.clickable { onIntent(NotificationsPageIntent.ToggleIpv6) },
+            modifier = Modifier
+                .testTag(NotificationsPageTestTags.SURFACE_IPV6)
+                .clickable {
+                    onIntent(NotificationsPageIntent.ToggleIpv6(!state.ipv6Enabled))
+                },
             trailingContent = {
                 Switch(
                     checked = state.ipv6Enabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleIpv6) },
+                    onCheckedChange = {
+                        onIntent(NotificationsPageIntent.ToggleIpv6(it))
+                    },
                     modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_IPV6)
                 )
             }
         )
     }
-}
-
-@Composable
-private fun SystemNotificationsSettings(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-    }
-
-    ListItem(
-        headlineContent = {
-            Text(stringResource(R.string.headline_system_notifications_settings))
-        },
-        modifier = modifier.clickable {
-            context.startActivity(intent)
-        },
-        trailingContent = {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null
-            )
-        }
-    )
 }
 
 @Preview
