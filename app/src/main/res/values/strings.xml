@@ -22,10 +22,13 @@
     <string name="headline_background_services">Background services</string>
     <string name="headline_notifications">Notifications</string>
     <string name="headline_language">Language</string>
+    <string name="headline_notify_on_ip_change">Notify on IP change</string>
+    <string name="headline_system_notifications_settings">System notifications settings</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
     <string name="neutral_copied">Info copied to clipboard</string>
+    <string name="neutral_you_havent_allowed_notifications">You haven\'t allowed notifications</string>
 
     <string name="error_no_internet_connection">No internet connection</string>
 
@@ -49,6 +52,8 @@
     <string name="description_background_services">Run while the app is closed</string>
     <string name="description_notifications">Notify on IP change</string>
     <string name="description_translate">Help translate the app</string>
+    <string name="description_network_type">Which network types should trigger notifications</string>
+    <string name="description_internet_protocol">Which Internet Protocols should trigger notifications</string>
 
     <string name="link_help_translate">https://</string>
 </resources>
