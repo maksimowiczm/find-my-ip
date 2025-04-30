@@ -24,6 +24,10 @@
     <string name="headline_language">Language</string>
     <string name="headline_notify_on_ip_change">Notify on IP change</string>
     <string name="headline_system_notifications_settings">System notifications settings</string>
+    <string name="headline_foreground_service">Foreground Service</string>
+    <string name="headline_periodic_work">Periodic Work</string>
+    <string name="headline_foreground_service_and_periodic_work">Foreground service and periodic work</string>
+    <string name="headline_what_is_network_state_change">What is network state change?</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
@@ -49,11 +53,17 @@
     <string name="action_translate">Translate</string>
 
     <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
-    <string name="description_background_services">Run while the app is closed</string>
+    <string name="description_background_services_short">Run while the app is closed</string>
+    <string name="description_background_services_long">Use background services to track your addresses while the app is closed</string>
     <string name="description_notifications">Notify on IP change</string>
     <string name="description_translate">Help translate the app</string>
     <string name="description_network_type">Which network types should trigger notifications</string>
     <string name="description_internet_protocol">Which Internet Protocols should trigger notifications</string>
+    <string name="description_foreground_service">Observe network state changes</string>
+    <string name="description_periodic_work">Run periodically in the background</string>
+    <string name="description_foreground_service_and_periodic_work">The foreground service will keep running all the time and check your IP address when your network changes. Periodic work runs once in a while and is better for your battery.</string>
+    <string name="description_what_is_network_state_change">Your device\'s internet connection was updated — like switching Wi-Fi, mobile data, or losing connection</string>
+    <string name="description_combine_periodic_notifications">You can combine periodic work with notifications to create powerful combination</string>
 
     <string name="link_help_translate">https://</string>
 </resources>

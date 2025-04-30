@@ -79,7 +79,7 @@ fun SettingsPage(
                     modifier = Modifier.clickable { onBackgroundServices() },
                     supportingContent = {
                         Text(
-                            text = stringResource(R.string.description_background_services)
+                            text = stringResource(R.string.description_background_services_short)
                         )
                     },
                     leadingContent = {
