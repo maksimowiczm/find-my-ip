@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,7 +31,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
 
 @Composable
 fun NotificationsPage(
@@ -113,36 +111,23 @@ fun NotificationsPage(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Surface(
-                onClick = {
-                    onIntent(NotificationsPageIntent.ToggleNotifications(!state.isEnabled))
-                },
-                modifier = Modifier
-                    .testTag(NotificationsPageTestTags.SWITCH_SURFACE)
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 color = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 shape = MaterialTheme.shapes.medium
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(R.string.headline_notify_on_ip_change),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-
-                    Switch(
-                        checked = state is NotificationsPageState.Enabled,
-                        onCheckedChange = {
-                            onIntent(NotificationsPageIntent.ToggleNotifications(!state.isEnabled))
-                        },
-                        modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH)
-                    )
-                }
+                SwitchSettingListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(R.string.headline_notify_on_ip_change),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    checked = state.isEnabled,
+                    onCheckedChange = {
+                        onIntent(NotificationsPageIntent.ToggleNotifications(it))
+                    }
+                )
             }
 
             if (state is NotificationsPageState.Enabled) {
@@ -182,9 +167,7 @@ fun NotificationsPage(
                                 )
                             },
                             modifier = Modifier
-                                .testTag(
-                                    NotificationsPageTestTags.SURFACE_SYSTEM_NOTIFICATIONS_SETTINGS
-                                )
+                                .testTag(NotificationsPageTestTags.SYSTEM_NOTIFICATIONS_SETTINGS)
                                 .clickable { onSystemSettings() },
                             trailingContent = {
                                 Icon(
@@ -243,17 +226,16 @@ private fun NetworkTypeSettings(
 
         Spacer(Modifier.height(8.dp))
 
-        ListItem(
+        SwitchSettingListItem(
             headlineContent = {
                 Text(
                     text = stringResource(R.string.wifi)
                 )
             },
-            modifier = Modifier
-                .testTag(NotificationsPageTestTags.SURFACE_WIFI)
-                .clickable {
-                    onIntent(NotificationsPageIntent.ToggleWifi(!state.wifiEnabled))
-                },
+            checked = state.wifiEnabled,
+            onCheckedChange = {
+                onIntent(NotificationsPageIntent.ToggleWifi(it))
+            },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -264,27 +246,19 @@ private fun NetworkTypeSettings(
                         contentDescription = null
                     )
                 }
-            },
-            trailingContent = {
-                Switch(
-                    checked = state.wifiEnabled,
-                    onCheckedChange = { onIntent(NotificationsPageIntent.ToggleWifi(it)) },
-                    modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_WIFI)
-                )
             }
         )
 
-        ListItem(
+        SwitchSettingListItem(
             headlineContent = {
                 Text(
                     text = stringResource(R.string.cellular)
                 )
             },
-            modifier = Modifier
-                .testTag(NotificationsPageTestTags.SURFACE_CELLULAR)
-                .clickable {
-                    onIntent(NotificationsPageIntent.ToggleCellular(!state.cellularEnabled))
-                },
+            checked = state.cellularEnabled,
+            onCheckedChange = {
+                onIntent(NotificationsPageIntent.ToggleCellular(it))
+            },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -295,29 +269,19 @@ private fun NetworkTypeSettings(
                         contentDescription = null
                     )
                 }
-            },
-            trailingContent = {
-                Switch(
-                    checked = state.cellularEnabled,
-                    onCheckedChange = {
-                        onIntent(NotificationsPageIntent.ToggleCellular(it))
-                    },
-                    modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_CELLULAR)
-                )
             }
         )
 
-        ListItem(
+        SwitchSettingListItem(
             headlineContent = {
                 Text(
                     text = stringResource(R.string.vpn)
                 )
             },
-            modifier = Modifier
-                .testTag(NotificationsPageTestTags.SURFACE_VPN)
-                .clickable {
-                    onIntent(NotificationsPageIntent.ToggleVpn(!state.vpnEnabled))
-                },
+            checked = state.vpnEnabled,
+            onCheckedChange = {
+                onIntent(NotificationsPageIntent.ToggleVpn(it))
+            },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -328,15 +292,6 @@ private fun NetworkTypeSettings(
                         contentDescription = null
                     )
                 }
-            },
-            trailingContent = {
-                Switch(
-                    checked = state.vpnEnabled,
-                    onCheckedChange = {
-                        onIntent(NotificationsPageIntent.ToggleVpn(it))
-                    },
-                    modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_VPN)
-                )
             }
         )
     }
@@ -368,47 +323,27 @@ private fun InternetProtocolSettings(
 
         Spacer(Modifier.height(8.dp))
 
-        ListItem(
+        SwitchSettingListItem(
             headlineContent = {
                 Text(
                     text = stringResource(R.string.ipv4)
                 )
             },
-            modifier = Modifier
-                .testTag(NotificationsPageTestTags.SURFACE_IPV4)
-                .clickable {
-                    onIntent(NotificationsPageIntent.ToggleIpv4(!state.ipv4Enabled))
-                },
-            trailingContent = {
-                Switch(
-                    checked = state.ipv4Enabled,
-                    onCheckedChange = {
-                        onIntent(NotificationsPageIntent.ToggleIpv4(it))
-                    },
-                    modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_IPV4)
-                )
+            checked = state.ipv4Enabled,
+            onCheckedChange = {
+                onIntent(NotificationsPageIntent.ToggleIpv4(it))
             }
         )
 
-        ListItem(
+        SwitchSettingListItem(
             headlineContent = {
                 Text(
                     text = stringResource(R.string.ipv6)
                 )
             },
-            modifier = Modifier
-                .testTag(NotificationsPageTestTags.SURFACE_IPV6)
-                .clickable {
-                    onIntent(NotificationsPageIntent.ToggleIpv6(!state.ipv6Enabled))
-                },
-            trailingContent = {
-                Switch(
-                    checked = state.ipv6Enabled,
-                    onCheckedChange = {
-                        onIntent(NotificationsPageIntent.ToggleIpv6(it))
-                    },
-                    modifier = Modifier.testTag(NotificationsPageTestTags.SWITCH_IPV6)
-                )
+            checked = state.ipv6Enabled,
+            onCheckedChange = {
+                onIntent(NotificationsPageIntent.ToggleIpv6(!state.ipv6Enabled))
             }
         )
     }

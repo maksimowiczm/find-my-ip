@@ -1,6 +1,5 @@
 package com.maksimowiczm.findmyip.ui.page.settings.backgroundservices
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,11 +15,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
 import com.maksimowiczm.findmyip.ui.ext.firstVisibleItemAlpha
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +83,9 @@ fun BackgroundServicesPage(
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .testTag(BackgroundServicesPageTestTags.CONTENT)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             state = lazyListState,
             contentPadding = paddingValues
         ) {
@@ -122,58 +122,40 @@ fun BackgroundServicesPage(
             }
 
             item {
-                ListItem(
+                SwitchSettingListItem(
                     headlineContent = {
                         Text(
                             text = stringResource(R.string.headline_foreground_service)
                         )
                     },
-                    modifier = Modifier
-                        .testTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SURFACE)
-                        .clickable {
-                            onToggleForegroundService(!foregroundServiceEnabled)
-                        },
+                    checked = foregroundServiceEnabled,
+                    onCheckedChange = onToggleForegroundService,
+                    modifier = Modifier.testTag(
+                        BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SETTING
+                    ),
                     supportingContent = {
                         Text(
                             text = stringResource(R.string.description_foreground_service)
-                        )
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = foregroundServiceEnabled,
-                            onCheckedChange = onToggleForegroundService,
-                            modifier = Modifier.testTag(
-                                BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH
-                            )
                         )
                     }
                 )
             }
 
             item {
-                ListItem(
+                SwitchSettingListItem(
                     headlineContent = {
                         Text(
                             text = stringResource(R.string.headline_periodic_work)
                         )
                     },
-                    modifier = Modifier
-                        .testTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SURFACE)
-                        .clickable {
-                            onTogglePeriodicWork(!periodicWorkEnabled)
-                        },
+                    checked = periodicWorkEnabled,
+                    onCheckedChange = onTogglePeriodicWork,
+                    modifier = Modifier.testTag(
+                        BackgroundServicesPageTestTags.PERIODIC_WORK_SETTING
+                    ),
                     supportingContent = {
                         Text(
                             text = stringResource(R.string.description_periodic_work)
-                        )
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = periodicWorkEnabled,
-                            onCheckedChange = onTogglePeriodicWork,
-                            modifier = Modifier.testTag(
-                                BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH
-                            )
                         )
                     }
                 )

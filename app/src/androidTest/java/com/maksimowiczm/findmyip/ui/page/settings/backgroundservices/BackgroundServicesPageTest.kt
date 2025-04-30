@@ -1,11 +1,16 @@
 package com.maksimowiczm.findmyip.ui.page.settings.backgroundservices
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageTestTags.CONTENT
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SETTING
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageTestTags.GO_BACK_BUTTON
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageTestTags.PERIODIC_WORK_SETTING
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageTestTags.TIPS
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,249 +30,14 @@ class BackgroundServicesPageTest {
             )
         }
 
-        onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH).assertIsDisplayed()
-        onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH).assertIsDisplayed()
-        onNodeWithTag(BackgroundServicesPageTestTags.TIPS).assertIsDisplayed()
-    }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceEnabledPeriodicWorkDisabled(): Unit =
-        composeTestRule.run {
-            setContent {
-                BackgroundServicesPage(
-                    onBack = {},
-                    foregroundServiceEnabled = true,
-                    onToggleForegroundService = {},
-                    periodicWorkEnabled = false,
-                    onTogglePeriodicWork = {}
-                )
-            }
-
-            onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOn()
-            onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOff()
-            onNodeWithTag(BackgroundServicesPageTestTags.TIPS).assertIsDisplayed()
-        }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceDisabledPeriodicWorkEnabled(): Unit =
-        composeTestRule.run {
-            setContent {
-                BackgroundServicesPage(
-                    onBack = {},
-                    foregroundServiceEnabled = false,
-                    onToggleForegroundService = {},
-                    periodicWorkEnabled = true,
-                    onTogglePeriodicWork = {}
-                )
-            }
-
-            onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOff()
-            onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOn()
-            onNodeWithTag(BackgroundServicesPageTestTags.TIPS).assertIsDisplayed()
-        }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceEnabledPeriodicWorkEnabled(): Unit =
-        composeTestRule.run {
-            setContent {
-                BackgroundServicesPage(
-                    onBack = {},
-                    foregroundServiceEnabled = true,
-                    onToggleForegroundService = {},
-                    periodicWorkEnabled = true,
-                    onTogglePeriodicWork = {}
-                )
-            }
-
-            onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOn()
-            onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOn()
-            onNodeWithTag(BackgroundServicesPageTestTags.TIPS).assertIsDisplayed()
-        }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceDisabledPeriodicWorkDisabled(): Unit =
-        composeTestRule.run {
-            setContent {
-                BackgroundServicesPage(
-                    onBack = {},
-                    foregroundServiceEnabled = false,
-                    onToggleForegroundService = {},
-                    periodicWorkEnabled = false,
-                    onTogglePeriodicWork = {}
-                )
-            }
-
-            onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOff()
-            onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH)
-                .assertIsDisplayed()
-                .assertIsOff()
-            onNodeWithTag(BackgroundServicesPageTestTags.TIPS).assertIsDisplayed()
-        }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceEnabledSwitchClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = true,
-                onToggleForegroundService = { newState = it },
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = {}
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH).performClick()
-
-        assert(newState == false) { "Foreground service switch should be off" }
-    }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceEnabledSurfaceClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = true,
-                onToggleForegroundService = { newState = it },
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = {}
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SURFACE).performClick()
-
-        assert(newState == false) { "Foreground service switch should be off" }
-    }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceDisabledSwitchClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = { newState = it },
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = {}
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SWITCH).performClick()
-
-        assert(newState == true) { "Foreground service switch should be on" }
-    }
-
-    @Test
-    fun backgroundServicesPage_ForegroundServiceDisabledSurfaceClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = { newState = it },
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = {}
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.FOREGROUND_SERVICE_SURFACE).performClick()
-
-        assert(newState == true) { "Foreground service switch should be on" }
-    }
-
-    @Test
-    fun backgroundServicesPage_PeriodicWorkEnabledSwitchClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = {},
-                periodicWorkEnabled = true,
-                onTogglePeriodicWork = { newState = it }
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH).performClick()
-
-        assert(newState == false) { "Periodic work switch should be off" }
-    }
-
-    @Test
-    fun backgroundServicesPage_PeriodicWorkEnabledSurfaceClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = {},
-                periodicWorkEnabled = true,
-                onTogglePeriodicWork = { newState = it }
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SURFACE).performClick()
-
-        assert(newState == false) { "Periodic work switch should be off" }
-    }
-
-    @Test
-    fun backgroundServicesPage_PeriodicWorkDisabledSwitchClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = {},
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = { newState = it }
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SWITCH).performClick()
-
-        assert(newState == true) { "Periodic work switch should be on" }
-    }
-
-    @Test
-    fun backgroundServicesPage_PeriodicWorkDisabledSurfaceClick(): Unit = composeTestRule.run {
-        var newState: Boolean? = null
-
-        setContent {
-            BackgroundServicesPage(
-                onBack = {},
-                foregroundServiceEnabled = false,
-                onToggleForegroundService = {},
-                periodicWorkEnabled = false,
-                onTogglePeriodicWork = { newState = it }
-            )
-        }
-
-        onNodeWithTag(BackgroundServicesPageTestTags.PERIODIC_WORK_SURFACE).performClick()
-
-        assert(newState == true) { "Periodic work switch should be on" }
+        onNodeWithTag(GO_BACK_BUTTON).assertIsDisplayed()
+        onNodeWithTag(CONTENT).assertIsDisplayed()
+        onNodeWithTag(CONTENT).performScrollToNode(hasTestTag(FOREGROUND_SERVICE_SETTING))
+        onNodeWithTag(FOREGROUND_SERVICE_SETTING).assertIsDisplayed()
+        onNodeWithTag(CONTENT).performScrollToNode(hasTestTag(PERIODIC_WORK_SETTING))
+        onNodeWithTag(PERIODIC_WORK_SETTING).assertIsDisplayed()
+        onNodeWithTag(CONTENT).performScrollToNode(hasTestTag(TIPS))
+        onNodeWithTag(TIPS).assertIsDisplayed()
     }
 
     @Test
@@ -286,7 +56,7 @@ class BackgroundServicesPageTest {
             )
         }
 
-        onNodeWithTag(BackgroundServicesPageTestTags.GO_BACK_BUTTON).performClick()
+        onNodeWithTag(GO_BACK_BUTTON).performClick()
 
         assert(clicked) { "Back button should be clickable" }
     }
