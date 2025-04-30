@@ -6,4 +6,6 @@ val languages = mapOf(
     )
 )
 
+fun Map<String, Translation>.containsTag(tag: String): Boolean = this.values.any { it.tag == tag }
+
 data class Translation(val tag: String)

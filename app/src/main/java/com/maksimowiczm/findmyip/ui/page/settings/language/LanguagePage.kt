@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,19 +48,39 @@ import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
 
 @Composable
 fun LanguagePage(onBack: () -> Unit, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val locale = remember(context) {
-        context.defaultLocale
-    }
     val helpTranslateLink = stringResource(R.string.link_help_translate)
     val uriHandler = LocalUriHandler.current
 
+    val context = LocalContext.current
+    val onSystemLanguageSettings = remember(context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
+                val uri = Uri.fromParts("package", context.packageName, null)
+                data = uri
+            }
+
+            context.packageManager
+                .queryIntentActivities(intent, PackageManager.MATCH_ALL)
+                .takeIf { it.isNotEmpty() }
+                ?.let {
+                    { context.startActivity(intent) }
+                }
+        } else {
+            null
+        }
+    }
+
     LanguagePage(
-        tag = locale.toLanguageTag(),
+        tag = remember(context) {
+            context.defaultLocale
+                .toLanguageTag()
+                .takeIf { languages.containsTag(it) }
+        },
         onTag = { AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(it)) },
         onHelp = { uriHandler.openUri(helpTranslateLink) },
         onBack = onBack,
-        modifier = modifier
+        modifier = modifier,
+        onSystemLanguageSettings = onSystemLanguageSettings
     )
 }
 
@@ -70,7 +91,8 @@ fun LanguagePage(
     onTag: (String?) -> Unit,
     onHelp: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSystemLanguageSettings: (() -> Unit)? = null
 ) {
     Scaffold(
         modifier = modifier,
@@ -81,7 +103,8 @@ fun LanguagePage(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = onBack
+                        onClick = onBack,
+                        modifier = Modifier.testTag(LanguagePageTestTags.BACK_BUTTON)
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -93,12 +116,15 @@ fun LanguagePage(
         }
     ) { paddingValues ->
         LazyColumn(
+            modifier = Modifier.testTag(LanguagePageTestTags.LANGUAGE_LIST),
             contentPadding = paddingValues
         ) {
             item {
                 Card(
                     onClick = onHelp,
-                    modifier = Modifier.padding(horizontal = 8.dp),
+                    modifier = Modifier
+                        .testTag(LanguagePageTestTags.HELP_BUTTON)
+                        .padding(horizontal = 8.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -139,7 +165,9 @@ fun LanguagePage(
                     headlineContent = {
                         Text(stringResource(R.string.system))
                     },
-                    modifier = Modifier.clickable { onTag(null) },
+                    modifier = Modifier
+                        .testTag(LanguagePageTestTags.Language(null).toString())
+                        .clickable { onTag(null) },
                     leadingContent = {
                         RadioButton(
                             selected = tag == null,
@@ -153,7 +181,9 @@ fun LanguagePage(
                 item {
                     ListItem(
                         headlineContent = { Text(name) },
-                        modifier = Modifier.clickable { onTag(translation.tag) },
+                        modifier = Modifier
+                            .testTag(LanguagePageTestTags.Language(translation.tag).toString())
+                            .clickable { onTag(translation.tag) },
                         leadingContent = {
                             RadioButton(
                                 selected = tag == translation.tag,
@@ -164,45 +194,24 @@ fun LanguagePage(
                 }
             }
 
-            item {
-                val context = LocalContext.current
-                val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
-                        val uri = Uri.fromParts("package", context.packageName, null)
-                        data = uri
-                    }
-                } else {
-                    Intent()
+            if (onSystemLanguageSettings != null) {
+                item {
+                    HorizontalDivider()
+                    ListItem(
+                        headlineContent = {
+                            Text(stringResource(R.string.system_language_settings))
+                        },
+                        modifier = Modifier
+                            .testTag(LanguagePageTestTags.SYSTEM_LANGUAGE_SETTINGS)
+                            .clickable { onSystemLanguageSettings() },
+                        trailingContent = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = null
+                            )
+                        }
+                    )
                 }
-
-                val isSystemLocaleSettingsAvailable =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        context.packageManager
-                            .queryIntentActivities(intent, PackageManager.MATCH_ALL)
-                            .isNotEmpty()
-                    } else {
-                        false
-                    }
-
-                if (!isSystemLocaleSettingsAvailable) {
-                    return@item
-                }
-
-                HorizontalDivider()
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.system_language_settings))
-                    },
-                    modifier = Modifier.clickable {
-                        context.startActivity(intent)
-                    },
-                    trailingContent = {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null
-                        )
-                    }
-                )
             }
         }
     }
