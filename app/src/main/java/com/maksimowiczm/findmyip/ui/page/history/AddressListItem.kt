@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.maksimowiczm.findmyip.domain.model.NetworkType
+import com.maksimowiczm.findmyip.ui.res.stringResource
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
 import com.maksimowiczm.findmyip.ui.utils.LocalDateFormatter
 import kotlinx.datetime.LocalDateTime

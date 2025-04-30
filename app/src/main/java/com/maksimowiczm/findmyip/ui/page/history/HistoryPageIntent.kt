@@ -1,5 +1,7 @@
 package com.maksimowiczm.findmyip.ui.page.history
 
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import kotlinx.datetime.LocalDate
 
 sealed interface HistoryPageIntent {

@@ -60,6 +60,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.model.NetworkType
+import com.maksimowiczm.findmyip.ui.res.stringResource
 import com.maksimowiczm.findmyip.ui.utils.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.utils.LocalDateFormatter
 import kotlinx.coroutines.launch
