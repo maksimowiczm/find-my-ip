@@ -8,8 +8,9 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         config?.invoke(this)
 
         modules(
-            uiModule,
-            dataStoreModule
+            dataModule,
+            dataStoreModule,
+            uiModule
         )
     }
 }
