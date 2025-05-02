@@ -4,6 +4,11 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,11 +49,24 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun HomePage(modifier: Modifier = Modifier, viewModel: HomePageViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    HomePage(
+        state = state,
+        onRefresh = viewModel::onRefresh,
+        modifier = modifier
+    )
+}
 
 @Composable
 fun HomePage(state: HomePageState, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
@@ -70,7 +89,9 @@ fun HomePage(state: HomePageState, onRefresh: () -> Unit, modifier: Modifier = M
             contentAlignment = Alignment.TopCenter
         ) {
             stateTransition.AnimatedVisibility(
-                visible = { it.noInternetConnection }
+                visible = { it.noInternetConnection },
+                enter = expandVertically(),
+                exit = shrinkVertically()
             ) {
                 ErrorCard(Modifier.testTag(HomePageTestTags.ERROR_CARD))
             }
@@ -120,9 +141,12 @@ private fun TopBar(state: HomePageState, onRefresh: () -> Unit, modifier: Modifi
             .consumeWindowInsets(insets)
     ) {
         stateTransition.AnimatedContent(
-            contentKey = { it.ipv4 is IpState.Loading || it.ipv6 is IpState.Loading }
+            contentKey = { it.isLoading },
+            transitionSpec = {
+                expandVertically() + fadeIn() togetherWith shrinkVertically() + fadeOut()
+            }
         ) {
-            if (it.ipv4 is IpState.Loading || it.ipv6 is IpState.Loading) {
+            if (it.isLoading) {
                 LinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
