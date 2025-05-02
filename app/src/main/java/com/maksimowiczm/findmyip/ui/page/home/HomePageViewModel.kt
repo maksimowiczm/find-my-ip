@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.runningFold
@@ -15,10 +16,13 @@ import kotlinx.coroutines.launch
 class HomePageViewModel(
     private val ipv4: AddressObserver,
     private val ipv6: AddressObserver,
-    private val loadingDelayMillis: Long = 300
+    loadingDelayMillis: Long = 300
 ) : ViewModel() {
 
-    val state = combine(ipv4.flow, ipv6.flow).runningFold(
+    val state = combine(
+        ipv4.flow.delayIfRefreshing(loadingDelayMillis),
+        ipv6.flow.delayIfRefreshing(loadingDelayMillis)
+    ).runningFold(
         initial = HomePageState()
     ) { prev, (ipv4, ipv6) ->
         val ipv4state = toIpState(ipv4, prev.ipv4)
@@ -29,12 +33,6 @@ class HomePageViewModel(
             ipv4 = ipv4state,
             ipv6 = ipv6state
         )
-    }.transform {
-        emit(it)
-        // Delay loading state to show loading animation
-        if (it.isLoading && loadingDelayMillis > 0) {
-            delay(loadingDelayMillis)
-        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(2_000),
@@ -44,6 +42,13 @@ class HomePageViewModel(
     fun onRefresh() {
         viewModelScope.launch { ipv4.refresh() }
         viewModelScope.launch { ipv6.refresh() }
+    }
+}
+
+private fun Flow<AddressState>.delayIfRefreshing(timeMillis: Long) = transform { state ->
+    emit(state)
+    if (state is AddressState.Refreshing) {
+        delay(timeMillis)
     }
 }
 
