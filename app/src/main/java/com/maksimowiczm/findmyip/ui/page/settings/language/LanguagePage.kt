@@ -31,10 +31,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
@@ -94,6 +96,8 @@ fun LanguagePage(
     modifier: Modifier = Modifier,
     onSystemLanguageSettings: (() -> Unit)? = null
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -111,12 +115,15 @@ fun LanguagePage(
                             contentDescription = stringResource(R.string.action_go_back)
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.testTag(LanguagePageTestTags.LANGUAGE_LIST),
+            modifier = Modifier
+                .testTag(LanguagePageTestTags.LANGUAGE_LIST)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = paddingValues
         ) {
             item {
@@ -124,11 +131,12 @@ fun LanguagePage(
                     onClick = onHelp,
                     modifier = Modifier
                         .testTag(LanguagePageTestTags.HELP_BUTTON)
-                        .padding(horizontal = 8.dp),
+                        .padding(8.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                    ),
+                    shape = MaterialTheme.shapes.extraLarge
                 ) {
                     Row(
                         modifier = Modifier

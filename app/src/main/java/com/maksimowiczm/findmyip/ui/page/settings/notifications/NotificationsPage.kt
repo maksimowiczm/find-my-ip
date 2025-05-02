@@ -28,21 +28,35 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
+import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItemTestTags
 
 @Composable
 fun NotificationsPage(
@@ -74,7 +88,9 @@ fun NotificationsPage(
     onSystemSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
         modifier = modifier,
@@ -96,37 +112,62 @@ fun NotificationsPage(
                             contentDescription = stringResource(R.string.action_go_back)
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         }
     ) { paddingValues ->
         val outerPadding = PaddingValues(
-            top = paddingValues.calculateTopPadding(),
+            top = paddingValues.calculateTopPadding() + 8.dp,
             start = paddingValues.calculateStartPadding(layoutDirection),
             end = paddingValues.calculateEndPadding(layoutDirection)
         )
 
-        Column(
-            modifier = Modifier.padding(outerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        var cardHeight by remember { mutableIntStateOf(0) }
+        val topPadding = remember(cardHeight) {
+            density.run { cardHeight.toDp() } + 16.dp
+        }
+
+        Box(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(outerPadding)
         ) {
             Surface(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {
+                    onIntent(NotificationsPageIntent.ToggleNotifications(!state.isEnabled))
+                },
+                modifier = Modifier
+                    .zIndex(10f)
+                    .onGloballyPositioned {
+                        cardHeight = it.size.height
+                    }
+                    .padding(horizontal = 16.dp),
                 color = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.extraLarge
             ) {
-                SwitchSettingListItem(
+                ListItem(
                     headlineContent = {
                         Text(
                             text = stringResource(R.string.headline_notify_on_ip_change),
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
-                    checked = state.isEnabled,
-                    onCheckedChange = {
-                        onIntent(NotificationsPageIntent.ToggleNotifications(it))
-                    }
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    trailingContent = {
+                        Switch(
+                            checked = state.isEnabled,
+                            onCheckedChange = {
+                                onIntent(NotificationsPageIntent.ToggleNotifications(it))
+                            },
+                            modifier = Modifier.testTag(SwitchSettingListItemTestTags.SWITCH)
+                        )
+                    },
+                    colors = ListItemDefaults.colors(
+                        containerColor = Color.Transparent,
+                        headlineColor = LocalContentColor.current
+                    )
                 )
             }
 
@@ -134,6 +175,7 @@ fun NotificationsPage(
                 LazyColumn(
                     modifier = Modifier.testTag(NotificationsPageTestTags.ENABLED_CONTENT),
                     contentPadding = PaddingValues(
+                        top = topPadding,
                         bottom = paddingValues.calculateBottomPadding()
                     )
                 ) {
@@ -182,6 +224,7 @@ fun NotificationsPage(
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
+                        .padding(top = topPadding)
                         .testTag(NotificationsPageTestTags.DISABLED_CONTENT),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
