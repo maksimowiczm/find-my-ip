@@ -28,6 +28,7 @@
     <string name="headline_periodic_work">Periodic Work</string>
     <string name="headline_foreground_service_and_periodic_work">Foreground service and periodic work</string>
     <string name="headline_what_is_network_state_change">What is network state change?</string>
+    <string name="headline_permission_required">Permission required</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
@@ -51,6 +52,7 @@
     <string name="action_confirm">Confirm</string>
     <string name="action_go_back">Go back</string>
     <string name="action_translate">Translate</string>
+    <string name="action_go_to_settings">Go to settings</string>
 
     <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
     <string name="description_background_services_short">Run while the app is closed</string>
@@ -66,4 +68,5 @@
     <string name="description_combine_periodic_notifications">You can combine periodic work with notifications to create powerful combination</string>
 
     <string name="link_help_translate">https://</string>
+    <string name="description_notifications_permission_required">Notifications permission is required to send notifications about IP changes. Please enable it in the system settings.</string>
 </resources>

@@ -40,6 +40,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+
+        freeCompilerArgs += "-Xwhen-guards"
     }
     buildFeatures {
         compose = true
@@ -47,6 +49,8 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.accompanist.permissions)
 
     implementation(libs.navigation.compose)
 

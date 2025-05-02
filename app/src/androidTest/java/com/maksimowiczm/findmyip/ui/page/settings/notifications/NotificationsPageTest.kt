@@ -73,7 +73,8 @@ class NotificationsPageTest {
                     ipv6Enabled = true
                 ),
                 onIntent = {},
-                onBack = { clicked = true }
+                onBack = { clicked = true },
+                onSystemSettings = {}
             )
         }
 
