@@ -13,9 +13,11 @@ kotlinxCoroutinesTest = "1.10.2"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.04.01"
+kotlinxSerializationJson = "1.8.0"
 kotlinxDatetime = "0.6.2"
 ktor = "3.1.2"
 mockk = "1.14.2"
+navigationCompose = "2.8.9"
 turbine = "1.2.0"
 
 [libraries]
@@ -48,9 +50,12 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

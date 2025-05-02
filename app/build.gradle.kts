@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -47,6 +48,8 @@ android {
 
 dependencies {
 
+    implementation(libs.navigation.compose)
+
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
 
@@ -57,6 +60,7 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
 
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.compose.shimmer)
 
     implementation(libs.androidx.datastore.preferences)
