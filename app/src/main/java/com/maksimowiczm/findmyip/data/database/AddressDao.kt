@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import com.maksimowiczm.findmyip.data.model.AddressEntity
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
 import kotlinx.coroutines.flow.Flow
 
@@ -31,22 +32,32 @@ abstract class AddressDao : AddressLocalDataSource {
     @Query("SELECT * FROM Address WHERE Id = :id")
     abstract override suspend fun getAddress(id: Long): AddressEntity?
 
-    @Query("SELECT * FROM Address ORDER BY EpochMillis DESC LIMIT 1")
-    protected abstract suspend fun getLastAddress(): AddressEntity?
+    @Query(
+        """
+        SELECT * 
+        FROM Address 
+        WHERE 
+          InternetProtocol = :protocol
+        ORDER BY EpochMillis DESC 
+        LIMIT 1
+        """
+    )
+    protected abstract suspend fun getLatestAddress(protocol: InternetProtocol): AddressEntity?
 
     @Insert
-    abstract override suspend fun insertAddress(address: AddressEntity)
+    protected abstract suspend fun insertAddress(address: AddressEntity): Long?
 
     @Transaction
-    override suspend fun insertAddressIfUniqueToLast(address: AddressEntity) {
-        val lastAddress = getLastAddress()
-        if (
-            lastAddress == null ||
-            lastAddress.ip != address.ip ||
-            lastAddress.networkType != address.networkType ||
-            lastAddress.internetProtocol != address.internetProtocol
+    override suspend fun insertAddressIfUniqueToLast(address: AddressEntity): Long? {
+        val latestAddress = getLatestAddress(protocol = address.internetProtocol)
+        return if (
+            latestAddress == null ||
+            latestAddress.ip != address.ip ||
+            latestAddress.networkType != address.networkType
         ) {
             insertAddress(address)
+        } else {
+            null
         }
     }
 

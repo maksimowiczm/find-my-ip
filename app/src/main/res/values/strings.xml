@@ -30,6 +30,8 @@
     <string name="headline_what_is_network_state_change">What is network state change?</string>
     <string name="headline_permission_required">Permission required</string>
     <string name="headline_home">Home</string>
+    <string name="headline_ip_change">IP Change</string>
+    <string name="headline_new_address_detected">New address detected</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>

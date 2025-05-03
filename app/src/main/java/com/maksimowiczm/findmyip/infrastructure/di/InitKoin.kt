@@ -8,6 +8,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         config?.invoke(this)
 
         modules(
+            androidModule,
             databaseModule,
             dataModule,
             dataStoreModule,

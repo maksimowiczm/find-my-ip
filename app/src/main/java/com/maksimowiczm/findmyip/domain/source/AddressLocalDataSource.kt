@@ -15,13 +15,11 @@ interface AddressLocalDataSource {
 
     suspend fun getAddress(id: Long): AddressEntity?
 
-    suspend fun insertAddress(address: AddressEntity)
-
     /**
      * Inserts an address into the database if it is unique to the last address. This means that if
      * the address already exists in the database, it will not be inserted again.
      */
-    suspend fun insertAddressIfUniqueToLast(address: AddressEntity)
+    suspend fun insertAddressIfUniqueToLast(address: AddressEntity): Long?
 
     suspend fun deleteAddress(address: AddressEntity)
 }
