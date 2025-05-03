@@ -6,8 +6,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.model.NetworkType
+import com.maksimowiczm.findmyip.domain.model.testAddress
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import org.junit.Rule
 import org.junit.Test
 
@@ -110,13 +110,7 @@ class HistoryPageTest {
         setContent {
             HistoryPage(
                 state = HistoryPageState(
-                    addressList = listOf(
-                        Address(
-                            ip = "192.168.1.1",
-                            dateTime = LocalDateTime(2023, 10, 1, 12, 0),
-                            networkType = NetworkType.WiFi
-                        )
-                    )
+                    addressList = listOf(Address.fromDomain(testAddress()))
                 ),
                 onIntent = {}
             )

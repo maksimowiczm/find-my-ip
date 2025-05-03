@@ -38,7 +38,7 @@ class HomePageViewModel(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(2_000),
+        started = SharingStarted.Lazily, // cache forever to avoid unnecessary collections
         initialValue = HomePageState()
     )
 

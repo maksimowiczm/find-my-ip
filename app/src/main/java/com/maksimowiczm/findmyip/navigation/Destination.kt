@@ -12,6 +12,9 @@ sealed interface TopDestination : Destination
 data object Home : TopDestination
 
 @Serializable
+data object History : TopDestination
+
+@Serializable
 data object Settings : TopDestination
 
 @Serializable

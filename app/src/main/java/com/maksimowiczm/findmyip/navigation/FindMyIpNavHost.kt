@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
+import com.maksimowiczm.findmyip.ui.page.history.HistoryPage
 import com.maksimowiczm.findmyip.ui.page.home.HomePage
 import com.maksimowiczm.findmyip.ui.page.settings.SettingsPage
 import com.maksimowiczm.findmyip.ui.page.settings.language.LanguagePage
@@ -26,6 +27,12 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
             exitTransition = { materialFadeThroughOut() }
         ) {
             HomePage()
+        }
+        composable<History>(
+            enterTransition = { materialFadeThroughIn() },
+            exitTransition = { materialFadeThroughOut() }
+        ) {
+            HistoryPage()
         }
         navigation<Settings>(
             startDestination = SettingsHome

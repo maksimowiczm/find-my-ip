@@ -59,16 +59,30 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.ui.res.stringResource
 import com.maksimowiczm.findmyip.ui.utils.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.utils.LocalDateFormatter
+import kotlin.String
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun HistoryPage(modifier: Modifier = Modifier, viewModel: HistoryPageViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    HistoryPage(
+        state = state,
+        onIntent = viewModel::onIntent,
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -203,10 +217,10 @@ fun HistoryPage(
                     SearchBar(
                         query = state.searchQuery,
                         onSearchQueryChange = {
-                            onIntent(HistoryPageIntent.SearchQueryChanged(it))
+                            onIntent(HistoryPageIntent.Search(it))
                         },
                         onClearSearch = {
-                            onIntent(HistoryPageIntent.ClearSearch)
+                            onIntent(HistoryPageIntent.Search(""))
                         },
                         onSearch = {
                             onIntent(HistoryPageIntent.Search(it))

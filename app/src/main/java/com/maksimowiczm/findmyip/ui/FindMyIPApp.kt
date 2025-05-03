@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.ui
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.navigation.FindMyIpNavHost
+import com.maksimowiczm.findmyip.navigation.History
 import com.maksimowiczm.findmyip.navigation.Home
 import com.maksimowiczm.findmyip.navigation.Settings
 import com.maksimowiczm.findmyip.navigation.SettingsHome
@@ -40,6 +42,30 @@ fun FindMyIPApp(modifier: Modifier = Modifier) {
             item(
                 icon = {
                     Icon(
+                        imageVector = Icons.Default.History,
+                        contentDescription = null
+                    )
+                },
+                label = { Text(stringResource(R.string.headline_history)) },
+                selected = currentDestination == History,
+                onClick = {
+                    if (currentDestination == History) {
+                        navController.popBackStack<History>(inclusive = false)
+                    } else {
+                        navController.navigate(History) {
+                            launchSingleTop = true
+                            restoreState = true
+
+                            popUpTo<Home> {
+                                saveState = true
+                            }
+                        }
+                    }
+                }
+            )
+            item(
+                icon = {
+                    Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = null
                     )
@@ -53,6 +79,10 @@ fun FindMyIPApp(modifier: Modifier = Modifier) {
                         navController.navigate(Settings) {
                             launchSingleTop = true
                             restoreState = true
+
+                            popUpTo<Home> {
+                                saveState = true
+                            }
                         }
                     }
                 }

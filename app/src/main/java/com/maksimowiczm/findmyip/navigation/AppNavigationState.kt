@@ -23,6 +23,7 @@ class AppNavigationState(val navController: NavHostController) {
         return when {
             destination.isRouteInHierarchy<Home>() == true -> Home
             destination.isRouteInHierarchy<Settings>() == true -> Settings
+            destination.isRouteInHierarchy<History>() == true -> History
             else -> null
         }
     }
