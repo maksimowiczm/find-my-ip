@@ -20,17 +20,3 @@ data class AddressEntity(
     @ColumnInfo(name = "EpochMillis")
     val epochMillis: Long
 )
-
-fun testAddressEntity(
-    id: Long = 0L,
-    ip: String = "127.0.0.1",
-    internetProtocol: InternetProtocol = InternetProtocol.IPv4,
-    networkType: NetworkType = NetworkType.WiFi,
-    epochMillis: Long = 0L
-) = AddressEntity(
-    id = id,
-    ip = ip,
-    internetProtocol = internetProtocol,
-    networkType = networkType,
-    epochMillis = epochMillis
-)

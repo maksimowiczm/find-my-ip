@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.maksimowiczm.findmyip.domain.model.testAddress
+import com.maksimowiczm.findmyip.domain.model.AddressId
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.ui.res.stringResource
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
 import com.maksimowiczm.findmyip.ui.utils.LocalDateFormatter
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun AddressListItem(
@@ -51,7 +53,12 @@ fun AddressListItem(
 private fun AddressListItemPreview() {
     FindMyIPTheme {
         AddressListItem(
-            address = Address.fromDomain(testAddress()),
+            address = Address(
+                id = AddressId(0L),
+                ip = "127.0.0.1",
+                dateTime = LocalDateTime(0, 0, 0, 0, 0, 0),
+                networkType = NetworkType.WiFi
+            ),
             onClick = {}
         )
     }

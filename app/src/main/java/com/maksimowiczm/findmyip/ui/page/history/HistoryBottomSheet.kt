@@ -19,8 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.maksimowiczm.findmyip.R
-import com.maksimowiczm.findmyip.domain.model.testAddress
+import com.maksimowiczm.findmyip.domain.model.AddressId
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
+import kotlinx.datetime.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,7 +109,12 @@ private fun HistoryBottomSheetContent(
 private fun HistoryBottomSheetPreview() {
     FindMyIPTheme {
         HistoryBottomSheetContent(
-            address = Address.fromDomain(testAddress()),
+            address = Address(
+                id = AddressId(0L),
+                ip = "127.0.0.1",
+                dateTime = LocalDateTime(0, 0, 0, 0, 0, 0),
+                networkType = NetworkType.WiFi
+            ),
             onCopy = {},
             onDelete = {}
         )

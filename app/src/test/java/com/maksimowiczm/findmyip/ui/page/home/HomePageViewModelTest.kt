@@ -1,11 +1,11 @@
 package com.maksimowiczm.findmyip.ui.page.home
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.data.model.AddressEntity
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.source.testNetworkAddress
 import com.maksimowiczm.findmyip.domain.usecase.ObserveCurrentAddressUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -107,11 +107,9 @@ class HomePageViewModelTest {
             flow {
                 emit(
                     AddressState.Success(
-                        AddressEntity(
+                        testNetworkAddress(
                             ip = "ip",
-                            networkType = NetworkType.WiFi,
-                            internetProtocol = InternetProtocol.IPv4,
-                            epochMillis = 0
+                            internetProtocol = InternetProtocol.IPv4
                         )
                     )
                 )
@@ -158,43 +156,33 @@ class HomePageViewModelTest {
             // Initial state
             assertEquals(HomePageState(), awaitItem())
 
-            launch {
-                addressStateFlow.emit(
-                    AddressState.Success(
-                        AddressEntity(
-                            ip = "initial",
-                            networkType = NetworkType.WiFi,
-                            internetProtocol = InternetProtocol.IPv4,
-                            epochMillis = 0
-                        )
+            addressStateFlow.emit(
+                AddressState.Success(
+                    testNetworkAddress(
+                        ip = "initial"
                     )
                 )
-            }
+            )
 
             // After first success
             val state1 = awaitItem()
             assertEquals(IpState.Success("initial"), state1.ipv4)
 
-            launch {
-                addressStateFlow.emit(AddressState.Refreshing)
-            }
+            addressStateFlow.emit(AddressState.Refreshing)
 
             // Refreshing
             val state2 = awaitItem()
             assertEquals(IpState.Loading("initial"), state2.ipv4)
 
-            launch {
-                addressStateFlow.emit(
-                    AddressState.Success(
-                        AddressEntity(
-                            ip = "new",
-                            networkType = NetworkType.WiFi,
-                            internetProtocol = InternetProtocol.IPv4,
-                            epochMillis = 0
-                        )
+            addressStateFlow.emit(
+                AddressState.Success(
+                    testNetworkAddress(
+                        ip = "new",
+                        networkType = NetworkType.Cellular,
+                        internetProtocol = InternetProtocol.IPv4
                     )
                 )
-            }
+            )
 
             // Final Success (new address)
             val state3 = awaitItem()
@@ -225,11 +213,8 @@ class HomePageViewModelTest {
             launch {
                 addressStateFlow.emit(
                     AddressState.Success(
-                        AddressEntity(
-                            ip = "initial",
-                            networkType = NetworkType.WiFi,
-                            internetProtocol = InternetProtocol.IPv4,
-                            epochMillis = 0
+                        testNetworkAddress(
+                            ip = "initial"
                         )
                     )
                 )

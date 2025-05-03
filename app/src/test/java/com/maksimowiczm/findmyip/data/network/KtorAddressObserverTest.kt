@@ -1,10 +1,10 @@
 package com.maksimowiczm.findmyip.data.network
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.data.model.AddressEntity
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.source.testNetworkAddress
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -13,6 +13,10 @@ import io.ktor.http.HttpStatusCode
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.junit.Test
 
 class KtorAddressObserverTest {
@@ -27,12 +31,17 @@ class KtorAddressObserverTest {
         respondError(HttpStatusCode.ServiceUnavailable)
     }
 
+    private val epoch = Clock.System.now().toEpochMilliseconds()
+    private val dateTime = Instant
+        .fromEpochMilliseconds(epoch)
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+
     private val observer: KtorAddressObserver
         get() = KtorAddressObserver(
             url = "",
             client = HttpClient(httpEngine),
             internetProtocol = InternetProtocol.IPv4,
-            dateProvider = { 0 },
+            dateProvider = { epoch },
             connectivityObserver = { NetworkType.WiFi }
         )
 
@@ -41,7 +50,7 @@ class KtorAddressObserverTest {
             url = "",
             client = HttpClient(errorHttpEngine),
             internetProtocol = InternetProtocol.IPv4,
-            dateProvider = { 0 },
+            dateProvider = { epoch },
             connectivityObserver = { NetworkType.WiFi }
         )
 
@@ -51,11 +60,9 @@ class KtorAddressObserverTest {
             assertEquals(AddressState.Refreshing, awaitItem())
             assertEquals(
                 AddressState.Success(
-                    AddressEntity(
+                    testNetworkAddress(
                         ip = ip,
-                        networkType = NetworkType.WiFi,
-                        internetProtocol = InternetProtocol.IPv4,
-                        epochMillis = 0
+                        dateTime = dateTime
                     )
                 ),
                 awaitItem()
@@ -72,11 +79,9 @@ class KtorAddressObserverTest {
             assertEquals(AddressState.Refreshing, awaitItem())
             assertEquals(
                 AddressState.Success(
-                    AddressEntity(
+                    testNetworkAddress(
                         ip = ip,
-                        networkType = NetworkType.WiFi,
-                        internetProtocol = InternetProtocol.IPv4,
-                        epochMillis = 0
+                        dateTime = dateTime
                     )
                 ),
                 awaitItem()
@@ -89,11 +94,9 @@ class KtorAddressObserverTest {
             assertEquals(AddressState.Refreshing, awaitItem())
             assertEquals(
                 AddressState.Success(
-                    AddressEntity(
+                    testNetworkAddress(
                         ip = ip,
-                        networkType = NetworkType.WiFi,
-                        internetProtocol = InternetProtocol.IPv4,
-                        epochMillis = 0
+                        dateTime = dateTime
                     )
                 ),
                 awaitItem()

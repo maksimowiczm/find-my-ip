@@ -1,11 +1,11 @@
 package com.maksimowiczm.findmyip.data.network
 
-import com.maksimowiczm.findmyip.data.model.AddressEntity
 import com.maksimowiczm.findmyip.data.utils.DateProvider
 import com.maksimowiczm.findmyip.data.utils.defaultKotlinDateProvider
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.source.NetworkAddress
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class KtorAddressObserver(
     private val url: String,
@@ -37,7 +40,7 @@ class KtorAddressObserver(
         }
         .filterNotNull()
 
-    override suspend fun refresh(): Result<AddressEntity> {
+    override suspend fun refresh(): Result<NetworkAddress> {
         _flow.emit(AddressState.Refreshing)
 
         val result = runCatching {
@@ -53,11 +56,13 @@ class KtorAddressObserver(
             val networkType = connectivityObserver.getNetworkType()
                 ?: error("Network type is null")
 
-            AddressEntity(
+            NetworkAddress(
                 ip = responseText,
                 networkType = networkType,
                 internetProtocol = internetProtocol,
-                epochMillis = dateProvider.currentTimeMillis()
+                dateTime = Instant
+                    .fromEpochMilliseconds(dateProvider.currentTimeMillis())
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
             )
         }
 

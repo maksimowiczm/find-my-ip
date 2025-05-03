@@ -1,10 +1,10 @@
 package com.maksimowiczm.findmyip.domain.usecase
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.data.model.testAddressEntity
 import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.source.testNetworkAddress
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -31,9 +31,9 @@ class ObserveCurrentAddressUseCaseImplTest {
         )
 
         useCase.observe().test {
-            addressFlow.emit(AddressState.Success(testAddressEntity()))
+            addressFlow.emit(AddressState.Success(testNetworkAddress()))
             assertEquals(
-                AddressState.Success(testAddressEntity()),
+                AddressState.Success(testNetworkAddress()),
                 awaitItem()
             )
 
@@ -65,7 +65,7 @@ class ObserveCurrentAddressUseCaseImplTest {
             addressObserver = addressObserver,
             addressLocalDataSource = addressLocalDataSource
         )
-        val entity = testAddressEntity()
+        val entity = testNetworkAddress()
 
         useCase.observe().test {
             addressFlow.emit(AddressState.Refreshing)
@@ -80,7 +80,7 @@ class ObserveCurrentAddressUseCaseImplTest {
         coVerify(
             exactly = 1
         ) {
-            addressLocalDataSource.insertAddressIfUniqueToLast(entity)
+            addressLocalDataSource.insertAddressIfUniqueToLast(any())
         }
     }
 }

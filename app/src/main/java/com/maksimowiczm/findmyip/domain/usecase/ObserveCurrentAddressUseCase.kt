@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.domain.usecase
 
+import com.maksimowiczm.findmyip.domain.mapper.AddressMapper
 import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
@@ -21,7 +22,8 @@ class ObserveCurrentAddressUseCaseImpl(
     override fun observe() = addressObserver.flow.onEach {
         if (it is AddressState.Success) {
             coroutineScope.launch {
-                addressLocalDataSource.insertAddressIfUniqueToLast(it.address)
+                val address = AddressMapper.toEntity(it.address)
+                addressLocalDataSource.insertAddressIfUniqueToLast(address)
             }
         }
     }
