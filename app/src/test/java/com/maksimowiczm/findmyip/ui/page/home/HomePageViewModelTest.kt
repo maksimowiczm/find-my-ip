@@ -1,9 +1,12 @@
 package com.maksimowiczm.findmyip.ui.page.home
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.domain.source.Address
+import com.maksimowiczm.findmyip.data.model.AddressEntity
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.usecase.ObserveCurrentAddressUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -24,9 +27,15 @@ class HomePageViewModelTest {
     @Test
     fun `Initial state check`() = runTest {
         val addressObserver = mockk<AddressObserver>()
-        every { addressObserver.flow } returns flow { }
+        val useCase = ObserveCurrentAddressUseCase { flowOf() }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
 
         viewModel.state.test {
             assertEquals(HomePageState(), awaitItem())
@@ -38,9 +47,15 @@ class HomePageViewModelTest {
     @Test
     fun `Initial into loading state`() = runTest {
         val addressObserver = mockk<AddressObserver>()
-        every { addressObserver.flow } returns flow { emit(AddressState.Refreshing) }
+        val useCase = ObserveCurrentAddressUseCase { flow { emit(AddressState.Refreshing) } }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
 
         viewModel.state.test {
             assertEquals(
@@ -58,9 +73,16 @@ class HomePageViewModelTest {
     @Test
     fun `Initial into error state`() = runTest {
         val addressObserver = mockk<AddressObserver>()
+        val useCase = ObserveCurrentAddressUseCase { flow { emit(AddressState.Error(null)) } }
         every { addressObserver.flow } returns flow { emit(AddressState.Error(null)) }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
 
         viewModel.state.test {
             assertEquals(HomePageState(), awaitItem())
@@ -81,9 +103,28 @@ class HomePageViewModelTest {
     @Test
     fun `Initial into success state`() = runTest {
         val addressObserver = mockk<AddressObserver>()
-        every { addressObserver.flow } returns flow { emit(AddressState.Success(Address("ip"))) }
+        val useCase = ObserveCurrentAddressUseCase {
+            flow {
+                emit(
+                    AddressState.Success(
+                        AddressEntity(
+                            ip = "ip",
+                            networkType = NetworkType.WiFi,
+                            internetProtocol = InternetProtocol.IPv4,
+                            epochMillis = 0
+                        )
+                    )
+                )
+            }
+        }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
         viewModel.state.test {
             assertEquals(HomePageState(), awaitItem())
 
@@ -103,16 +144,31 @@ class HomePageViewModelTest {
     fun `Preserve ip on refreshing state`() = runTest {
         val addressStateFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver>()
-        every { addressObserver.flow } returns addressStateFlow.filterNotNull()
+        val useCase = ObserveCurrentAddressUseCase { addressStateFlow.filterNotNull() }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
 
         viewModel.state.test {
             // Initial state
             assertEquals(HomePageState(), awaitItem())
 
             launch {
-                addressStateFlow.emit(AddressState.Success(Address("initial")))
+                addressStateFlow.emit(
+                    AddressState.Success(
+                        AddressEntity(
+                            ip = "initial",
+                            networkType = NetworkType.WiFi,
+                            internetProtocol = InternetProtocol.IPv4,
+                            epochMillis = 0
+                        )
+                    )
+                )
             }
 
             // After first success
@@ -128,7 +184,16 @@ class HomePageViewModelTest {
             assertEquals(IpState.Loading("initial"), state2.ipv4)
 
             launch {
-                addressStateFlow.emit(AddressState.Success(Address("new")))
+                addressStateFlow.emit(
+                    AddressState.Success(
+                        AddressEntity(
+                            ip = "new",
+                            networkType = NetworkType.WiFi,
+                            internetProtocol = InternetProtocol.IPv4,
+                            epochMillis = 0
+                        )
+                    )
+                )
             }
 
             // Final Success (new address)
@@ -143,16 +208,31 @@ class HomePageViewModelTest {
     fun `Success into error state`() = runTest {
         val addressStateFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver>()
-        every { addressObserver.flow } returns addressStateFlow.filterNotNull()
+        val useCase = ObserveCurrentAddressUseCase { addressStateFlow.filterNotNull() }
 
-        val viewModel = HomePageViewModel(addressObserver, addressObserver, loadingDelayMillis = 0)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = useCase,
+            observeIpv6 = useCase,
+            ipv4 = addressObserver,
+            ipv6 = addressObserver,
+            loadingDelayMillis = 0
+        )
 
         viewModel.state.test {
             // Initial state
             assertEquals(HomePageState(), awaitItem())
 
             launch {
-                addressStateFlow.emit(AddressState.Success(Address("initial")))
+                addressStateFlow.emit(
+                    AddressState.Success(
+                        AddressEntity(
+                            ip = "initial",
+                            networkType = NetworkType.WiFi,
+                            internetProtocol = InternetProtocol.IPv4,
+                            epochMillis = 0
+                        )
+                    )
+                )
             }
 
             // After first success
@@ -175,10 +255,13 @@ class HomePageViewModelTest {
     fun `Call refresh on refresh`() = runTest {
         val addressObserver4 = mockk<AddressObserver>(relaxed = true)
         val addressObserver6 = mockk<AddressObserver>(relaxed = true)
-        every { addressObserver4.flow } returns flowOf()
-        every { addressObserver6.flow } returns flowOf()
 
-        val viewModel = HomePageViewModel(addressObserver4, addressObserver6)
+        val viewModel = HomePageViewModel(
+            observeIpv4 = { flowOf() },
+            observeIpv6 = { flowOf() },
+            ipv4 = addressObserver4,
+            ipv6 = addressObserver6
+        )
         viewModel.onRefresh()
 
         verify(

@@ -11,6 +11,8 @@ import org.koin.dsl.module
 val uiModule = module {
     viewModel {
         HomePageViewModel(
+            observeIpv4 = get(named(InternetProtocol.IPv4)),
+            observeIpv6 = get(named(InternetProtocol.IPv6)),
             ipv4 = get(named(InternetProtocol.IPv4)),
             ipv6 = get(named(InternetProtocol.IPv6))
         )

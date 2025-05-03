@@ -1,7 +1,9 @@
 package com.maksimowiczm.findmyip.data.network
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.domain.source.Address
+import com.maksimowiczm.findmyip.data.model.AddressEntity
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -28,20 +30,36 @@ class KtorAddressObserverTest {
     private val observer: KtorAddressObserver
         get() = KtorAddressObserver(
             url = "",
-            client = HttpClient(httpEngine)
+            client = HttpClient(httpEngine),
+            internetProtocol = InternetProtocol.IPv4,
+            dateProvider = { 0 },
+            connectivityObserver = { NetworkType.WiFi }
         )
 
     private val errorObserver: KtorAddressObserver
         get() = KtorAddressObserver(
             url = "",
-            client = HttpClient(errorHttpEngine)
+            client = HttpClient(errorHttpEngine),
+            internetProtocol = InternetProtocol.IPv4,
+            dateProvider = { 0 },
+            connectivityObserver = { NetworkType.WiFi }
         )
 
     @Test
     fun `Initial state is refreshed`() = runTest {
         observer.flow.test {
             assertEquals(AddressState.Refreshing, awaitItem())
-            assertEquals(AddressState.Success(Address(ip)), awaitItem())
+            assertEquals(
+                AddressState.Success(
+                    AddressEntity(
+                        ip = ip,
+                        networkType = NetworkType.WiFi,
+                        internetProtocol = InternetProtocol.IPv4,
+                        epochMillis = 0
+                    )
+                ),
+                awaitItem()
+            )
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -52,14 +70,34 @@ class KtorAddressObserverTest {
 
         observer.flow.test {
             assertEquals(AddressState.Refreshing, awaitItem())
-            assertEquals(AddressState.Success(Address(ip)), awaitItem())
+            assertEquals(
+                AddressState.Success(
+                    AddressEntity(
+                        ip = ip,
+                        networkType = NetworkType.WiFi,
+                        internetProtocol = InternetProtocol.IPv4,
+                        epochMillis = 0
+                    )
+                ),
+                awaitItem()
+            )
 
             launch {
                 observer.refresh()
             }
 
             assertEquals(AddressState.Refreshing, awaitItem())
-            assertEquals(AddressState.Success(Address(ip)), awaitItem())
+            assertEquals(
+                AddressState.Success(
+                    AddressEntity(
+                        ip = ip,
+                        networkType = NetworkType.WiFi,
+                        internetProtocol = InternetProtocol.IPv4,
+                        epochMillis = 0
+                    )
+                ),
+                awaitItem()
+            )
 
             cancelAndIgnoreRemainingEvents()
         }

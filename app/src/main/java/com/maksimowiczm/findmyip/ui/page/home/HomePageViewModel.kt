@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
+import com.maksimowiczm.findmyip.domain.usecase.ObserveCurrentAddressUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,14 +15,16 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
 class HomePageViewModel(
+    observeIpv4: ObserveCurrentAddressUseCase,
+    observeIpv6: ObserveCurrentAddressUseCase,
     private val ipv4: AddressObserver,
     private val ipv6: AddressObserver,
     loadingDelayMillis: Long = 300
 ) : ViewModel() {
 
     val state = combine(
-        ipv4.flow.delayIfRefreshing(loadingDelayMillis),
-        ipv6.flow.delayIfRefreshing(loadingDelayMillis)
+        observeIpv4.observe().delayIfRefreshing(loadingDelayMillis),
+        observeIpv6.observe().delayIfRefreshing(loadingDelayMillis)
     ).runningFold(
         initial = HomePageState()
     ) { prev, (ipv4, ipv6) ->

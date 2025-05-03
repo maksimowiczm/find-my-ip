@@ -1,6 +1,9 @@
 package com.maksimowiczm.findmyip.data.network
 
-import com.maksimowiczm.findmyip.domain.source.Address
+import com.maksimowiczm.findmyip.data.model.AddressEntity
+import com.maksimowiczm.findmyip.data.utils.DateProvider
+import com.maksimowiczm.findmyip.data.utils.defaultKotlinDateProvider
+import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import io.ktor.client.HttpClient
@@ -17,6 +20,9 @@ import kotlinx.coroutines.launch
 class KtorAddressObserver(
     private val url: String,
     private val client: HttpClient,
+    private val internetProtocol: InternetProtocol,
+    private val connectivityObserver: ConnectivityObserver,
+    private val dateProvider: DateProvider = defaultKotlinDateProvider,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : AddressObserver {
     private val _flow = MutableStateFlow<AddressState?>(null)
@@ -31,27 +37,36 @@ class KtorAddressObserver(
         }
         .filterNotNull()
 
-    override suspend fun refresh(): Result<Address> {
+    override suspend fun refresh(): Result<AddressEntity> {
         _flow.emit(AddressState.Refreshing)
 
-        val address = runCatching {
+        val result = runCatching {
             val response = client.get(url)
 
             if (response.status.value != 200) {
                 error("Error: ${response.status.value}")
             }
 
-            response.bodyAsText()
-        }.map {
-            Address(it)
+            val responseText = response.bodyAsText()
+
+            // Possible race conditions, how to handle this?
+            val networkType = connectivityObserver.getNetworkType()
+                ?: error("Network type is null")
+
+            AddressEntity(
+                ip = responseText,
+                networkType = networkType,
+                internetProtocol = internetProtocol,
+                epochMillis = dateProvider.currentTimeMillis()
+            )
         }
 
-        address.onSuccess {
+        result.onSuccess {
             _flow.emit(AddressState.Success(it))
         }.onFailure {
             _flow.emit(AddressState.Error(it))
         }
 
-        return address
+        return result
     }
 }
