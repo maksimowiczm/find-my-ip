@@ -4,6 +4,8 @@ import com.maksimowiczm.findmyip.data.network.AndroidConnectivityObserver
 import com.maksimowiczm.findmyip.data.network.ConnectivityObserver
 import com.maksimowiczm.findmyip.data.network.KtorAddressObserver
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences
+import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferencesImpl
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.infrastructure.IpifyConfig
 import io.ktor.client.HttpClient
@@ -47,4 +49,6 @@ val dataModule = module {
     }.bind<AddressObserver>()
 
     factoryOf(::AndroidConnectivityObserver).bind<ConnectivityObserver>()
+
+    factoryOf(::NotificationPreferencesImpl).bind<NotificationPreferences>()
 }
