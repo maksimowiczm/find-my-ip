@@ -36,15 +36,32 @@ android {
             )
         }
     }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("openSource") {
+            dimension = "version"
+            applicationIdSuffix = ".open"
+            versionNameSuffix = "-open"
+        }
+        create("playStore") {
+            dimension = "version"
+            applicationIdSuffix = ".play"
+            versionNameSuffix = "-play"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
 
         freeCompilerArgs += "-Xwhen-guards"
     }
+
     buildFeatures {
         compose = true
     }
