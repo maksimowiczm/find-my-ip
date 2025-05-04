@@ -14,14 +14,11 @@ fun interface ObserveCurrentAddressUseCase {
 
 class ObserveCurrentAddressUseCaseImpl(
     private val addressObserver: AddressObserver,
-    private val insertNetworkAddressIfChangedUseCase: InsertNetworkAddressIfChangedUseCase,
-    private val handleNewAddressUseCase: HandleNewAddressUseCase,
+    private val processAddressUseCase: ProcessAddressUseCase,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : ObserveCurrentAddressUseCase {
     override fun observe() = addressObserver.flow.onSuccess {
-        insertNetworkAddressIfChangedUseCase
-            .insertNetworkAddressIfChanged(it.address)
-            ?.let { handleNewAddressUseCase.handle(it) }
+        processAddressUseCase.process(it.address)
     }
 
     private fun Flow<AddressState>.onSuccess(

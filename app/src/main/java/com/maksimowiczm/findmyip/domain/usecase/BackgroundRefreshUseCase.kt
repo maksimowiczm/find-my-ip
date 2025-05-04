@@ -8,14 +8,10 @@ fun interface BackgroundRefreshUseCase {
 
 class BackgroundRefreshUseCaseImpl(
     private val addressObserver: AddressObserver,
-    private val insertNetworkAddressIfChangedUseCase: InsertNetworkAddressIfChangedUseCase,
-    private val handleNewAddressUseCase: HandleNewAddressUseCase
+    private val processAddressUseCase: ProcessAddressUseCase
 ) : BackgroundRefreshUseCase {
     override suspend fun refresh(): Result<Unit> = runCatching {
         val address = addressObserver.refresh().getOrThrow()
-
-        insertNetworkAddressIfChangedUseCase
-            .insertNetworkAddressIfChanged(address)
-            ?.let { handleNewAddressUseCase.handle(it) }
+        processAddressUseCase.process(address)
     }
 }

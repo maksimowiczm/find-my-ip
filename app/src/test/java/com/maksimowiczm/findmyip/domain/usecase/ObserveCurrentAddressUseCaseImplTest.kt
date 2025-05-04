@@ -1,11 +1,9 @@
 package com.maksimowiczm.findmyip.domain.usecase
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.domain.model.testAddress
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import com.maksimowiczm.findmyip.domain.source.testNetworkAddress
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -18,7 +16,7 @@ import org.junit.Test
 class ObserveCurrentAddressUseCaseImplTest {
 
     @Test
-    fun `ObserveCurrentAddressUseCaseImpl proxy to AddressObserver`() = runTest {
+    fun `proxy to AddressObserver`() = runTest {
         val addressFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver>(relaxed = true) {
             every { flow } returns addressFlow.filterNotNull()
@@ -26,8 +24,7 @@ class ObserveCurrentAddressUseCaseImplTest {
 
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            insertNetworkAddressIfChangedUseCase = mockk(relaxed = true),
-            handleNewAddressUseCase = mockk(relaxed = true)
+            processAddressUseCase = mockk(relaxed = true)
         )
 
         useCase.observe().test {
@@ -54,18 +51,16 @@ class ObserveCurrentAddressUseCaseImplTest {
     }
 
     @Test
-    fun `ObserveCurrentAddressUseCaseImpl inserts address to local data source`() = runTest {
+    fun `process on success`() = runTest {
         val networkAddress = testNetworkAddress()
         val addressFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver> {
             every { flow } returns addressFlow.filterNotNull()
         }
-        val insertNetworkAddressIfChangedUseCase =
-            mockk<InsertNetworkAddressIfChangedUseCase>(relaxed = true)
+        val processAddressUseCase = mockk<ProcessAddressUseCase>(relaxed = true)
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
-            handleNewAddressUseCase = mockk(relaxed = true)
+            processAddressUseCase = processAddressUseCase
         )
 
         useCase.observe().test {
@@ -77,74 +72,57 @@ class ObserveCurrentAddressUseCaseImplTest {
         coVerify(
             exactly = 1
         ) {
-            insertNetworkAddressIfChangedUseCase.insertNetworkAddressIfChanged(networkAddress)
+            processAddressUseCase.process(networkAddress)
         }
     }
 
     @Test
-    fun `ObserveCurrentAddressUseCaseImpl call HandleNewAddressUseCase on new address`() = runTest {
-        val networkAddress = testNetworkAddress()
-        val domainAddress = testAddress()
-
+    fun `don't process on error`() = runTest {
         val addressFlow = MutableStateFlow<AddressState?>(null)
-        val addressObserver = mockk<AddressObserver>(relaxed = true) {
+        val addressObserver = mockk<AddressObserver> {
             every { flow } returns addressFlow.filterNotNull()
         }
-        val insertNetworkAddressIfChangedUseCase = mockk<InsertNetworkAddressIfChangedUseCase> {
-            coEvery { insertNetworkAddressIfChanged(networkAddress) } returns domainAddress
-        }
-        val handleNewAddressUseCase = mockk<HandleNewAddressUseCase>(relaxed = true)
-
+        val processAddressUseCase = mockk<ProcessAddressUseCase>(relaxed = true)
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
-            handleNewAddressUseCase = handleNewAddressUseCase
+            processAddressUseCase = processAddressUseCase
         )
 
         useCase.observe().test {
-            addressFlow.emit(AddressState.Success(networkAddress))
+            addressFlow.emit(AddressState.Error(null))
             awaitItem()
-
             cancelAndIgnoreRemainingEvents()
         }
 
         coVerify(
-            exactly = 1
+            exactly = 0
         ) {
-            handleNewAddressUseCase.handle(domainAddress)
+            processAddressUseCase.process(any())
         }
     }
 
     @Test
-    fun `ObserveCurrentAddressUseCaseImpl does not call HandleNewAddressUseCase on same address`() =
-        runTest {
-            val addressFlow = MutableStateFlow<AddressState?>(null)
-            val addressObserver = mockk<AddressObserver>(relaxed = true) {
-                every { flow } returns addressFlow.filterNotNull()
-            }
-            val insertNetworkAddressIfChangedUseCase =
-                mockk<InsertNetworkAddressIfChangedUseCase>(relaxed = true) {
-                    coEvery { insertNetworkAddressIfChanged(testNetworkAddress()) } returns null
-                }
-            val handleNewAddressUseCase = mockk<HandleNewAddressUseCase>(relaxed = true)
-
-            val useCase = ObserveCurrentAddressUseCaseImpl(
-                addressObserver = addressObserver,
-                insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
-                handleNewAddressUseCase = handleNewAddressUseCase
-            )
-
-            useCase.observe().test {
-                addressFlow.emit(AddressState.Success(testNetworkAddress()))
-                awaitItem()
-
-                cancelAndConsumeRemainingEvents()
-            }
-
-            coVerify(
-                exactly = 0
-            ) {
-                handleNewAddressUseCase.handle(any())
-            }
+    fun `don't process on refreshing`() = runTest {
+        val addressFlow = MutableStateFlow<AddressState?>(null)
+        val addressObserver = mockk<AddressObserver> {
+            every { flow } returns addressFlow.filterNotNull()
         }
+        val processAddressUseCase = mockk<ProcessAddressUseCase>(relaxed = true)
+        val useCase = ObserveCurrentAddressUseCaseImpl(
+            addressObserver = addressObserver,
+            processAddressUseCase = processAddressUseCase
+        )
+
+        useCase.observe().test {
+            addressFlow.emit(AddressState.Refreshing)
+            awaitItem()
+            cancelAndIgnoreRemainingEvents()
+        }
+
+        coVerify(
+            exactly = 0
+        ) {
+            processAddressUseCase.process(any())
+        }
+    }
 }
