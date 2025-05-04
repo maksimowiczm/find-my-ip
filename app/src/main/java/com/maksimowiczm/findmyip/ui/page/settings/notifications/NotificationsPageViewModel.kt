@@ -13,8 +13,10 @@ import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences.Comp
 import com.maksimowiczm.findmyip.ext.launch
 import com.maksimowiczm.findmyip.ext.set
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.runBlocking
 
 class NotificationsPageViewModel(private val userPreferences: DataStore<Preferences>) :
     ViewModel() {
@@ -23,7 +25,7 @@ class NotificationsPageViewModel(private val userPreferences: DataStore<Preferen
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(2_000),
-            initialValue = NotificationsPageState.Disabled
+            initialValue = runBlocking { userPreferences.data.first().toState() }
         )
 
     fun onIntent(intent: NotificationsPageIntent): Unit = launch {
