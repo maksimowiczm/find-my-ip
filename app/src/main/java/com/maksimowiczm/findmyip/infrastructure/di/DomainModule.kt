@@ -4,6 +4,8 @@ import com.maksimowiczm.findmyip.domain.mapper.AddressMapper
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.repository.AddressRepository
 import com.maksimowiczm.findmyip.domain.repository.AddressRepositoryImpl
+import com.maksimowiczm.findmyip.domain.usecase.BackgroundRefreshUseCase
+import com.maksimowiczm.findmyip.domain.usecase.BackgroundRefreshUseCaseImpl
 import com.maksimowiczm.findmyip.domain.usecase.HandleNewAddressUseCase
 import com.maksimowiczm.findmyip.domain.usecase.HandleNewAddressUseCaseImpl
 import com.maksimowiczm.findmyip.domain.usecase.InsertNetworkAddressIfChangedUseCase
@@ -47,4 +49,20 @@ val domainModule = module {
     }.bind<ObserveCurrentAddressUseCase>()
 
     factoryOf(::HandleNewAddressUseCaseImpl).bind<HandleNewAddressUseCase>()
+
+    factory(named(InternetProtocol.IPv4)) {
+        BackgroundRefreshUseCaseImpl(
+            addressObserver = get(named(InternetProtocol.IPv4)),
+            insertNetworkAddressIfChangedUseCase = get(),
+            handleNewAddressUseCase = get()
+        )
+    }.bind<BackgroundRefreshUseCase>()
+
+    factory(named(InternetProtocol.IPv6)) {
+        BackgroundRefreshUseCaseImpl(
+            addressObserver = get(named(InternetProtocol.IPv6)),
+            insertNetworkAddressIfChangedUseCase = get(),
+            handleNewAddressUseCase = get()
+        )
+    }.bind<BackgroundRefreshUseCase>()
 }
