@@ -13,6 +13,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             dataModule,
             dataStoreModule,
             domainModule,
+            flavourModule,
             uiModule
         )
     }

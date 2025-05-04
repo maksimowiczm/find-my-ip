@@ -18,13 +18,32 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun BackgroundServicesPage(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: BackgroundServicesPageViewModel = koinViewModel()
+) {
+    val periodicWorkEnabled by viewModel.periodicWorkEnabled.collectAsStateWithLifecycle()
+
+    BackgroundServicesPage(
+        onBack = onBack,
+        periodicWorkEnabled = periodicWorkEnabled,
+        onTogglePeriodicWork = viewModel::onTogglePeriodicWork,
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -10,6 +10,7 @@ import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
 import com.maksimowiczm.findmyip.ui.page.history.HistoryPage
 import com.maksimowiczm.findmyip.ui.page.home.HomePage
 import com.maksimowiczm.findmyip.ui.page.settings.SettingsPage
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPage
 import com.maksimowiczm.findmyip.ui.page.settings.language.LanguagePage
 import com.maksimowiczm.findmyip.ui.page.settings.notifications.NotificationsPage
 
@@ -40,7 +41,10 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
             settingsComposable<SettingsHome> {
                 SettingsPage(
                     onBackgroundServices = {
-                        // TODO
+                        navController.navigate(BackgroundServicesSettings) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                     onNotifications = {
                         navController.navigate(NotificationsSettings) {
@@ -53,6 +57,13 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
                             launchSingleTop = true
                             restoreState = true
                         }
+                    }
+                )
+            }
+            settingsComposable<BackgroundServicesSettings> {
+                BackgroundServicesPage(
+                    onBack = {
+                        navController.popBackStack<BackgroundServicesSettings>(inclusive = true)
                     }
                 )
             }

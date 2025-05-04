@@ -21,6 +21,9 @@ data object Settings : TopDestination
 data object SettingsHome : Destination
 
 @Serializable
+data object BackgroundServicesSettings : Destination
+
+@Serializable
 data object NotificationsSettings : Destination
 
 @Serializable
