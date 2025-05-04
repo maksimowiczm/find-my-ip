@@ -3,9 +3,13 @@ package com.maksimowiczm.findmyip.infrastructure.android
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.domain.model.Address
 import com.maksimowiczm.findmyip.domain.model.NetworkType
@@ -22,11 +26,25 @@ class AndroidNotificationService(
     }
 
     override fun postAddress(address: Address) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "findmyip://history".toUri(),
+            context,
+            MainActivity::class.java
+        )
+
+        val pendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification_ip_change) // TODO
             .setContentTitle(context.getString(R.string.headline_new_address_detected))
             .setContentText(address.notificationText())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .build()
 
         notificationManager.notifyIfAllowed(

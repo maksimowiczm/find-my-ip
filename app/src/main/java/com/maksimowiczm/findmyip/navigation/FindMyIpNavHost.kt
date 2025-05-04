@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
@@ -31,7 +32,12 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
         }
         composable<History>(
             enterTransition = { materialFadeThroughIn() },
-            exitTransition = { materialFadeThroughOut() }
+            exitTransition = { materialFadeThroughOut() },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "findmyip://history"
+                }
+            )
         ) {
             HistoryPage()
         }
