@@ -61,27 +61,6 @@ class AddressMapperTest {
     }
 
     @Test
-    fun `NetworkAddress toDomain valid conversion`() {
-        val address = NetworkAddress(
-            ip = "127.0.0.1",
-            networkType = NetworkType.WiFi,
-            internetProtocol = InternetProtocol.IPv4,
-            dateTime = LocalDateTime(2023, 1, 1, 0, 0, 0)
-        )
-
-        val result = mapper.toDomain(
-            address = address,
-            id = AddressId(1)
-        )
-
-        Assert.assertEquals(AddressId(1), result.id)
-        Assert.assertEquals("127.0.0.1", result.ip)
-        Assert.assertEquals(InternetProtocol.IPv4, result.internetProtocol)
-        Assert.assertEquals(NetworkType.WiFi, result.networkType)
-        Assert.assertEquals(LocalDateTime(2023, 1, 1, 0, 0, 0), result.dateTime)
-    }
-
-    @Test
     fun `NetworkAddress toEntity valid conversion`() {
         val address = NetworkAddress(
             ip = "127.0.0.1",

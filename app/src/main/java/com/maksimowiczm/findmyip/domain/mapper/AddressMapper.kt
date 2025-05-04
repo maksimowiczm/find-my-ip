@@ -20,8 +20,6 @@ object AddressMapper {
         zone: TimeZone = TimeZone.currentSystemDefault()
     ): AddressEntity = address.toEntity(zone)
 
-    fun toDomain(address: NetworkAddress, id: AddressId): Address = address.toDomain(id)
-
     /**
      * Converts a [NetworkAddress] to an [AddressEntity]. Identifier is not set.
      */
@@ -45,14 +43,6 @@ private fun Address.toEntity(zone: TimeZone) = AddressEntity(
     internetProtocol = internetProtocol,
     networkType = networkType,
     epochMillis = dateTime.toInstant(zone).toEpochMilliseconds()
-)
-
-private fun NetworkAddress.toDomain(id: AddressId): Address = Address(
-    id = id,
-    ip = ip,
-    internetProtocol = internetProtocol,
-    networkType = networkType,
-    dateTime = dateTime
 )
 
 private fun NetworkAddress.toEntity(zone: TimeZone): AddressEntity = AddressEntity(

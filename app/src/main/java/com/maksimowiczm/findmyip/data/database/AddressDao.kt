@@ -48,14 +48,15 @@ abstract class AddressDao : AddressLocalDataSource {
     protected abstract suspend fun insertAddress(address: AddressEntity): Long?
 
     @Transaction
-    override suspend fun insertAddressIfUniqueToLast(address: AddressEntity): Long? {
+    override suspend fun insertAddressIfUniqueToLast(address: AddressEntity): AddressEntity? {
         val latestAddress = getLatestAddress(protocol = address.internetProtocol)
         return if (
             latestAddress == null ||
             latestAddress.ip != address.ip ||
             latestAddress.networkType != address.networkType
         ) {
-            insertAddress(address)
+            val newId = insertAddress(address) ?: return null
+            getAddress(newId)
         } else {
             null
         }

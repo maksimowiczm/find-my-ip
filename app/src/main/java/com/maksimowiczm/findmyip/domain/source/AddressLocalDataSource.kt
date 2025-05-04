@@ -19,7 +19,7 @@ interface AddressLocalDataSource {
      * Inserts an address into the database if it is unique to the last address. This means that if
      * the address already exists in the database, it will not be inserted again.
      */
-    suspend fun insertAddressIfUniqueToLast(address: AddressEntity): Long?
+    suspend fun insertAddressIfUniqueToLast(address: AddressEntity): AddressEntity?
 
     suspend fun deleteAddress(address: AddressEntity)
 }

@@ -1,10 +1,7 @@
 package com.maksimowiczm.findmyip.domain.usecase
 
 import app.cash.turbine.test
-import com.maksimowiczm.findmyip.data.model.AddressEntity
-import com.maksimowiczm.findmyip.domain.model.Address
-import com.maksimowiczm.findmyip.domain.model.AddressId
-import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
+import com.maksimowiczm.findmyip.domain.model.testAddress
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import com.maksimowiczm.findmyip.domain.source.testNetworkAddress
@@ -16,8 +13,6 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import org.junit.Test
 
 class ObserveCurrentAddressUseCaseImplTest {
@@ -28,11 +23,10 @@ class ObserveCurrentAddressUseCaseImplTest {
         val addressObserver = mockk<AddressObserver>(relaxed = true) {
             every { flow } returns addressFlow.filterNotNull()
         }
-        val addressLocalDataSource = mockk<AddressLocalDataSource>(relaxed = true)
 
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            addressLocalDataSource = addressLocalDataSource,
+            insertNetworkAddressIfChangedUseCase = mockk(relaxed = true),
             handleNewAddressUseCase = mockk(relaxed = true)
         )
 
@@ -62,22 +56,15 @@ class ObserveCurrentAddressUseCaseImplTest {
     @Test
     fun `ObserveCurrentAddressUseCaseImpl inserts address to local data source`() = runTest {
         val networkAddress = testNetworkAddress()
-        val addressEntity = AddressEntity(
-            ip = networkAddress.ip,
-            internetProtocol = networkAddress.internetProtocol,
-            networkType = networkAddress.networkType,
-            epochMillis = networkAddress.dateTime
-                .toInstant(TimeZone.currentSystemDefault())
-                .toEpochMilliseconds()
-        )
         val addressFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver> {
             every { flow } returns addressFlow.filterNotNull()
         }
-        val addressLocalDataSource = mockk<AddressLocalDataSource>(relaxed = true)
+        val insertNetworkAddressIfChangedUseCase =
+            mockk<InsertNetworkAddressIfChangedUseCase>(relaxed = true)
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            addressLocalDataSource = addressLocalDataSource,
+            insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
             handleNewAddressUseCase = mockk(relaxed = true)
         )
 
@@ -90,33 +77,27 @@ class ObserveCurrentAddressUseCaseImplTest {
         coVerify(
             exactly = 1
         ) {
-            addressLocalDataSource.insertAddressIfUniqueToLast(addressEntity)
+            insertNetworkAddressIfChangedUseCase.insertNetworkAddressIfChanged(networkAddress)
         }
     }
 
     @Test
     fun `ObserveCurrentAddressUseCaseImpl call HandleNewAddressUseCase on new address`() = runTest {
         val networkAddress = testNetworkAddress()
-        val domainAddress = Address(
-            id = AddressId(100L),
-            ip = networkAddress.ip,
-            internetProtocol = networkAddress.internetProtocol,
-            networkType = networkAddress.networkType,
-            dateTime = networkAddress.dateTime
-        )
+        val domainAddress = testAddress()
 
         val addressFlow = MutableStateFlow<AddressState?>(null)
         val addressObserver = mockk<AddressObserver>(relaxed = true) {
             every { flow } returns addressFlow.filterNotNull()
         }
-        val addressLocalDataSource = mockk<AddressLocalDataSource> {
-            coEvery { insertAddressIfUniqueToLast(any()) } returns 100L
+        val insertNetworkAddressIfChangedUseCase = mockk<InsertNetworkAddressIfChangedUseCase> {
+            coEvery { insertNetworkAddressIfChanged(networkAddress) } returns domainAddress
         }
         val handleNewAddressUseCase = mockk<HandleNewAddressUseCase>(relaxed = true)
 
         val useCase = ObserveCurrentAddressUseCaseImpl(
             addressObserver = addressObserver,
-            addressLocalDataSource = addressLocalDataSource,
+            insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
             handleNewAddressUseCase = handleNewAddressUseCase
         )
 
@@ -141,14 +122,15 @@ class ObserveCurrentAddressUseCaseImplTest {
             val addressObserver = mockk<AddressObserver>(relaxed = true) {
                 every { flow } returns addressFlow.filterNotNull()
             }
-            val addressLocalDataSource = mockk<AddressLocalDataSource>(relaxed = true) {
-                coEvery { insertAddressIfUniqueToLast(any()) } returns null
-            }
+            val insertNetworkAddressIfChangedUseCase =
+                mockk<InsertNetworkAddressIfChangedUseCase>(relaxed = true) {
+                    coEvery { insertNetworkAddressIfChanged(testNetworkAddress()) } returns null
+                }
             val handleNewAddressUseCase = mockk<HandleNewAddressUseCase>(relaxed = true)
 
             val useCase = ObserveCurrentAddressUseCaseImpl(
                 addressObserver = addressObserver,
-                addressLocalDataSource = addressLocalDataSource,
+                insertNetworkAddressIfChangedUseCase = insertNetworkAddressIfChangedUseCase,
                 handleNewAddressUseCase = handleNewAddressUseCase
             )
 

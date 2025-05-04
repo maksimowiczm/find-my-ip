@@ -8,7 +8,7 @@ import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences
  * Use case for handling a new (distinct to previous) address.
  */
 fun interface HandleNewAddressUseCase {
-    suspend fun handle(address: Address)
+    suspend fun handle(newAddress: Address)
 }
 
 class HandleNewAddressUseCaseImpl(
@@ -16,10 +16,8 @@ class HandleNewAddressUseCaseImpl(
     private val addressNotificationService: AddressNotificationService
 ) : HandleNewAddressUseCase {
     override suspend fun handle(newAddress: Address) {
-        if (!notificationPreferences.shouldPostNotification(newAddress)) {
-            return
+        if (notificationPreferences.shouldPostNotification(newAddress)) {
+            addressNotificationService.postAddress(newAddress)
         }
-
-        addressNotificationService.postAddress(newAddress)
     }
 }

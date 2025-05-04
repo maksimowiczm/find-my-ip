@@ -1,8 +1,5 @@
 package com.maksimowiczm.findmyip.domain.usecase
 
-import com.maksimowiczm.findmyip.domain.mapper.AddressMapper
-import com.maksimowiczm.findmyip.domain.model.AddressId
-import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import kotlinx.coroutines.CoroutineScope
@@ -17,18 +14,14 @@ fun interface ObserveCurrentAddressUseCase {
 
 class ObserveCurrentAddressUseCaseImpl(
     private val addressObserver: AddressObserver,
-    private val addressLocalDataSource: AddressLocalDataSource,
+    private val insertNetworkAddressIfChangedUseCase: InsertNetworkAddressIfChangedUseCase,
     private val handleNewAddressUseCase: HandleNewAddressUseCase,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : ObserveCurrentAddressUseCase {
     override fun observe() = addressObserver.flow.onSuccess {
-        val entity = AddressMapper.toEntity(it.address)
-        val newId = addressLocalDataSource.insertAddressIfUniqueToLast(entity)
-
-        if (newId != null) {
-            val address = AddressMapper.toDomain(it.address, AddressId(newId))
-            handleNewAddressUseCase.handle(address)
-        }
+        insertNetworkAddressIfChangedUseCase
+            .insertNetworkAddressIfChanged(it.address)
+            ?.let { handleNewAddressUseCase.handle(it) }
     }
 
     private fun Flow<AddressState>.onSuccess(

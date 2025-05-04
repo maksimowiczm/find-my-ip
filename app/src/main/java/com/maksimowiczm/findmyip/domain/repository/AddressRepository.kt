@@ -25,8 +25,10 @@ interface AddressRepository {
     suspend fun deleteAddress(id: AddressId)
 }
 
-class AddressRepositoryImpl(private val localDataSource: AddressLocalDataSource) :
-    AddressRepository {
+class AddressRepositoryImpl(
+    private val localDataSource: AddressLocalDataSource,
+    private val addressMapper: AddressMapper
+) : AddressRepository {
     override fun observeAddresses(
         query: String,
         ipFilters: List<InternetProtocol>,
@@ -47,7 +49,7 @@ class AddressRepositoryImpl(private val localDataSource: AddressLocalDataSource)
             (ipFilters.isEmpty() || ipFilters.contains(it.internetProtocol)) &&
                 (netFilters.isEmpty() || netFilters.contains(it.networkType))
         }
-        .mapValues { AddressMapper.toDomain(it) }
+        .mapValues { addressMapper.toDomain(it) }
 
     override suspend fun deleteAddress(id: AddressId) {
         val address = localDataSource.getAddress(id.value) ?: return
