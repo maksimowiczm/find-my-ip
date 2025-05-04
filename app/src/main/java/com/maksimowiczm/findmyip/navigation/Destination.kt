@@ -28,3 +28,6 @@ data object NotificationsSettings : Destination
 
 @Serializable
 data object LanguageSettings : Destination
+
+@Serializable
+data object About : Destination

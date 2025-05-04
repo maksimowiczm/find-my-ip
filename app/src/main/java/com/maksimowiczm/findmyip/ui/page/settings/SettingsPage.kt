@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ fun SettingsPage(
     onBackgroundServices: () -> Unit,
     onNotifications: () -> Unit,
     onLanguage: () -> Unit,
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -40,6 +42,7 @@ fun SettingsPage(
         onBackgroundServices = onBackgroundServices,
         onNotifications = onNotifications,
         onLanguage = onLanguage,
+        onAbout = onAbout,
         modifier = modifier
     )
 }
@@ -51,6 +54,7 @@ fun SettingsPage(
     onBackgroundServices: () -> Unit,
     onNotifications: () -> Unit,
     onLanguage: () -> Unit,
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -132,6 +136,23 @@ fun SettingsPage(
                     }
                 )
             }
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.headline_about))
+                    },
+                    modifier = Modifier.clickable { onAbout() },
+                    supportingContent = {
+                        Text(stringResource(R.string.description_about))
+                    },
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -144,7 +165,8 @@ private fun SettingsPagePreview() {
             language = "English (United States)",
             onBackgroundServices = {},
             onNotifications = {},
-            onLanguage = {}
+            onLanguage = {},
+            onAbout = {}
         )
     }
 }

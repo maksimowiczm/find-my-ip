@@ -32,6 +32,9 @@
     <string name="headline_home">Home</string>
     <string name="headline_ip_change">IP Change</string>
     <string name="headline_new_address_detected">New address detected</string>
+    <string name="headline_version">Version</string>
+    <string name="headline_about">About</string>
+    <string name="headline_source_code">Source code</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
@@ -69,7 +72,10 @@
     <string name="description_foreground_service_and_periodic_work">The foreground service will keep running all the time and check your IP address when your network changes. Periodic work runs once in a while and is better for your battery.</string>
     <string name="description_what_is_network_state_change">Your device\'s internet connection was updated — like switching Wi-Fi, mobile data, or losing connection</string>
     <string name="description_combine_periodic_notifications">You can combine periodic work with notifications to create powerful combination</string>
-
-    <string name="link_help_translate">https://</string>
     <string name="description_notifications_permission_required">Notifications permission is required to send notifications about IP changes. Please enable it in the system settings.</string>
+    <string name="description_source_code">View the project’s source code on Github</string>
+    <string name="description_about">Learn more about the app</string>
+
+    <string name="link_help_translate" translatable="false">https://</string>
+    <string name="link_source_code" translatable="false">https://</string>
 </resources>

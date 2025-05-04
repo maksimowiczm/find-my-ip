@@ -8,6 +8,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
+import com.maksimowiczm.findmyip.ui.page.about.AboutPage
 import com.maksimowiczm.findmyip.ui.page.history.HistoryPage
 import com.maksimowiczm.findmyip.ui.page.home.HomePage
 import com.maksimowiczm.findmyip.ui.page.settings.SettingsPage
@@ -63,6 +64,12 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
                             launchSingleTop = true
                             restoreState = true
                         }
+                    },
+                    onAbout = {
+                        navController.navigate(About) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 )
             }
@@ -84,6 +91,13 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
                 LanguagePage(
                     onBack = {
                         navController.popBackStack<LanguageSettings>(inclusive = true)
+                    }
+                )
+            }
+            settingsComposable<About> {
+                AboutPage(
+                    onBack = {
+                        navController.popBackStack<About>(inclusive = true)
                     }
                 )
             }
