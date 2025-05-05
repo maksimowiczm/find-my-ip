@@ -1,5 +1,0 @@
-Find My IP to prosta aplikacja zaprojektowana do pobierania i opcjonalnego przechowywania historii adresów IP, pomagając Ci śledzić twoje adresy IP. Może automatycznie rejestrować zmiany adresu IP w tle, dzięki czemu nie musisz otwierać aplikacji za każdym razem.
-
-Aplikacja używa API ipify do pobierania adresu IP urządzenia. Po więcej szczegółów, zobacz https://www.ipify.org.
-
-Ikona aplikacji stworzona przez Freepik z www.flaticon.com.

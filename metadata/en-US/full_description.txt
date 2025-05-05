@@ -1,5 +1,1 @@
-Find My IP is a straightforward app designed to fetch and optionally store your IP address history, helping you keep track of your IP addresses. It can automatically log IP changes in the background, so you don't have to open the app every time.
-
-The app uses the ipify API to retrieve the device's IP address. For more details, see here: https://www.ipify.org.
-
-Launcher icon made by Freepik from www.flaticon.com.
+Find My IP is a straightforward app designed to fetch and store your IP address history. It can automatically log IP changes in the background, so you don’t have to open the app every time.

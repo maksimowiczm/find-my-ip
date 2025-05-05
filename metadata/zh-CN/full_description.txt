@@ -1,5 +1,0 @@
-Find My IP 是一款简单易用的应用，旨在获取并可选地存储您的 IP 地址历史记录，帮助您跟踪自己的 IP 地址。 它可以自动在后台记录 IP 地址的变化，因此您无需每次都打开应用。
-
-这款应用使用 ipify API 来获取设备的 IP 地址。 更多详细信息，请参见此处：https://www.ipify.org。
-
-启动器图标由 Freepik 在 www.flaticon.com 制作。

@@ -1,5 +1,0 @@
-O Find My IP é um app para Android fácil de usar feito para obter e opcionalmente registrar seu endereço IP atual, ajudando você a manter um histórico de seus endereços IP. Ele pode automaticamente registrar mudanças de IP em segundo plano, para que você não tenha que abrir o app toda vez.
-
-O aplicativo usa a API do ipify para obter o endereço IP do dispositivo. Veja aqui para mais detalhes : https://www.ipify.org
-
-Ícone da launcher feito por Freepik de www.flaticon.com.

@@ -1,5 +1,0 @@
-Find My IP, IP adresinizi almak ve isteğe bağlı olarak IP adres geçmişinizi saklamak için tasarlanmış basit bir uygulamadır. IP adreslerinizi takip etmenize yardımcı olur. Uygulama her seferinde açmanıza gerek kalmadan, arka planda IP değişikliklerini otomatik olarak kaydedebilir.
-
-Uygulama, cihazın IP adresini almak için ipify API'sini kullanır. Daha fazla bilgi için buraya bakabilirsiniz: https://www.ipify.org.
-
-Başlatıcı simgesi, Freepik tarafından https://www.flaticon.com sitesinden yapılmıştır.
