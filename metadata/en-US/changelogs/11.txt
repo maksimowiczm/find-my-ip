@@ -1,0 +1,15 @@
+Breaking Changes
+- Background worker has been reset (again)
+
+New features
+- history search
+- save address network type
+- copy IP
+- choose which IPs should trigger notifications
+- save network type in database
+
+Notes
+Since this release, address history is now a mandatory feature.
+I made this decision because it aligns with the main goal of the app and simplifies the codebase.
+
+All addresses saved in previous versions are automatically treated as Wi-Fi addresses.
