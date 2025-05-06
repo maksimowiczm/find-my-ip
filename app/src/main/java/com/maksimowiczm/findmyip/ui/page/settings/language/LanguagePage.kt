@@ -192,6 +192,15 @@ fun LanguagePage(
                         modifier = Modifier
                             .testTag(LanguagePageTestTags.Language(translation.tag).toString())
                             .clickable { onTag(translation.tag) },
+                        supportingContent = {
+                            translation.authors.takeIf { it.isNotEmpty() }?.let {
+                                Column {
+                                    it.forEach { author ->
+                                        Text(author.toAnnotatedString())
+                                    }
+                                }
+                            }
+                        },
                         leadingContent = {
                             RadioButton(
                                 selected = tag == translation.tag,
