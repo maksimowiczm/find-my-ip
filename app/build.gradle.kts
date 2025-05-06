@@ -38,6 +38,8 @@ android {
     }
 
     flavorDimensions += "version"
+    flavorDimensions += "addressSource"
+
     productFlavors {
         create("openSource") {
             dimension = "version"
@@ -48,6 +50,15 @@ android {
             dimension = "version"
             applicationIdSuffix = ".play"
             versionNameSuffix = "-play"
+        }
+
+        create("ipify") {
+            dimension = "addressSource"
+        }
+        create("fake") {
+            dimension = "addressSource"
+            applicationIdSuffix = ".fake"
+            versionNameSuffix = "-fake"
         }
     }
 

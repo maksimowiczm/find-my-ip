@@ -11,6 +11,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             androidModule,
             databaseModule,
             dataModule,
+            addressSourceModule,
             dataStoreModule,
             domainModule,
             flavourModule,

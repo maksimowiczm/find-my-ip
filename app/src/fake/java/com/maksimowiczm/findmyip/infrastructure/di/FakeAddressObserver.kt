@@ -1,17 +1,15 @@
-package com.maksimowiczm.findmyip.data.network
+package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.data.utils.DateProvider
-import com.maksimowiczm.findmyip.data.utils.defaultKotlinDateProvider
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
+import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import com.maksimowiczm.findmyip.domain.source.NetworkAddress
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import kotlin.random.Random
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
@@ -20,19 +18,23 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class KtorAddressObserver(
-    private val url: String,
-    private val client: HttpClient,
+class FakeAddressObserver(
     private val internetProtocol: InternetProtocol,
-    private val connectivityObserver: ConnectivityObserver,
-    private val dateProvider: DateProvider = defaultKotlinDateProvider,
+    private val random: Random = Random.Default,
+    private val dateProvider: DateProvider = DateProvider {
+        random.nextLong(1746500000000, 1747500000000)
+    },
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : AddressObserver {
+    private val addresses: List<String> = when (internetProtocol) {
+        InternetProtocol.IPv4 -> DEMO_IPS_V4
+        InternetProtocol.IPv6 -> DEMO_IPS_V6
+    }
+
     private val _flow = MutableStateFlow<AddressState?>(null)
-    override val flow: Flow<AddressState> = _flow
+    override val flow = _flow
         .onEach {
             if (it == null) {
-                // Don't block the flow scope
                 scope.launch {
                     refresh()
                 }
@@ -44,20 +46,16 @@ class KtorAddressObserver(
         _flow.emit(AddressState.Refreshing)
 
         val result = runCatching {
-            val response = client.get(url)
+            delay(random.nextLong(200, 1000))
+            val response = addresses.random(random)
+            val networkType = randomNetworkType(random)
 
-            if (response.status.value != 200) {
-                error("Error: ${response.status.value}")
+            if (random.nextInt(0, 100) < 20) {
+                error("Simulated error")
             }
 
-            val responseText = response.bodyAsText()
-
-            // Possible race conditions, how to handle this?
-            val networkType = connectivityObserver.getNetworkType()
-                ?: error("Network type is null")
-
             NetworkAddress(
-                ip = responseText,
+                ip = response,
                 networkType = networkType,
                 internetProtocol = internetProtocol,
                 dateTime = Instant
@@ -74,4 +72,28 @@ class KtorAddressObserver(
 
         return result
     }
+}
+
+private val DEMO_IPS_V4 = listOf(
+    // google.com
+    "172.253.63.100",
+    // github.com
+    "140.82.121.3",
+    // developer.android.com
+    "142.250.203.142"
+)
+
+private val DEMO_IPS_V6 = listOf(
+    // google.com
+    "2001:4860:4860::8888",
+    "2001:4860:4860:0:0:0:0:8888",
+    "2001:4860:4860::8844",
+    "2001:4860:4860:0:0:0:0:8844"
+)
+
+private fun randomNetworkType(random: Random) = when (random.nextInt(2)) {
+    0 -> NetworkType.WiFi
+    1 -> NetworkType.Cellular
+    2 -> NetworkType.VPN
+    else -> error("Invalid random value")
 }
