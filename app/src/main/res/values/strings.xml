@@ -59,6 +59,9 @@
     <string name="action_go_back">Go back</string>
     <string name="action_translate">Translate</string>
     <string name="action_go_to_settings">Go to settings</string>
+    <string name="action_agree_and_continue"><![CDATA[Agree & Continue]]></string>
+    <string name="action_enable">Enable</string>
+    <string name="action_skip_for_now">Skip for now</string>
 
     <string name="description_delete_entry">The address entry will be permanently removed from the history</string>
     <string name="description_background_services_short">Run while the app is closed</string>
@@ -78,4 +81,14 @@
 
     <string name="link_help_translate" translatable="false">https://</string>
     <string name="link_source_code" translatable="false">https://</string>
+    <string name="link_ipify" translatable="false">https://www.ipify.org</string>
+
+    <string name="onboarding_learn_more_about_ipify_on_their_website">Learn more about ipify on their website</string>
+    <string name="onboarding_description_before_you_get_started">To provide you with accurate IP tracking, we use the ipify to fetch your public IP address. Your IP address history is stored only on your device — we don’t upload or share your data with anyone.</string>
+    <string name="onboarding_headline_before_you_get_started">Before you get started</string>
+    <string name="onboarding_headline_keep_tracking">Keep tracking, even when you\'re not using the app</string>
+    <string name="onboarding_description_keep_tracking">Enable automatic IP tracking so your address history stays up to date — even when the app is closed.</string>
+    <string name="onboarding_headline_stay_informed">Stay informed</string>
+    <string name="onboarding_description_stay_informed">Get notified when your IP address changes — especially useful when you\'re on the move.</string>
+
 </resources>

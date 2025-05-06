@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.domain.preferences
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.maksimowiczm.findmyip.domain.model.Address
@@ -18,6 +19,18 @@ fun interface NotificationPreferences {
         val notificationsVpnEnabled = booleanPreferencesKey("notifications_vpn_enabled")
         val notificationsIpv4Enabled = booleanPreferencesKey("notifications_ipv4_enabled")
         val notificationsIpv6Enabled = booleanPreferencesKey("notifications_ipv6_enabled")
+
+        /**
+         * Enables all notification preferences.
+         */
+        fun MutablePreferences.enableAll() {
+            this[notificationsEnabled] = true
+            this[notificationsWifiEnabled] = true
+            this[notificationsCellularEnabled] = true
+            this[notificationsVpnEnabled] = true
+            this[notificationsIpv4Enabled] = true
+            this[notificationsIpv6Enabled] = true
+        }
     }
 }
 

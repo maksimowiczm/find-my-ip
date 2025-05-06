@@ -14,6 +14,7 @@ import androidx.work.await
 import com.maksimowiczm.findmyip.domain.backgroundservices.PeriodicWorker
 import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.domain.usecase.BackgroundRefreshUseCase
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -49,7 +50,11 @@ class AndroidPeriodicWorker(private val workManager: WorkManager) : PeriodicWork
         val request = PeriodicWorkRequestBuilder<AddressRefreshWorker>(
             repeatInterval = 30,
             repeatIntervalTimeUnit = TimeUnit.MINUTES
-        ).setConstraints(constraints).addTag(WORK_TAG).build()
+        )
+            .setConstraints(constraints)
+            .setInitialDelay(Duration.ofMinutes(15))
+            .addTag(WORK_TAG)
+            .build()
 
         val operation = workManager.enqueueUniquePeriodicWork(
             WORK_TAG,

@@ -8,18 +8,43 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
+import com.maksimowiczm.findmyip.domain.preferences.OnboardingPreferences
+import com.maksimowiczm.findmyip.ext.get
+import com.maksimowiczm.findmyip.ext.getBlocking
+import com.maksimowiczm.findmyip.ext.observe
 import com.maksimowiczm.findmyip.navigation.FindMyIpNavHost
 import com.maksimowiczm.findmyip.navigation.History
 import com.maksimowiczm.findmyip.navigation.Home
 import com.maksimowiczm.findmyip.navigation.Settings
 import com.maksimowiczm.findmyip.navigation.SettingsHome
 import com.maksimowiczm.findmyip.navigation.rememberAppNavigationState
+import com.maksimowiczm.findmyip.ui.page.onboarding.OnboardingPage
+import org.koin.compose.koinInject
 
 @Composable
-fun FindMyIPApp(modifier: Modifier = Modifier) {
+fun FindMyIPApp(modifier: Modifier = Modifier, dataStore: DataStore<Preferences> = koinInject()) {
+    val isOnboardingCompleted by dataStore
+        .observe(OnboardingPreferences.onboardingCompleted)
+        .collectAsStateWithLifecycle(
+            dataStore.getBlocking(OnboardingPreferences.onboardingCompleted)
+        )
+
+    if (isOnboardingCompleted != true) {
+        OnboardingPage()
+    } else {
+        FindMyIPApp(modifier)
+    }
+}
+
+@Composable
+private fun FindMyIPApp(modifier: Modifier = Modifier) {
     val appNavigationState = rememberAppNavigationState()
     val currentDestination = appNavigationState.rememberTopDestination()
     val navController = appNavigationState.navController

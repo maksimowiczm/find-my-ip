@@ -2,8 +2,10 @@ package com.maksimowiczm.findmyip.ui.page.settings.notifications
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences
 import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences.Companion.notificationsCellularEnabled
 import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences.Companion.notificationsEnabled
 import com.maksimowiczm.findmyip.domain.preferences.NotificationPreferences.Companion.notificationsIpv4Enabled
@@ -29,7 +31,15 @@ class NotificationsPageViewModel(private val userPreferences: DataStore<Preferen
         )
 
     fun onIntent(intent: NotificationsPageIntent): Unit = launch {
-        userPreferences.set(intent.preferenceFlag to intent.newState)
+        if (intent is NotificationsPageIntent.ToggleNotifications && intent.newState == true) {
+            userPreferences.edit {
+                with(NotificationPreferences) {
+                    it.enableAll()
+                }
+            }
+        } else {
+            userPreferences.set(intent.preferenceFlag to intent.newState)
+        }
     }
 }
 
