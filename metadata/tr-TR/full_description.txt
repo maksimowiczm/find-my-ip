@@ -1,0 +1,1 @@
+Find My IP, IP adresi geçmişinizi takip eden basit bir uygulamadır. Arka planda çalışabilir ve herhangi bir değişikliği otomatik olarak kaydeder — her seferinde uygulamayı açmanıza gerek kalmaz.
