@@ -276,15 +276,7 @@ private fun IpState.Content(shimmer: Shimmer, modifier: Modifier = Modifier) {
                     )
                 }
 
-                else -> Text(
-                    text = ip,
-                    modifier = modifier,
-                    style = if (ip.length > 20) {
-                        MaterialTheme.typography.bodyMedium
-                    } else {
-                        LocalTextStyle.current
-                    }
-                )
+                else -> IpText(ip)
             }
 
             IpState.NotDetected -> Text(
@@ -293,15 +285,20 @@ private fun IpState.Content(shimmer: Shimmer, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            is IpState.Success -> Text(
-                text = ip,
-                modifier = modifier,
-                style = if (ip.length > 20) {
-                    MaterialTheme.typography.bodySmall
-                } else {
-                    LocalTextStyle.current
-                }
-            )
+            is IpState.Success -> IpText(ip)
         }
     }
+}
+
+@Composable
+private fun IpText(ip: String, modifier: Modifier = Modifier) {
+    Text(
+        text = ip,
+        modifier = modifier,
+        style = if (ip.length > 20) {
+            MaterialTheme.typography.bodySmall
+        } else {
+            LocalTextStyle.current
+        }
+    )
 }
