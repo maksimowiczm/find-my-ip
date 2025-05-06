@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">Find my IP</string>
 
-    <string name="en_dash">–</string>
+    <string name="en_dash" translatable="false">–</string>
 
     <string name="internet_protocol">Internet Protocol</string>
     <string name="ipv4" translatable="false">IPv4</string>
     <string name="ipv6" translatable="false">IPv6</string>
 
-    <string name="network_type">Network Type</string>
+    <string name="network_type" description="Wi-Fi, Mobile, VPN">Network type</string>
     <string name="wifi" translatable="false">Wi-Fi</string>
     <string name="vpn" translatable="false">VPN</string>
     <string name="cellular">Cellular</string>
 
     <string name="date">Date</string>
-    <string name="system">System</string>
-    <string name="system_language_settings">System language settings</string>
 
+    <string name="headline_system">System</string>
+    <string name="headline_system_language_settings">System language settings</string>
     <string name="headline_history">History</string>
     <string name="headline_internet_protocols">Internet Protocols</string>
     <string name="headline_settings">Settings</string>
@@ -24,10 +24,7 @@
     <string name="headline_language">Language</string>
     <string name="headline_notify_on_ip_change">Notify on IP change</string>
     <string name="headline_system_notifications_settings">System notifications settings</string>
-    <string name="headline_foreground_service">Foreground Service</string>
     <string name="headline_periodic_work">Periodic Work</string>
-    <string name="headline_foreground_service_and_periodic_work">Foreground service and periodic work</string>
-    <string name="headline_what_is_network_state_change">What is network state change?</string>
     <string name="headline_permission_required">Permission required</string>
     <string name="headline_home">Home</string>
     <string name="headline_ip_change">IP Change</string>
@@ -70,17 +67,14 @@
     <string name="description_translate">Help translate the app</string>
     <string name="description_network_type">Which network types should trigger notifications</string>
     <string name="description_internet_protocol">Which Internet Protocols should trigger notifications</string>
-    <string name="description_foreground_service">Observe network state changes</string>
     <string name="description_periodic_work">Run periodically in the background</string>
-    <string name="description_foreground_service_and_periodic_work">The foreground service will keep running all the time and check your IP address when your network changes. Periodic work runs once in a while and is better for your battery.</string>
-    <string name="description_what_is_network_state_change">Your device\'s internet connection was updated — like switching Wi-Fi, mobile data, or losing connection</string>
     <string name="description_combine_periodic_notifications">You can combine periodic work with notifications to create powerful combination</string>
     <string name="description_notifications_permission_required">Notifications permission is required to send notifications about IP changes. Please enable it in the system settings.</string>
     <string name="description_source_code">View the project’s source code on Github</string>
     <string name="description_about">Learn more about the app</string>
 
-    <string name="link_help_translate" translatable="false">https://</string>
-    <string name="link_source_code" translatable="false">https://</string>
+    <string name="link_help_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>
+    <string name="link_source_code" translatable="false">https://github.com/maksimowiczm/find-my-ip</string>
     <string name="link_ipify" translatable="false">https://www.ipify.org</string>
 
     <string name="onboarding_learn_more_about_ipify_on_their_website">Learn more about ipify on their website</string>

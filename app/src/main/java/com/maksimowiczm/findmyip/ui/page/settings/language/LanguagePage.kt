@@ -171,7 +171,7 @@ fun LanguagePage(
             item {
                 ListItem(
                     headlineContent = {
-                        Text(stringResource(R.string.system))
+                        Text(stringResource(R.string.headline_system))
                     },
                     modifier = Modifier
                         .testTag(LanguagePageTestTags.Language(null).toString())
@@ -207,7 +207,7 @@ fun LanguagePage(
                     HorizontalDivider()
                     ListItem(
                         headlineContent = {
-                            Text(stringResource(R.string.system_language_settings))
+                            Text(stringResource(R.string.headline_system_language_settings))
                         },
                         modifier = Modifier
                             .testTag(LanguagePageTestTags.SYSTEM_LANGUAGE_SETTINGS)
