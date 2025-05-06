@@ -43,8 +43,6 @@ android {
     productFlavors {
         create("openSource") {
             dimension = "version"
-            applicationIdSuffix = ".open"
-            versionNameSuffix = "-open"
         }
         create("playStore") {
             dimension = "version"

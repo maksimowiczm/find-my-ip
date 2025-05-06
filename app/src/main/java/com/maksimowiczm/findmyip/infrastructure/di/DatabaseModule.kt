@@ -10,7 +10,7 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-const val DATABASE_NAME = "FindMyIp.db"
+const val DATABASE_NAME = "database"
 
 val databaseModule = module {
     single {

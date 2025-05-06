@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "b511b8f3cb996a0e166dbc4d15cf1599",
+    "version": 2,
+    "identityHash": "a17f5258fd8293dcdd1de0e733913d36",
     "entities": [
       {
         "tableName": "AddressEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ip` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ip` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `internetProtocolVersion` TEXT NOT NULL DEFAULT 'IPv4')",
         "fields": [
           {
             "fieldPath": "id",
@@ -25,6 +25,13 @@
             "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "internetProtocolVersion",
+            "columnName": "internetProtocolVersion",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'IPv4'"
           }
         ],
         "primaryKey": {
@@ -40,7 +47,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b511b8f3cb996a0e166dbc4d15cf1599')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a17f5258fd8293dcdd1de0e733913d36')"
     ]
   }
 }
