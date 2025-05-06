@@ -1,1 +1,1 @@
-Fetch and log your IP addresses
+Monitor your IP addresses

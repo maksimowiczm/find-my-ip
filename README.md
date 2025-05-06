@@ -13,14 +13,12 @@ need to open the app every time.
 ### 📷 Screenshots
 
 <div align="center">
-    <img src="./metadata/en-US/images/phoneScreenshots/100_home.png" width="22%" alt="Home Screen"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/200_history_disabled.png" width="22%" alt="History Disabled"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/300_history.png" width="22%" alt="History Enabled"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/400_settings.png" width="22%" alt="Settings"/>
-        <img src="./metadata/en-US/images/phoneScreenshots/490_history_disabled_settings.png" width="22%" alt="History Disabled Settings"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/500_history_settings.png" width="22%" alt="History Settings"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/510_internet_protocol_settings.png" width="22%" alt="Internet Protocol Settings"/>
-    <img src="./metadata/en-US/images/phoneScreenshots/600_language_settings.png" width="22%" alt="Language Settings"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_100.png" width="30%" alt="Home"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_200.png" width="30%" alt="History"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_300.png" width="30%" alt="Settings"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_400.png" width="30%" alt="Background services"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_500.png" width="30%" alt="Notifications"/>
+    <img src="./metadata/en-US/images/phoneScreenshots/4_600.png" width="30%" alt="Language"/>
 </div>
 
 ---

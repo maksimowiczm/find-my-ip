@@ -1,1 +1,1 @@
-Find My IP is a straightforward app designed to fetch and store your IP address history. It can automatically log IP changes in the background, so you don’t have to open the app every time.
+Find My IP is a simple app that keeps track of your IP address history. It can run in the background and automatically log any changes — no need to open the app each time.
