@@ -276,7 +276,7 @@ private fun IpState.Content(shimmer: Shimmer, modifier: Modifier = Modifier) {
                     )
                 }
 
-                else -> IpText(ip)
+                else -> IpText(ip, modifier)
             }
 
             IpState.NotDetected -> Text(
@@ -285,7 +285,7 @@ private fun IpState.Content(shimmer: Shimmer, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            is IpState.Success -> IpText(ip)
+            is IpState.Success -> IpText(ip, modifier)
         }
     }
 }
