@@ -189,9 +189,7 @@ fun LanguagePage(
                 item {
                     ListItem(
                         headlineContent = { Text(name) },
-                        modifier = Modifier
-                            .testTag(LanguagePageTestTags.Language(translation.tag).toString())
-                            .clickable { onTag(translation.tag) },
+                        modifier = Modifier.clickable { onTag(translation.tag) },
                         supportingContent = {
                             translation.authors.takeIf { it.isNotEmpty() }?.let {
                                 Column {
@@ -204,7 +202,10 @@ fun LanguagePage(
                         leadingContent = {
                             RadioButton(
                                 selected = tag == translation.tag,
-                                onClick = { onTag(translation.tag) }
+                                onClick = { onTag(translation.tag) },
+                                modifier = Modifier.testTag(
+                                    LanguagePageTestTags.Language(translation.tag).toString()
+                                )
                             )
                         }
                     )
