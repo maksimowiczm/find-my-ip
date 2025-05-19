@@ -220,7 +220,7 @@ fun HistoryPage(
                             onIntent(HistoryPageIntent.Search(it))
                         },
                         onClearSearch = {
-                            onIntent(HistoryPageIntent.Search(""))
+                            onIntent(HistoryPageIntent.ClearAll)
                         },
                         onSearch = {
                             onIntent(HistoryPageIntent.Search(it))

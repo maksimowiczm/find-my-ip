@@ -8,6 +8,8 @@ sealed interface HistoryPageIntent {
     data object ShowSearch : HistoryPageIntent
     data object HideSearch : HistoryPageIntent
 
+    data object ClearAll : HistoryPageIntent
+
     data class Search(val query: String) : HistoryPageIntent
 
     data class DeleteAddress(val address: Address) : HistoryPageIntent

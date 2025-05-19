@@ -81,6 +81,12 @@ class HistoryPageViewModel(private val addressRepository: AddressRepository) : V
             HistoryPageIntent.ShowSearch -> showSearch.emit(true)
 
             is HistoryPageIntent.Search -> searchQuery.emit(intent.query)
+            HistoryPageIntent.ClearAll -> {
+                searchQuery.emit("")
+                protocolFilters.emit(emptyList())
+                networkTypeFilters.emit(emptyList())
+                dateRange.emit(null)
+            }
         }
     }
 
