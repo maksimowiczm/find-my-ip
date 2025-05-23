@@ -83,6 +83,8 @@ room {
 
 dependencies {
 
+    implementation(libs.androidx.browser)
+
     implementation(libs.androidx.work.runtime)
 
     implementation(libs.androidx.room.runtime)

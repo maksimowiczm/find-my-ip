@@ -32,6 +32,7 @@
     <string name="headline_version">Version</string>
     <string name="headline_about">About</string>
     <string name="headline_source_code">Source code</string>
+    <string name="headline_privacy_policy">Privacy Policy</string>
 
     <string name="neutral_your_public_ip_address_is">Your public IP address is</string>
     <string name="neutral_not_detected">Not detected</string>
@@ -72,12 +73,14 @@
     <string name="description_notifications_permission_required">Notifications permission is required to send notifications about IP changes. Please enable it in the system settings.</string>
     <string name="description_source_code">View the project’s source code on Github</string>
     <string name="description_about">Learn more about the app</string>
+    <string name="description_privacy_policy">Read the privacy policy</string>
 
     <string name="link_help_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>
     <string name="link_source_code" translatable="false">https://github.com/maksimowiczm/find-my-ip</string>
     <string name="link_ipify" translatable="false">https://www.ipify.org</string>
+    <string name="link_privacy_policy" translatable="false">https://maksimowiczm.github.io/find-my-ip/privacy-policy.html</string>
 
-    <string name="onboarding_learn_more_about_ipify_on_their_website">Learn more about ipify on their website</string>
+    <string name="onboarding_read_the_privacy_policy">Read the privacy policy</string>
     <string name="onboarding_description_before_you_get_started">To provide you with accurate IP tracking, we use the ipify to fetch your public IP address. Your IP address history is stored only on your device — we don’t upload or share your data with anyone.</string>
     <string name="onboarding_headline_before_you_get_started">Before you get started</string>
     <string name="onboarding_headline_keep_tracking">Keep tracking, even when you\'re not using the app</string>

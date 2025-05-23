@@ -1,5 +1,7 @@
 package com.maksimowiczm.findmyip.ui.page.onboarding
 
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -16,20 +18,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.theme.FindMyIPTheme
+import java.util.Collections
 
 @Composable
 fun BeforeYouGetStartedPage(onAgree: () -> Unit, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
-    val ipifyUrl = stringResource(R.string.link_ipify)
+    val context = LocalContext.current
+
+    val isCustomTabsSupported = remember(context) {
+        CustomTabsClient.getPackageName(context, Collections.emptyList()) != null
+    }
+
+    val privacyPolicyUrl = stringResource(R.string.link_privacy_policy)
+    val onPrivacyPolicy = remember(isCustomTabsSupported, privacyPolicyUrl, uriHandler) {
+        if (isCustomTabsSupported) {
+            { CustomTabsIntent.Builder().build().launchUrl(context, privacyPolicyUrl.toUri()) }
+        } else {
+            { uriHandler.openUri(privacyPolicyUrl) }
+        }
+    }
 
     BeforeYouGetStartedPage(
-        onIpify = { uriHandler.openUri(ipifyUrl) },
+        onPrivacyPolicy = onPrivacyPolicy,
         onAgree = onAgree,
         modifier = modifier
     )
@@ -37,7 +55,7 @@ fun BeforeYouGetStartedPage(onAgree: () -> Unit, modifier: Modifier = Modifier) 
 
 @Composable
 fun BeforeYouGetStartedPage(
-    onIpify: () -> Unit,
+    onPrivacyPolicy: () -> Unit,
     onAgree: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -66,13 +84,13 @@ fun BeforeYouGetStartedPage(
                 )
                 Text(
                     text = stringResource(
-                        R.string.onboarding_learn_more_about_ipify_on_their_website
+                        R.string.onboarding_read_the_privacy_policy
                     ),
                     modifier = Modifier.clickable(
                         enabled = true,
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = onIpify
+                        onClick = onPrivacyPolicy
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
@@ -94,7 +112,7 @@ fun BeforeYouGetStartedPage(
 private fun BeforeYouGetStartedPagePreview() {
     FindMyIPTheme {
         BeforeYouGetStartedPage(
-            onIpify = {},
+            onPrivacyPolicy = {},
             onAgree = {}
         )
     }

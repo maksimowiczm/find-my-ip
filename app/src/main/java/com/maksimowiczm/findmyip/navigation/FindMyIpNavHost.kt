@@ -8,10 +8,10 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughIn
 import com.maksimowiczm.findmyip.ui.motion.materialFadeThroughOut
-import com.maksimowiczm.findmyip.ui.page.about.AboutPage
 import com.maksimowiczm.findmyip.ui.page.history.HistoryPage
 import com.maksimowiczm.findmyip.ui.page.home.HomePage
 import com.maksimowiczm.findmyip.ui.page.settings.SettingsPage
+import com.maksimowiczm.findmyip.ui.page.settings.about.AboutPage
 import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPage
 import com.maksimowiczm.findmyip.ui.page.settings.language.LanguagePage
 import com.maksimowiczm.findmyip.ui.page.settings.notifications.NotificationsPage
