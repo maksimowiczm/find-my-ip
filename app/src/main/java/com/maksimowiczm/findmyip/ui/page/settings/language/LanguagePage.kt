@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -122,6 +123,7 @@ fun LanguagePage(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
+                .fillMaxSize()
                 .testTag(LanguagePageTestTags.LANGUAGE_LIST)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = paddingValues
