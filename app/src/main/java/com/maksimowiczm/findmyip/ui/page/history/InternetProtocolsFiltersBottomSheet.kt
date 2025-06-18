@@ -26,6 +26,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
@@ -151,11 +154,15 @@ private fun InternetProtocolsFiltersBottomSheetContent(
             headlineContent = {
                 Text(stringResource(R.string.ipv4))
             },
-            modifier = Modifier.clickable { state.toggleFilter(InternetProtocol.IPv4) },
+            modifier = Modifier
+                .semantics {
+                    role = Role.Checkbox
+                }
+                .clickable { state.toggleFilter(InternetProtocol.IPv4) },
             trailingContent = {
                 Checkbox(
                     checked = state.ipv4,
-                    onCheckedChange = { state.toggleFilter(InternetProtocol.IPv4) }
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(
@@ -167,11 +174,15 @@ private fun InternetProtocolsFiltersBottomSheetContent(
             headlineContent = {
                 Text(stringResource(R.string.ipv6))
             },
-            modifier = Modifier.clickable { state.toggleFilter(InternetProtocol.IPv6) },
+            modifier = Modifier
+                .semantics {
+                    role = Role.Checkbox
+                }
+                .clickable { state.toggleFilter(InternetProtocol.IPv6) },
             trailingContent = {
                 Checkbox(
                     checked = state.ipv6,
-                    onCheckedChange = { state.toggleFilter(InternetProtocol.IPv6) }
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(

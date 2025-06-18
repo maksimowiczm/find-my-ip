@@ -32,6 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.R
@@ -160,7 +163,11 @@ private fun NetworkTypeFiltersBottomSheetContent(
             headlineContent = {
                 Text(stringResource(R.string.wifi))
             },
-            modifier = Modifier.clickable { state.toggleFilter(NetworkType.WiFi) },
+            modifier = Modifier
+                .semantics {
+                    role = Role.Checkbox
+                }
+                .clickable { state.toggleFilter(NetworkType.WiFi) },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -175,7 +182,7 @@ private fun NetworkTypeFiltersBottomSheetContent(
             trailingContent = {
                 Checkbox(
                     checked = state.wifi,
-                    onCheckedChange = { state.toggleFilter(NetworkType.WiFi) }
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(
@@ -187,7 +194,11 @@ private fun NetworkTypeFiltersBottomSheetContent(
             headlineContent = {
                 Text(stringResource(R.string.cellular))
             },
-            modifier = Modifier.clickable { state.toggleFilter(NetworkType.Cellular) },
+            modifier = Modifier
+                .semantics {
+                    role = Role.Checkbox
+                }
+                .clickable { state.toggleFilter(NetworkType.Cellular) },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -202,7 +213,7 @@ private fun NetworkTypeFiltersBottomSheetContent(
             trailingContent = {
                 Checkbox(
                     checked = state.cellular,
-                    onCheckedChange = { state.toggleFilter(NetworkType.Cellular) }
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(
@@ -214,7 +225,11 @@ private fun NetworkTypeFiltersBottomSheetContent(
             headlineContent = {
                 Text(stringResource(R.string.vpn))
             },
-            modifier = Modifier.clickable { state.toggleFilter(NetworkType.VPN) },
+            modifier = Modifier
+                .semantics {
+                    role = Role.Checkbox
+                }
+                .clickable { state.toggleFilter(NetworkType.VPN) },
             leadingContent = {
                 Box(
                     modifier = Modifier.size(48.dp),
@@ -229,7 +244,7 @@ private fun NetworkTypeFiltersBottomSheetContent(
             trailingContent = {
                 Checkbox(
                     checked = state.vpn,
-                    onCheckedChange = { state.toggleFilter(NetworkType.VPN) }
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(
