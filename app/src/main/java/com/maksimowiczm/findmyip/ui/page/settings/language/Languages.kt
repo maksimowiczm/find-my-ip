@@ -33,6 +33,10 @@ val languages = mapOf(
                 link = "https://github.com/mikropsoft"
             )
         )
+    ),
+    "Русский (Россия)" to Translation(
+        tag = "ru-RU",
+        authors = listOf()
     )
 )
 
