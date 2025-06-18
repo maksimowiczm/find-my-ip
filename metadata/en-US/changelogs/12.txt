@@ -6,3 +6,4 @@ Changes
 
 Bug fixes
 - Fixed font scaling on home page. Long addresses should no longer overflow the screen width.
+- Fixed some accessibility issues
