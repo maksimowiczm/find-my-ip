@@ -45,8 +45,7 @@ fun SwitchSettingListItem(
             trailingContent = {
                 Switch(
                     checked = checked,
-                    onCheckedChange = null,
-                    modifier = Modifier.testTag(SwitchSettingListItemTestTags.SWITCH)
+                    onCheckedChange = null
                 )
             },
             colors = ListItemDefaults.colors(
@@ -58,5 +57,4 @@ fun SwitchSettingListItem(
 
 object SwitchSettingListItemTestTags {
     const val SURFACE = "switch_setting_list_item_surface"
-    const val SWITCH = "switch_setting_list_item_switch"
 }
