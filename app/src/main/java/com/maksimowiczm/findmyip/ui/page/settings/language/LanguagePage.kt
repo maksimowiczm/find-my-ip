@@ -42,6 +42,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
@@ -133,7 +137,10 @@ fun LanguagePage(
                     onClick = onHelp,
                     modifier = Modifier
                         .testTag(LanguagePageTestTags.HELP_BUTTON)
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .semantics {
+                            role = Role.Button
+                        },
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -177,11 +184,15 @@ fun LanguagePage(
                     },
                     modifier = Modifier
                         .testTag(LanguagePageTestTags.Language(null).toString())
-                        .clickable { onTag(null) },
+                        .clickable { onTag(null) }
+                        .semantics {
+                            role = Role.RadioButton
+                            selected = tag == null
+                        },
                     leadingContent = {
                         RadioButton(
                             selected = tag == null,
-                            onClick = { onTag(null) }
+                            onClick = null
                         )
                     }
                 )
@@ -191,7 +202,12 @@ fun LanguagePage(
                 item {
                     ListItem(
                         headlineContent = { Text(name) },
-                        modifier = Modifier.clickable { onTag(translation.tag) },
+                        modifier = Modifier
+                            .clickable { onTag(translation.tag) }
+                            .semantics {
+                                role = Role.RadioButton
+                                selected = tag == translation.tag
+                            },
                         supportingContent = {
                             translation.authors.takeIf { it.isNotEmpty() }?.let {
                                 Column {
@@ -204,7 +220,7 @@ fun LanguagePage(
                         leadingContent = {
                             RadioButton(
                                 selected = tag == translation.tag,
-                                onClick = { onTag(translation.tag) },
+                                onClick = null,
                                 modifier = Modifier.testTag(
                                     LanguagePageTestTags.Language(translation.tag).toString()
                                 )
