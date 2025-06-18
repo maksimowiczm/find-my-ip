@@ -62,6 +62,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -277,6 +284,9 @@ fun NotificationsPage(
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(outerPadding)
+                .semantics {
+                    isTraversalGroup = true
+                }
         ) {
             Surface(
                 onClick = {
@@ -299,13 +309,22 @@ fun NotificationsPage(
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
-                    modifier = Modifier.padding(vertical = 16.dp),
+                    modifier = Modifier
+                        .semantics {
+                            role = Role.Switch
+                            toggleableState = if (state.isEnabled) {
+                                ToggleableState.On
+                            } else {
+                                ToggleableState.Off
+                            }
+
+                            traversalIndex = -1f
+                        }
+                        .padding(vertical = 16.dp),
                     trailingContent = {
                         Switch(
                             checked = state.isEnabled,
-                            onCheckedChange = {
-                                onIntent(NotificationsPageIntent.ToggleNotifications(it))
-                            },
+                            onCheckedChange = null,
                             modifier = Modifier.testTag(SwitchSettingListItemTestTags.SWITCH)
                         )
                     },
@@ -318,7 +337,11 @@ fun NotificationsPage(
 
             if (state is NotificationsPageState.Enabled) {
                 LazyColumn(
-                    modifier = Modifier.testTag(NotificationsPageTestTags.ENABLED_CONTENT),
+                    modifier = Modifier
+                        .semantics {
+                            traversalIndex = 0f
+                        }
+                        .testTag(NotificationsPageTestTags.ENABLED_CONTENT),
                     contentPadding = PaddingValues(
                         top = topPadding,
                         bottom = paddingValues.calculateBottomPadding()
