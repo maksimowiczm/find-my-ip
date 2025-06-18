@@ -9,6 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 
 @Composable
 fun SwitchSettingListItem(
@@ -26,13 +31,21 @@ fun SwitchSettingListItem(
             headlineContent = headlineContent,
             modifier = Modifier
                 .testTag(SwitchSettingListItemTestTags.SURFACE)
-                .clickable { onCheckedChange(!checked) },
+                .clickable { onCheckedChange(!checked) }
+                .semantics {
+                    role = Role.Switch
+                    toggleableState = if (checked) {
+                        ToggleableState.On
+                    } else {
+                        ToggleableState.Off
+                    }
+                },
             supportingContent = supportingContent,
             leadingContent = leadingContent,
             trailingContent = {
                 Switch(
                     checked = checked,
-                    onCheckedChange = onCheckedChange,
+                    onCheckedChange = null,
                     modifier = Modifier.testTag(SwitchSettingListItemTestTags.SWITCH)
                 )
             },
