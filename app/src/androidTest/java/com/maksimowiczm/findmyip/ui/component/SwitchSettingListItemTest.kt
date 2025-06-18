@@ -26,7 +26,6 @@ class SwitchSettingListItemTest {
         }
 
         onNodeWithTag(SwitchSettingListItemTestTags.SURFACE).assertIsDisplayed()
-        onNodeWithTag(SwitchSettingListItemTestTags.SWITCH).assertIsDisplayed()
     }
 
     @Test
@@ -39,7 +38,7 @@ class SwitchSettingListItemTest {
             )
         }
 
-        onNodeWithTag(SwitchSettingListItemTestTags.SWITCH)
+        onNodeWithTag(SwitchSettingListItemTestTags.SURFACE)
             .assertIsDisplayed()
             .assertIsEnabled()
             .assertIsToggleable()
@@ -56,7 +55,7 @@ class SwitchSettingListItemTest {
             )
         }
 
-        onNodeWithTag(SwitchSettingListItemTestTags.SWITCH)
+        onNodeWithTag(SwitchSettingListItemTestTags.SURFACE)
             .assertIsDisplayed()
             .assertIsEnabled()
             .assertIsToggleable()
@@ -64,27 +63,7 @@ class SwitchSettingListItemTest {
     }
 
     @Test
-    fun testSwitchSettingsListItem_StateOnSwitchClick(): Unit = composeTestRule.run {
-        var clickEvents = mutableListOf<Boolean>()
-
-        setContent {
-            SwitchSettingListItem(
-                headlineContent = {},
-                checked = true,
-                onCheckedChange = { clickEvents.add(it) }
-            )
-        }
-
-        onNodeWithTag(SwitchSettingListItemTestTags.SWITCH)
-            .assertIsDisplayed()
-            .performClick()
-
-        assert(clickEvents.size == 1)
-        assert(clickEvents[0] == false)
-    }
-
-    @Test
-    fun testSwitchSettingsListItem_StateOnSurfaceClick(): Unit = composeTestRule.run {
+    fun testSwitchSettingsListItem_StateOnClick(): Unit = composeTestRule.run {
         var clickEvents = mutableListOf<Boolean>()
 
         setContent {
@@ -104,27 +83,7 @@ class SwitchSettingListItemTest {
     }
 
     @Test
-    fun testSwitchSettingsListItem_StateOffSwitchClick(): Unit = composeTestRule.run {
-        var clickEvents = mutableListOf<Boolean>()
-
-        setContent {
-            SwitchSettingListItem(
-                headlineContent = {},
-                checked = false,
-                onCheckedChange = { clickEvents.add(it) }
-            )
-        }
-
-        onNodeWithTag(SwitchSettingListItemTestTags.SWITCH)
-            .assertIsDisplayed()
-            .performClick()
-
-        assert(clickEvents.size == 1)
-        assert(clickEvents[0] == true)
-    }
-
-    @Test
-    fun testSwitchSettingsListItem_StateOffSurfaceClick(): Unit = composeTestRule.run {
+    fun testSwitchSettingsListItem_StateOffClick(): Unit = composeTestRule.run {
         var clickEvents = mutableListOf<Boolean>()
 
         setContent {

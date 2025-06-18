@@ -207,7 +207,8 @@ fun LanguagePage(
                             .semantics {
                                 role = Role.RadioButton
                                 selected = tag == translation.tag
-                            },
+                            }
+                            .testTag(LanguagePageTestTags.Language(translation.tag).toString()),
                         supportingContent = {
                             translation.authors.takeIf { it.isNotEmpty() }?.let {
                                 Column {
@@ -220,10 +221,7 @@ fun LanguagePage(
                         leadingContent = {
                             RadioButton(
                                 selected = tag == translation.tag,
-                                onClick = null,
-                                modifier = Modifier.testTag(
-                                    LanguagePageTestTags.Language(translation.tag).toString()
-                                )
+                                onClick = null
                             )
                         }
                     )

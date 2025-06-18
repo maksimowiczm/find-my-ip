@@ -79,7 +79,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
-import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItemTestTags
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -324,8 +323,7 @@ fun NotificationsPage(
                     trailingContent = {
                         Switch(
                             checked = state.isEnabled,
-                            onCheckedChange = null,
-                            modifier = Modifier.testTag(SwitchSettingListItemTestTags.SWITCH)
+                            onCheckedChange = null
                         )
                     },
                     colors = ListItemDefaults.colors(
