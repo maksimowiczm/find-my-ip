@@ -23,6 +23,7 @@
     <string name="headline_version">Wersja</string>
     <string name="headline_about">O aplikacji</string>
     <string name="headline_source_code">Kod źródłowy</string>
+    <string name="headline_privacy_policy">Polityka prywatności</string>
     <string name="neutral_your_public_ip_address_is">Twój publiczny adres IP to</string>
     <string name="neutral_not_detected">Nie wykryto</string>
     <string name="neutral_copied">Informacja skopiowana do schowka</string>
@@ -59,7 +60,8 @@
     <string name="description_notifications_permission_required">Wymagane są uprawnienia do powiadomień, aby wysyłać powiadomienia o zmianach adresu IP. Proszę włączyć je w ustawieniach systemowych.</string>
     <string name="description_source_code">Zobacz kod źródłowy projektu na Githubie</string>
     <string name="description_about">Dowiedz się więcej o aplikacji</string>
-    <string name="onboarding_learn_more_about_ipify_on_their_website">Dowiedz się więcej o ipify na ich stronie internetowej</string>
+    <string name="description_privacy_policy">Sprawdź politykę prywatności</string>
+    <string name="onboarding_read_the_privacy_policy">Sprawdź politykę prywatności</string>
     <string name="onboarding_description_before_you_get_started">Aby zapewnić dokładne śledzenie adresu IP, używamy ipify do pobierania Twojego publicznego adresu IP. Historia Twoich adresów IP jest przechowywana wyłącznie na Twoim urządzeniu — nie przesyłamy ani nie udostępniamy Twoich danych nikomu.</string>
     <string name="onboarding_headline_before_you_get_started">Zanim zaczniesz</string>
     <string name="onboarding_headline_keep_tracking">Kontynuuj śledzenie, nawet gdy nie używasz aplikacji</string>
