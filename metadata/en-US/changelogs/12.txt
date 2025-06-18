@@ -1,0 +1,8 @@
+New features
+- Added privacy policy
+
+Changes
+- Clearing search query now also clears search filters
+
+Bug fixes
+- Fixed font scaling on home page. Long addresses should no longer overflow the screen width.
