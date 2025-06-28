@@ -37,19 +37,9 @@ android {
         }
     }
 
-    flavorDimensions += "version"
     flavorDimensions += "addressSource"
 
     productFlavors {
-        create("openSource") {
-            dimension = "version"
-        }
-        create("playStore") {
-            dimension = "version"
-            applicationIdSuffix = ".play"
-            versionNameSuffix = "-play"
-        }
-
         create("ipify") {
             dimension = "addressSource"
         }

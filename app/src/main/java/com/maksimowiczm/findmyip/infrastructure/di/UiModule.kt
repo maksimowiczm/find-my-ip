@@ -4,6 +4,7 @@ import com.maksimowiczm.findmyip.domain.model.InternetProtocol
 import com.maksimowiczm.findmyip.ui.page.history.HistoryPageViewModel
 import com.maksimowiczm.findmyip.ui.page.home.HomePageViewModel
 import com.maksimowiczm.findmyip.ui.page.onboarding.OnboardingPageViewModel
+import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPageViewModel
 import com.maksimowiczm.findmyip.ui.page.settings.notifications.NotificationsPageViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -25,4 +26,6 @@ val uiModule = module {
     viewModelOf(::HistoryPageViewModel)
 
     viewModelOf(::OnboardingPageViewModel)
+
+    viewModelOf(::BackgroundServicesPageViewModel)
 }
