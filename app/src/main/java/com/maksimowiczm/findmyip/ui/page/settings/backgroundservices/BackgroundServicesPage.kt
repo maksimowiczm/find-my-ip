@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maksimowiczm.findmyip.R
 import com.maksimowiczm.findmyip.ui.component.SwitchSettingListItem
+import com.maksimowiczm.findmyip.ui.ext.add
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -84,11 +85,10 @@ fun BackgroundServicesPage(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
-                .padding(vertical = 8.dp)
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             state = lazyListState,
-            contentPadding = paddingValues
+            contentPadding = paddingValues.add(vertical = 8.dp)
         ) {
             item {
                 Text(
