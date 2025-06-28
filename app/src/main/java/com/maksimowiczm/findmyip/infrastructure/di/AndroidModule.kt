@@ -1,8 +1,10 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
 import androidx.work.WorkManager
+import com.maksimowiczm.findmyip.domain.backgroundservices.ForegroundService
 import com.maksimowiczm.findmyip.domain.backgroundservices.PeriodicWorker
 import com.maksimowiczm.findmyip.domain.notification.AddressNotificationService
+import com.maksimowiczm.findmyip.infrastructure.android.AndroidForegroundService
 import com.maksimowiczm.findmyip.infrastructure.android.AndroidNotificationService
 import com.maksimowiczm.findmyip.infrastructure.android.AndroidPeriodicWorker
 import org.koin.dsl.bind
@@ -23,4 +25,10 @@ val androidModule = module {
             workManager = WorkManager.getInstance(get())
         )
     }.bind<PeriodicWorker>()
+
+    factory {
+        AndroidForegroundService(
+            context = get()
+        )
+    }.bind<ForegroundService>()
 }
