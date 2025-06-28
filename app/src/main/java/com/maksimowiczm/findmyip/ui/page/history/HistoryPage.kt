@@ -67,8 +67,9 @@ import com.maksimowiczm.findmyip.ui.res.stringResource
 import com.maksimowiczm.findmyip.ui.utils.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.utils.LocalDateFormatter
 import kotlin.String
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
@@ -473,7 +474,7 @@ private fun NetworkTypeFilterChip(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 private fun DateFilterChip(
     dateRange: DateRange?,

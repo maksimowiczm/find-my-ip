@@ -4,7 +4,8 @@ import com.maksimowiczm.findmyip.data.model.AddressEntity
 import com.maksimowiczm.findmyip.domain.model.Address
 import com.maksimowiczm.findmyip.domain.model.AddressId
 import com.maksimowiczm.findmyip.domain.source.NetworkAddress
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -29,6 +30,7 @@ object AddressMapper {
     ): AddressEntity = address.toEntity(zone)
 }
 
+@OptIn(ExperimentalTime::class)
 private fun AddressEntity.toDomain(zone: TimeZone) = Address(
     id = AddressId(id),
     ip = ip,
@@ -37,6 +39,7 @@ private fun AddressEntity.toDomain(zone: TimeZone) = Address(
     dateTime = Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(zone)
 )
 
+@OptIn(ExperimentalTime::class)
 private fun Address.toEntity(zone: TimeZone) = AddressEntity(
     id = id.value,
     ip = ip,
@@ -45,6 +48,7 @@ private fun Address.toEntity(zone: TimeZone) = AddressEntity(
     epochMillis = dateTime.toInstant(zone).toEpochMilliseconds()
 )
 
+@OptIn(ExperimentalTime::class)
 private fun NetworkAddress.toEntity(zone: TimeZone): AddressEntity = AddressEntity(
     ip = ip,
     internetProtocol = internetProtocol,

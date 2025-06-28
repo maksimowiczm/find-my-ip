@@ -8,6 +8,7 @@ import com.maksimowiczm.findmyip.domain.model.NetworkType
 import com.maksimowiczm.findmyip.domain.source.AddressLocalDataSource
 import com.maksimowiczm.findmyip.ext.filterValues
 import com.maksimowiczm.findmyip.ext.mapValues
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -29,10 +30,11 @@ class AddressRepositoryImpl(
     private val localDataSource: AddressLocalDataSource,
     private val addressMapper: AddressMapper
 ) : AddressRepository {
+    @OptIn(ExperimentalTime::class)
     override fun observeAddresses(
         query: String,
-        ipFilters: List<InternetProtocol>,
-        netFilters: List<NetworkType>,
+        internetProtocolFilters: List<InternetProtocol>,
+        networkTypeFilters: List<NetworkType>,
         startDate: LocalDate?,
         endDate: LocalDate?
     ): Flow<List<Address>> = localDataSource
@@ -46,8 +48,11 @@ class AddressRepositoryImpl(
                 ?.toEpochMilliseconds()
         )
         .filterValues {
-            (ipFilters.isEmpty() || ipFilters.contains(it.internetProtocol)) &&
-                (netFilters.isEmpty() || netFilters.contains(it.networkType))
+            (
+                internetProtocolFilters.isEmpty() ||
+                    internetProtocolFilters.contains(it.internetProtocol)
+                ) &&
+                (networkTypeFilters.isEmpty() || networkTypeFilters.contains(it.networkType))
         }
         .mapValues { addressMapper.toDomain(it) }
 

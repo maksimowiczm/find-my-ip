@@ -9,6 +9,8 @@ import com.maksimowiczm.findmyip.domain.source.NetworkAddress
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -40,6 +41,7 @@ class KtorAddressObserver(
         }
         .filterNotNull()
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun refresh(): Result<NetworkAddress> {
         _flow.emit(AddressState.Refreshing)
 
