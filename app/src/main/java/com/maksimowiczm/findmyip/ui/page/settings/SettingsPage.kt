@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -29,6 +30,7 @@ fun SettingsPage(
     onBackgroundServices: () -> Unit,
     onNotifications: () -> Unit,
     onLanguage: () -> Unit,
+    onSponsor: () -> Unit,
     onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -42,6 +44,7 @@ fun SettingsPage(
         onBackgroundServices = onBackgroundServices,
         onNotifications = onNotifications,
         onLanguage = onLanguage,
+        onSponsor = onSponsor,
         onAbout = onAbout,
         modifier = modifier
     )
@@ -54,6 +57,7 @@ fun SettingsPage(
     onBackgroundServices: () -> Unit,
     onNotifications: () -> Unit,
     onLanguage: () -> Unit,
+    onSponsor: () -> Unit,
     onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -139,6 +143,23 @@ fun SettingsPage(
             item {
                 ListItem(
                     headlineContent = {
+                        Text(stringResource(R.string.headline_sponsor))
+                    },
+                    modifier = Modifier.clickable { onSponsor() },
+                    supportingContent = {
+                        Text(stringResource(R.string.description_sponsor))
+                    },
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.VolunteerActivism,
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = {
                         Text(stringResource(R.string.headline_about))
                     },
                     modifier = Modifier.clickable { onAbout() },
@@ -166,6 +187,7 @@ private fun SettingsPagePreview() {
             onBackgroundServices = {},
             onNotifications = {},
             onLanguage = {},
+            onSponsor = {},
             onAbout = {}
         )
     }

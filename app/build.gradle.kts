@@ -26,6 +26,12 @@ android {
         versionName = "4.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val feedbackEmail = "maksimowicz.dev@gmail.com"
+        val feedbackEmailUri =
+            "mailto:$feedbackEmail?subject=Find My IP Feedback&body=Find My IP Version: $versionName\\n"
+
+        buildConfigField("String", "FEEDBACK_EMAIL_URI", "\"$feedbackEmailUri\"")
     }
 
     buildTypes {

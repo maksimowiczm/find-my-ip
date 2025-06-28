@@ -30,4 +30,7 @@ data object NotificationsSettings : Destination
 data object LanguageSettings : Destination
 
 @Serializable
+data object Sponsor : Destination
+
+@Serializable
 data object About : Destination

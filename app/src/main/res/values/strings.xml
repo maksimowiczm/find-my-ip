@@ -100,4 +100,11 @@
 
     <string name="notification_network_monitor">Network Monitor</string>
 
+    <string name="headline_sponsor">Sponsor</string>
+    <string name="description_sponsor">Contributions in any form are welcome</string>
+    <string name="description_sponsor_2">Your support keeps the app going</string>
+    <string name="headline_contact">Contact</string>
+    <string name="description_sponsor_contact">If you have any requests regarding sponsoring, feel free to contact me via email or GitHub.</string>
+
+
 </resources>

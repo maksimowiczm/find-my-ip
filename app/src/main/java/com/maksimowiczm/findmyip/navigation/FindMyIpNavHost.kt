@@ -15,6 +15,7 @@ import com.maksimowiczm.findmyip.ui.page.settings.about.AboutPage
 import com.maksimowiczm.findmyip.ui.page.settings.backgroundservices.BackgroundServicesPage
 import com.maksimowiczm.findmyip.ui.page.settings.language.LanguagePage
 import com.maksimowiczm.findmyip.ui.page.settings.notifications.NotificationsPage
+import com.maksimowiczm.findmyip.ui.page.settings.sponsor.SponsorPage
 
 @Composable
 fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier = Modifier) {
@@ -65,6 +66,12 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
                             restoreState = true
                         }
                     },
+                    onSponsor = {
+                        navController.navigate(Sponsor) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     onAbout = {
                         navController.navigate(About) {
                             launchSingleTop = true
@@ -91,6 +98,13 @@ fun FindMyIpNavHost(appNavigationState: AppNavigationState, modifier: Modifier =
                 LanguagePage(
                     onBack = {
                         navController.popBackStack<LanguageSettings>(inclusive = true)
+                    }
+                )
+            }
+            settingsComposable<Sponsor> {
+                SponsorPage(
+                    onBack = {
+                        navController.popBackStack<Sponsor>(inclusive = true)
                     }
                 )
             }
