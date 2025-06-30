@@ -25,6 +25,10 @@ val languages = mapOf(
         tag = "pl-PL",
         authors = listOf(me)
     ),
+    "Português (Brasil)" to Translation(
+        tag = "pt-BR",
+        authors = listOf()
+    ),
     "Türkçe (Türkiye)" to Translation(
         tag = "tr-TR",
         authors = listOf(

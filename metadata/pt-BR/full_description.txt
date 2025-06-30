@@ -1,0 +1,1 @@
+O Find My IP é um app simples que mantém um histórico do seus endereços de IP. Pode ser executado em segundo plano e registrar qualquer mudança automaticamente — não há necessidade de abrir o app toda vez.
