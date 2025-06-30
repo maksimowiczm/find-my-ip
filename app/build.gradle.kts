@@ -45,9 +45,13 @@ android {
         }
     }
 
+    flavorDimensions += "version"
     flavorDimensions += "addressSource"
 
     productFlavors {
+        create("openSource") {
+            dimension = "version"
+        }
         create("ipify") {
             dimension = "addressSource"
         }
