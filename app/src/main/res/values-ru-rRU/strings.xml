@@ -68,4 +68,17 @@
     <string name="onboarding_description_keep_tracking">Включите автоматическое отслеживание IP-адресов, чтобы история ваших адресов оставалась актуальной, даже когда приложение закрыто.</string>
     <string name="onboarding_headline_stay_informed">Будьте в курсе событий</string>
     <string name="onboarding_description_stay_informed">Получайте уведомления об изменении вашего IP-адреса, что особенно полезно, когда вы находитесь в движении.</string>
+    <string name="headline_foreground_service_and_periodic_work">Foreground service and periodic work</string>
+    <string name="headline_foreground_service">Foreground Service</string>
+    <string name="headline_what_is_network_state_change">What is network state change?</string>
+    <string name="description_foreground_service_and_periodic_work">The foreground service will keep running all the time and check your IP address when your network changes. Periodic work runs once in a while and is better for your battery.</string>
+    <string name="description_foreground_service">Observe network state changes</string>
+    <string name="description_what_is_network_state_change">Your device\'s internet connection was updated — like switching Wi-Fi, mobile data, or losing connection</string>
+    <string name="neutral_refreshing">Refreshing</string>
+    <string name="notification_network_monitor">Network Monitor</string>
+    <string name="headline_sponsor">Sponsor</string>
+    <string name="description_sponsor">Contributions in any form are welcome</string>
+    <string name="description_sponsor_2">Your support keeps the app going</string>
+    <string name="headline_contact">Contact</string>
+    <string name="description_sponsor_contact">If you have any requests regarding sponsoring, feel free to contact me via email or GitHub.</string>
 </resources>

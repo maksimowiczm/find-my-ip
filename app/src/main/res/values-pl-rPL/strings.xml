@@ -68,4 +68,17 @@
     <string name="onboarding_description_keep_tracking">Włącz automatyczne śledzenie adresu IP, aby historia Twoich adresów była zawsze aktualna — nawet gdy aplikacja jest zamknięta.</string>
     <string name="onboarding_headline_stay_informed">Bądź na bieżąco</string>
     <string name="onboarding_description_stay_informed">Otrzymuj powiadomienia, gdy Twój adres IP się zmieni.</string>
+    <string name="headline_foreground_service_and_periodic_work">Usługa pierwszoplanowa a praca okresowa</string>
+    <string name="headline_foreground_service">Usługa pierwszoplanowa</string>
+    <string name="headline_what_is_network_state_change">Czym jest zmiana stanu sieci?</string>
+    <string name="description_foreground_service_and_periodic_work">Usługa pierwszego planu będzie działać cały czas i sprawdzać adres IP, gdy zmieni się sieć. Okresowa praca jest wykonywana od czasu do czasu i jest lepsza dla baterii.</string>
+    <string name="description_foreground_service">Obserwuj zmiany stanu sieci</string>
+    <string name="description_what_is_network_state_change">Połączenie internetowe Twojego urządzenia zostało zaktualizowane — np. w wyniku zmiany sieci Wi-Fi, danych mobilnych lub utraty połączenia</string>
+    <string name="neutral_refreshing">Odświeżanie</string>
+    <string name="notification_network_monitor">Monitor sieciowy</string>
+    <string name="headline_sponsor">Sponsoruj</string>
+    <string name="description_sponsor">Wszelkie formy wsparcia są mile widziane</string>
+    <string name="description_sponsor_2">Dzięki Twojemu wsparciu aplikacja nadal działa</string>
+    <string name="headline_contact">Kontakt</string>
+    <string name="description_sponsor_contact">Jeśli masz jakieś pytania dotyczące sponsorowania, możesz się ze mną skontaktować przez e-mail lub GitHub.</string>
 </resources>
