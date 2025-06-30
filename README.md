@@ -36,6 +36,13 @@ I use it as a playground for my Android development projects.
 
 ---
 
+### 🎨 Design
+
+Explore the design mockups and prototypes
+on [Figma](https://www.figma.com/design/BDNLirxKWIx8BljIWhEz6B/Find-my-IP-4?node-id=108-1005&t=rrTgk4k8pJWFqO4L-1)
+
+---
+
 ### 🌍 Contribute to Translations
 
 Help translate **Find My IP** on [Crowdin](https://crowdin.com/project/find-my-ip)!
