@@ -1,0 +1,6 @@
+New features
+- Added foreground service support for fetching address on address state changes.
+- Added sponsor screen. You can now support the app development by donating.
+
+Translations
+- Added Portuguese (Brazil)
