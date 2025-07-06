@@ -7,6 +7,8 @@ import com.maksimowiczm.findmyip.domain.source.AddressObserver
 import com.maksimowiczm.findmyip.domain.source.AddressState
 import com.maksimowiczm.findmyip.domain.source.NetworkAddress
 import kotlin.random.Random
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -14,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -42,6 +43,7 @@ class FakeAddressObserver(
         }
         .filterNotNull()
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun refresh(): Result<NetworkAddress> {
         _flow.emit(AddressState.Refreshing)
 

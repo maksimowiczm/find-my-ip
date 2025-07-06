@@ -51,9 +51,11 @@ android {
     productFlavors {
         create("openSource") {
             dimension = "version"
+            isDefault = true
         }
         create("ipify") {
             dimension = "addressSource"
+            isDefault = true
         }
         create("fake") {
             dimension = "addressSource"
