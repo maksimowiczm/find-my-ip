@@ -17,6 +17,15 @@ private val me = Author(
 )
 
 val languages = mapOf(
+    "Arabic (الْعَرَبِيَّةُ)" to Translation(
+        tag = "AR",
+        authors = listOf(
+            Author(
+                name = "Moayad ahmed",
+                link = "https://github.com/moayad-star"
+            )
+        )
+    ),
     "English (United States)" to Translation(
         tag = "en-US",
         authors = listOf(me)
@@ -29,6 +38,10 @@ val languages = mapOf(
         tag = "pt-BR",
         authors = listOf()
     ),
+    "Русский (Россия)" to Translation(
+        tag = "ru-RU",
+        authors = listOf()
+    ),
     "Türkçe (Türkiye)" to Translation(
         tag = "tr-TR",
         authors = listOf(
@@ -37,10 +50,6 @@ val languages = mapOf(
                 link = "https://github.com/mikropsoft"
             )
         )
-    ),
-    "Русский (Россия)" to Translation(
-        tag = "ru-RU",
-        authors = listOf()
     )
 )
 
