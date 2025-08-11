@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 应用名称 -->
+    <string name="app_name">Find my IP</string>
+
+    <!-- 非可翻译项，保持原样 -->
+    <string name="en_dash" translatable="false">–</string>
+
+    <!-- 协议与网络类型 -->
+    <string name="internet_protocol">互联网协议</string>
+    <string name="ipv4" translatable="false">IPv4</string>
+    <string name="ipv6" translatable="false">IPv6</string>
+
+    <string name="network_type" description="Wi-Fi, Mobile, VPN">网络类型</string>
+    <string name="wifi" translatable="false">Wi-Fi</string>
+    <string name="vpn" translatable="false">VPN</string>
+    <string name="cellular">移动网络</string>
+
+    <string name="date">日期</string>
+
+    <!-- 各页面与分组标题 -->
+    <string name="headline_system">系统</string>
+    <string name="headline_system_language_settings">系统语言设置</string>
+    <string name="headline_history">历史记录</string>
+    <string name="headline_internet_protocols">互联网协议</string>
+    <string name="headline_settings">设置</string>
+    <string name="headline_background_services">后台服务</string>
+    <string name="headline_notifications">通知</string>
+    <string name="headline_language">语言</string>
+    <string name="headline_notify_on_ip_change">IP 变更提醒</string>
+    <string name="headline_system_notifications_settings">系统通知设置</string>
+    <string name="headline_periodic_work">周期性任务</string>
+    <string name="headline_permission_required">需要权限</string>
+    <string name="headline_home">首页</string>
+    <string name="headline_ip_change">IP 变更</string>
+    <string name="headline_new_address_detected">检测到新地址</string>
+    <string name="headline_version">版本</string>
+    <string name="headline_about">关于</string>
+    <string name="headline_source_code">源代码</string>
+    <string name="headline_privacy_policy">隐私政策</string>
+
+    <!-- 中性提示 -->
+    <string name="neutral_your_public_ip_address_is">你的公网 IP 地址是</string>
+    <string name="neutral_not_detected">未检测到</string>
+    <string name="neutral_copied">信息已复制到剪贴板</string>
+    <string name="neutral_you_havent_allowed_notifications">你尚未允许通知</string>
+
+    <!-- 错误 -->
+    <string name="error_no_internet_connection">无网络连接</string>
+
+    <!-- 动作 -->
+    <string name="action_refresh">刷新</string>
+    <string name="action_show_search_bar">显示搜索栏</string>
+    <string name="action_hide_search_bar">隐藏搜索栏</string>
+    <string name="action_clear_input">清空输入</string>
+    <string name="action_show_filters">显示筛选器</string>
+    <string name="action_copy_ip">复制 IP</string>
+    <string name="action_delete_entry">删除条目</string>
+    <string name="action_delete">删除</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_ok">确定</string>
+    <string name="action_clear">清除</string>
+    <string name="action_close">关闭</string>
+    <string name="action_confirm">确认</string>
+    <string name="action_go_back">返回</string>
+    <string name="action_translate">翻译</string>
+    <string name="action_go_to_settings">前往设置</string>
+    <string name="action_agree_and_continue"><![CDATA[同意并继续]]></string>
+    <string name="action_enable">启用</string>
+    <string name="action_skip_for_now">暂时跳过</string>
+
+    <!-- 说明文案 -->
+    <string name="description_delete_entry">该地址条目将被永久从历史记录中移除</string>
+    <string name="description_background_services_short">在应用关闭时继续运行</string>
+    <string name="description_background_services_long">使用后台服务在应用关闭时也能跟踪你的地址</string>
+    <string name="description_notifications">在 IP 发生变化时发送通知</string>
+    <string name="description_translate">帮助翻译此应用</string>
+    <string name="description_network_type">哪些网络类型应触发通知</string>
+    <string name="description_internet_protocol">哪些互联网协议应触发通知</string>
+    <string name="description_periodic_work">周期性在后台运行</string>
+    <string name="description_combine_periodic_notifications">你可以将周期性任务与通知结合，形成强大的组合</string>
+    <string name="description_notifications_permission_required">发送 IP 变更通知需要通知权限。请在系统设置中启用。</string>
+    <string name="description_source_code">在 GitHub 查看项目源代码</string>
+    <string name="description_about">了解更多关于本应用的信息</string>
+    <string name="description_privacy_policy">阅读隐私政策</string>
+
+    <!-- 外部链接：不可翻译 -->
+    <string name="link_help_translate" translatable="false">https://crowdin.com/project/find-my-ip</string>
+    <string name="link_source_code" translatable="false">https://github.com/maksimowiczm/find-my-ip</string>
+    <string name="link_ipify" translatable="false">https://www.ipify.org</string>
+    <string name="link_privacy_policy" translatable="false">https://maksimowiczm.github.io/find-my-ip/privacy-policy.html</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_read_the_privacy_policy">阅读隐私政策</string>
+    <string name="onboarding_description_before_you_get_started">为向你提供准确的 IP 跟踪，我们使用 ipify 获取你的公网 IP 地址。你的 IP 历史仅保存在你的设备上——我们不会上传或与任何人共享你的数据。</string>
+    <string name="onboarding_headline_before_you_get_started">开始之前</string>
+    <string name="onboarding_headline_keep_tracking">即使不使用应用也持续跟踪</string>
+    <string name="onboarding_description_keep_tracking">启用自动 IP 跟踪，让你的地址历史保持最新——即使在应用关闭时。</string>
+    <string name="onboarding_headline_stay_informed">随时获知变化</string>
+    <string name="onboarding_description_stay_informed">当你的 IP 地址发生变化时接收通知——在出行时尤其有用。</string>
+
+    <!-- 前台/后台与网络状态 -->
+    <string name="headline_foreground_service_and_periodic_work">前台服务与周期性任务</string>
+    <string name="headline_foreground_service">前台服务</string>
+    <string name="headline_what_is_network_state_change">什么是网络状态变化？</string>
+
+    <string name="description_foreground_service_and_periodic_work">前台服务将始终运行，并在网络变化时检查你的 IP 地址。周期性任务会不时运行，更省电。</string>
+    <string name="description_foreground_service">监听网络状态变化</string>
+    <string name="description_what_is_network_state_change">设备的互联网连接发生了更新——例如切换 Wi-Fi、移动数据或失去连接</string>
+
+    <!-- 其他 -->
+    <string name="neutral_refreshing">正在刷新</string>
+    <string name="notification_network_monitor">网络监视器</string>
+
+    <!-- 赞助与联系 -->
+    <string name="headline_sponsor">赞助</string>
+    <string name="description_sponsor">欢迎以任何形式支持</string>
+    <string name="description_sponsor_2">你的支持让应用得以持续</string>
+    <string name="headline_contact">联系方式</string>
+    <string name="description_sponsor_contact">如有任何有关赞助的需求，欢迎通过电子邮件或 GitHub 与我联系。</string>
+</resources>
