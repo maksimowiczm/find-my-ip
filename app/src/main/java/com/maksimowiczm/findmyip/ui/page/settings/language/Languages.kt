@@ -41,6 +41,15 @@ val languages = mapOf(
     "Русский (Россия)" to Translation(
         tag = "ru-RU",
         authors = listOf()
+    ),
+    "简体中文" to Translation(
+        tag = "zh-CN",
+        authors = listOf(
+            Author(
+                name = "Ariel Xinyue Wang",
+                link = "https://github.com/AcideFluorhydrique"
+            )
+        )
     )
 )
 
