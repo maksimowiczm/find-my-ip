@@ -22,8 +22,8 @@ android {
         applicationId = "com.maksimowiczm.findmyip"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "4.1.0"
+        versionCode = 14
+        versionName = "4.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
