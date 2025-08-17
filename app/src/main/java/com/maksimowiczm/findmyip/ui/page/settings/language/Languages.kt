@@ -50,6 +50,15 @@ val languages = mapOf(
                 link = "https://github.com/moayad-star"
             )
         )
+    ),
+    "简体中文" to Translation(
+        tag = "zh-CN",
+        authors = listOf(
+            Author(
+                name = "Ariel Xinyue Wang",
+                link = "https://github.com/AcideFluorhydrique"
+            )
+        )
     )
 )
 
