@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -28,14 +26,14 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.application)
             implementation(projects.domain)
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.paging)
+            implementation(libs.ktor.client.core)
         }
 
         commonTest.dependencies { implementation(libs.androidx.room.testing) }
 
-        androidMain.dependencies {}
+        androidMain.dependencies { implementation(libs.ktor.client.okhttp) }
 
         getByName("androidDeviceTest").dependencies {
             implementation(libs.androidx.testRunner)
@@ -43,19 +41,6 @@ kotlin {
             implementation(libs.androidx.testExt.junit)
         }
 
-        iosMain.dependencies {}
+        iosMain.dependencies { implementation(libs.ktor.client.darwin) }
     }
-}
-
-room { schemaDirectory("$projectDir/schemas") }
-
-dependencies {
-    listOf(
-            "kspCommonMainMetadata",
-            "kspAndroid",
-            "kspIosX64",
-            "kspIosArm64",
-            "kspIosSimulatorArm64",
-        )
-        .forEach { add(it, libs.androidx.room.compiler) }
 }

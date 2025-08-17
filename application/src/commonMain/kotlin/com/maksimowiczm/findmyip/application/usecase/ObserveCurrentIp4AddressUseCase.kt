@@ -23,7 +23,7 @@ internal class ObserveCurrentIp4AddressUseCaseImpl(
     override fun observe(): Flow<AddressStatus<Ip4Address>> =
         localSource
             .observeCurrentIp4Address()
-            .map<Ip4Address, AddressStatus<Ip4Address>> { address ->
+            .map<_, AddressStatus<Ip4Address>> { address ->
                 logger.d(TAG) { "Current IP address: $address" }
                 AddressStatus.Success(address)
             }
