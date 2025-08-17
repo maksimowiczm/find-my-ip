@@ -5,8 +5,10 @@ plugins {
 }
 
 kotlin {
+    sourceSets.all { languageSettings.enableLanguageFeature("ExpectActualClasses") }
+
     androidLibrary {
-        namespace = "com.maksimowiczm.findmyip.application"
+        namespace = "com.maksimowiczm.findmyip.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -16,28 +18,11 @@ kotlin {
             .configure { instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
     }
 
-    val xcfName = "applicationKit"
+    val xcfName = "sharedKit"
 
     iosX64 { binaries.framework { baseName = xcfName } }
 
     iosArm64 { binaries.framework { baseName = xcfName } }
 
     iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(projects.shared)
-            implementation(projects.domain)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.datetime)
-        }
-
-        commonTest.dependencies { implementation(libs.kotlin.test) }
-
-        getByName("androidDeviceTest").dependencies {
-            implementation(libs.androidx.testRunner)
-            implementation(libs.androidx.core)
-            implementation(libs.androidx.testExt.junit)
-        }
-    }
 }

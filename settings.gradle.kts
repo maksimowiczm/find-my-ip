@@ -34,3 +34,5 @@ include(":composeApp")
 include(":domain")
 
 include(":application")
+
+include(":shared")
