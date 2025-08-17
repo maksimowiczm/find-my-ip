@@ -42,6 +42,15 @@ val languages = mapOf(
         tag = "ru-RU",
         authors = listOf()
     ),
+    "العربية" to Translation(
+        tag = "ar-SA",
+        authors = listOf(
+            Author(
+                name = "Moayad ahmed",
+                link = "https://github.com/moayad-star"
+            )
+        )
+    ),
     "简体中文" to Translation(
         tag = "zh-CN",
         authors = listOf(
