@@ -13,4 +13,6 @@ value class Ip4Address(val array: UByteArray) {
 
     override fun toString(): String =
         array.joinToString(separator = ".", transform = UByte::toString)
+
+    fun stringRepresentation(): String = toString()
 }
