@@ -13,7 +13,7 @@ interface StringToAddressMapper {
 }
 
 @OptIn(ExperimentalUnsignedTypes::class)
-internal class StringToAddressMapperImpl : StringToAddressMapper {
+internal object StringToAddressMapperImpl : StringToAddressMapper {
     override fun toIp4Address(ip: String): Ip4Address {
         val parts = ip.split(".")
         require(parts.size == 4) { "Invalid IP address format: $ip" }

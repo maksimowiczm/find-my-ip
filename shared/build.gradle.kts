@@ -25,4 +25,9 @@ kotlin {
     iosArm64 { binaries.framework { baseName = xcfName } }
 
     iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
+
+    sourceSets.commonMain.dependencies {
+        implementation(project.dependencies.platform(libs.koin.bom))
+        implementation(libs.koin.core)
+    }
 }

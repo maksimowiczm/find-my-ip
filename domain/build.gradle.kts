@@ -25,7 +25,11 @@ kotlin {
     iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
 
     sourceSets {
-        commonMain.dependencies { implementation(libs.kotlinx.datetime) }
+        commonMain.dependencies {
+            implementation(libs.kotlinx.datetime)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+        }
 
         commonTest.dependencies { implementation(libs.kotlin.test) }
 

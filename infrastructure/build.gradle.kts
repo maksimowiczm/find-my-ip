@@ -29,6 +29,8 @@ kotlin {
             implementation(projects.application)
             implementation(projects.domain)
             implementation(libs.ktor.client.core)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
         }
 
         commonTest.dependencies { implementation(libs.androidx.room.testing) }

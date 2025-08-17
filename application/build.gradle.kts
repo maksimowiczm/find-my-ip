@@ -30,6 +30,8 @@ kotlin {
             implementation(projects.domain)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
         }
 
         commonTest.dependencies { implementation(libs.kotlin.test) }
