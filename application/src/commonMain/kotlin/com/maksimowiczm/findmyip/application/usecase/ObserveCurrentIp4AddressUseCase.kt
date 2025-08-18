@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.application.usecase
 
+import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressStatus
@@ -17,6 +18,7 @@ fun interface ObserveCurrentIp4AddressUseCase {
 internal class ObserveCurrentIp4AddressUseCaseImpl(
     private val localSource: Ip4AddressLocalDataSource,
     private val remoteSource: Ip4AddressRemoteDataSource,
+    private val dateProvider: DateProvider,
     private val logger: Logger,
 ) : ObserveCurrentIp4AddressUseCase {
 
@@ -25,7 +27,10 @@ internal class ObserveCurrentIp4AddressUseCaseImpl(
             .observeCurrentIp4Address()
             .map<_, AddressStatus<Ip4Address>> { address ->
                 logger.d(TAG) { "Current IP address: $address" }
-                AddressStatus.Success(address)
+                AddressStatus.Success(
+                    date = dateProvider.now(),
+                    value = address
+                )
             }
             .onStart {
                 try {
@@ -39,8 +44,11 @@ internal class ObserveCurrentIp4AddressUseCaseImpl(
 
                     val error: AddressStatus.Error<Ip4Address> =
                         when (val message = e.message) {
-                            null -> AddressStatus.Error.Unknown()
-                            else -> AddressStatus.Error.Custom(message)
+                            null -> AddressStatus.Error.Unknown(dateProvider.now())
+                            else -> AddressStatus.Error.Custom(
+                                date = dateProvider.now(),
+                                message = message
+                            )
                         }
 
                     emit(error)
