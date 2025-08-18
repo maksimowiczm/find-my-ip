@@ -56,6 +56,10 @@ class HomeViewModel(
         }
     }
 
+    init {
+        viewModelScope.launch { refresh() }
+    }
+
     companion object {
         private const val REFRESH_DELAY_MS = 1000L
     }
