@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
     alias(libs.plugins.gmazzo.buildconfig)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 buildConfig {
@@ -12,6 +14,8 @@ buildConfig {
     val useFake = true
     buildConfigField("Boolean", "USE_FAKE", "$useFake")
 }
+
+room { schemaDirectory("$projectDir/schemas") }
 
 kotlin {
     androidLibrary {
@@ -41,6 +45,8 @@ kotlin {
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.paging)
         }
 
         commonTest.dependencies { implementation(libs.androidx.room.testing) }
@@ -55,4 +61,15 @@ kotlin {
 
         iosMain.dependencies { implementation(libs.ktor.client.darwin) }
     }
+}
+
+dependencies {
+    listOf(
+            "kspCommonMainMetadata",
+            "kspAndroid",
+            "kspIosX64",
+            "kspIosArm64",
+            "kspIosSimulatorArm64",
+        )
+        .forEach { add(it, libs.androidx.room.compiler) }
 }

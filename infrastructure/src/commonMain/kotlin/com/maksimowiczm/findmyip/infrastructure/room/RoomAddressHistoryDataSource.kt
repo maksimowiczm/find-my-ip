@@ -1,0 +1,47 @@
+package com.maksimowiczm.findmyip.infrastructure.room
+
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.domain.entity.AddressHistory
+import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
+internal class RoomAddressHistoryDataSource(
+    private val dao: AddressHistoryDao,
+    private val stringToAddressMapper: StringToAddressMapper,
+) : AddressHistoryLocalDataSource {
+    override fun observeHistory(): Flow<PagingData<AddressHistory>> =
+        Pager(config = PagingConfig(pageSize = 30), pagingSourceFactory = { dao.observePaged() })
+            .flow
+            .map { data -> data.map { it.toModel() } }
+
+    @OptIn(ExperimentalTime::class)
+    private fun AddressHistoryEntity.toModel(): AddressHistory =
+        when (addressVersion) {
+            AddressVersion.IPV4 ->
+                AddressHistory.Ipv4(
+                    id = id,
+                    address = stringToAddressMapper.toIp4Address(address),
+                    dateTime =
+                        Instant.fromEpochSeconds(epochSeconds)
+                            .toLocalDateTime(TimeZone.currentSystemDefault()),
+                )
+
+            AddressVersion.IPV6 ->
+                AddressHistory.Ipv6(
+                    id = id,
+                    address = stringToAddressMapper.toIp6Address(address),
+                    dateTime =
+                        Instant.fromEpochSeconds(epochSeconds)
+                            .toLocalDateTime(TimeZone.currentSystemDefault()),
+                )
+        }
+}
