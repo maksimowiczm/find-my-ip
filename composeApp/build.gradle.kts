@@ -70,7 +70,18 @@ android {
         versionName = "1.0"
     }
     packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
-    buildTypes { getByName("release") { isMinifyEnabled = true } }
+    buildTypes {
+        getByName("release") { isMinifyEnabled = true }
+        create("devRelease") {
+            initWith(getByName("release"))
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("miniDevRelease") {
+            initWith(getByName("devRelease"))
+            isMinifyEnabled = true
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
