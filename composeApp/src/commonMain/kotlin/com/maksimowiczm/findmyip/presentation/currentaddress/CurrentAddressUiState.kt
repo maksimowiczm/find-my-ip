@@ -1,16 +1,24 @@
 package com.maksimowiczm.findmyip.presentation.currentaddress
 
 import androidx.compose.runtime.Immutable
+import kotlinx.datetime.LocalDateTime
 
 @Immutable
 sealed interface IpAddressUiState {
     val address: String?
+    val date: LocalDateTime?
 
-    @Immutable data class Loading(override val address: String?) : IpAddressUiState
+    @Immutable
+    data class Loading(override val address: String?, override val date: LocalDateTime?) :
+        IpAddressUiState
 
-    @Immutable data class Success(override val address: String) : IpAddressUiState
+    @Immutable
+    data class Success(override val address: String, override val date: LocalDateTime?) :
+        IpAddressUiState
 
-    @Immutable data class Error(override val address: String?) : IpAddressUiState
+    @Immutable
+    data class Error(override val address: String?, override val date: LocalDateTime?) :
+        IpAddressUiState
 }
 
 @Immutable

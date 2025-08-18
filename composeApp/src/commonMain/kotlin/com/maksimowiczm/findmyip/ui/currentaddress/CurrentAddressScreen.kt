@@ -44,8 +44,11 @@ import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.presentation.currentaddress.CurrentAddressUiState
 import com.maksimowiczm.findmyip.presentation.currentaddress.IpAddressUiState
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
+import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.now
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -81,6 +84,7 @@ fun CurrentAddressScreen(
                 AddressButton(
                     label = stringResource(Res.string.ipv4),
                     address = addr,
+                    date = uiState.ip4.date,
                     onClick = { clipboardManager.copyToClipboard(addr) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -89,6 +93,7 @@ fun CurrentAddressScreen(
                 AddressButton(
                     label = stringResource(Res.string.ipv6),
                     address = addr,
+                    date = uiState.ip6.date,
                     onClick = { clipboardManager.copyToClipboard(addr) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -125,10 +130,13 @@ private fun ErrorCard(modifier: Modifier = Modifier) {
 @Composable
 private fun AddressButton(
     label: String,
+    date: LocalDateTime?,
     address: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val dateFormatter = LocalDateFormatter.current
+
     Button(
         onClick = onClick,
         modifier = modifier,
@@ -143,7 +151,19 @@ private fun AddressButton(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(text = label, style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = label, style = MaterialTheme.typography.titleMedium)
+                date?.let { date ->
+                    Text(
+                        text = dateFormatter.formatDateTimeLong(date),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+            }
             Text(
                 text = address,
                 style = MaterialTheme.typography.headlineMediumEmphasized,
@@ -198,8 +218,8 @@ private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier
 private fun CurrentAddressScreenPreview() {
     val uiState =
         CurrentAddressUiState(
-            ip4 = IpAddressUiState.Success("127.0.0.1"),
-            ip6 = IpAddressUiState.Success("::1"),
+            ip4 = IpAddressUiState.Success("127.0.0.1", LocalDateTime.now()),
+            ip6 = IpAddressUiState.Success("::1", LocalDateTime.now()),
         )
 
     FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
@@ -210,8 +230,8 @@ private fun CurrentAddressScreenPreview() {
 private fun CurrentAddressScreenLoadingPreview() {
     val uiState =
         CurrentAddressUiState(
-            ip4 = IpAddressUiState.Loading(null),
-            ip6 = IpAddressUiState.Loading(null),
+            ip4 = IpAddressUiState.Loading(null, LocalDateTime.now()),
+            ip6 = IpAddressUiState.Loading(null, LocalDateTime.now()),
         )
 
     FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
@@ -222,8 +242,8 @@ private fun CurrentAddressScreenLoadingPreview() {
 private fun CurrentAddressScreenErrorPreview() {
     val uiState =
         CurrentAddressUiState(
-            ip4 = IpAddressUiState.Error(null),
-            ip6 = IpAddressUiState.Error(null),
+            ip4 = IpAddressUiState.Error(null, LocalDateTime.now()),
+            ip6 = IpAddressUiState.Error(null, LocalDateTime.now()),
         )
 
     FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }

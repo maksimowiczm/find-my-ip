@@ -50,8 +50,8 @@ class CurrentAddressViewModel(
                 started = SharingStarted.WhileSubscribed(SUBSCRIPTION_TIMEOUT_MS),
                 initialValue =
                     CurrentAddressUiState(
-                        ip4 = IpAddressUiState.Loading(null),
-                        ip6 = IpAddressUiState.Loading(null),
+                        ip4 = IpAddressUiState.Loading(null, null),
+                        ip6 = IpAddressUiState.Loading(null, null),
                     ),
             )
 
@@ -88,19 +88,23 @@ class CurrentAddressViewModel(
             }
 
         return when (refreshStatus) {
-            is RefreshStatus.Error -> IpAddressUiState.Error(ipAddress)
+            is RefreshStatus.Error -> IpAddressUiState.Error(ipAddress, addressStatus.date)
 
             RefreshStatus.Idle ->
                 when (addressStatus) {
-                    is AddressStatus.Error -> IpAddressUiState.Error(null)
+                    is AddressStatus.Error -> IpAddressUiState.Error(null, addressStatus.date)
                     is AddressStatus.Success ->
-                        IpAddressUiState.Success(addressStatus.value.stringRepresentation())
+                        IpAddressUiState.Success(
+                            addressStatus.value.stringRepresentation(),
+                            addressStatus.date,
+                        )
                 }
 
             RefreshStatus.Refreshing ->
                 when (addressStatus) {
-                    is AddressStatus.Error -> IpAddressUiState.Error(null)
-                    is AddressStatus.Success -> IpAddressUiState.Loading(ipAddress)
+                    is AddressStatus.Error -> IpAddressUiState.Error(null, addressStatus.date)
+                    is AddressStatus.Success ->
+                        IpAddressUiState.Loading(ipAddress, addressStatus.date)
                 }
         }
     }

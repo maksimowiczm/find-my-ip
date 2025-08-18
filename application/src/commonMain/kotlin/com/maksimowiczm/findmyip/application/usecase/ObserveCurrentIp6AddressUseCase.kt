@@ -27,10 +27,7 @@ internal class ObserveCurrentIp6AddressUseCaseImpl(
             .observeCurrentIp6Address()
             .map<_, AddressStatus<Ip6Address>> { address ->
                 logger.d(TAG) { "Current IP address: $address" }
-                AddressStatus.Success(
-                    date = dateProvider.now(),
-                    value = address
-                )
+                AddressStatus.Success(date = dateProvider.now(), value = address)
             }
             .onStart {
                 try {
@@ -45,10 +42,11 @@ internal class ObserveCurrentIp6AddressUseCaseImpl(
                     val error: AddressStatus.Error<Ip6Address> =
                         when (val message = e.message) {
                             null -> AddressStatus.Error.Unknown(dateProvider.now())
-                            else -> AddressStatus.Error.Custom(
-                                date = dateProvider.now(),
-                                message = message
-                            )
+                            else ->
+                                AddressStatus.Error.Custom(
+                                    date = dateProvider.now(),
+                                    message = message,
+                                )
                         }
 
                     emit(error)

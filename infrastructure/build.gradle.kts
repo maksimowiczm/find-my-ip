@@ -9,7 +9,7 @@ buildConfig {
     packageName("com.maksimowiczm.findmyip.infrastructure")
     className("BuildConfig")
 
-    val useFake = false
+    val useFake = true
     buildConfigField("Boolean", "USE_FAKE", "$useFake")
 }
 
@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies { implementation(libs.androidx.room.testing) }
