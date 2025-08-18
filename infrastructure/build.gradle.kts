@@ -2,6 +2,15 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.gmazzo.buildconfig)
+}
+
+buildConfig {
+    packageName("com.maksimowiczm.findmyip.infrastructure")
+    className("BuildConfig")
+
+    val useFake = false
+    buildConfigField("Boolean", "USE_FAKE", "$useFake")
 }
 
 kotlin {
