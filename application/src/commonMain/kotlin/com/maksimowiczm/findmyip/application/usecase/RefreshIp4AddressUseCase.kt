@@ -1,8 +1,8 @@
 package com.maksimowiczm.findmyip.application.usecase
 
-import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
-import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
+import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.shared.log.Logger
 import com.maksimowiczm.findmyip.shared.result.Err

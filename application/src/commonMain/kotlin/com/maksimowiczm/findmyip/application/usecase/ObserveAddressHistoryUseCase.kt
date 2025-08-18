@@ -1,7 +1,7 @@
 package com.maksimowiczm.findmyip.application.usecase
 
 import androidx.paging.PagingData
-import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import kotlinx.coroutines.flow.Flow
 

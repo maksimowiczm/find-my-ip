@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.application.infrastructure
+package com.maksimowiczm.findmyip.application.infrastructure.date
 
 import kotlinx.datetime.LocalDateTime
 

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
 import kotlin.time.ExperimentalTime

@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.application.infrastructure
+package com.maksimowiczm.findmyip.application.infrastructure.local
 
 import androidx.paging.PagingData
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory

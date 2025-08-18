@@ -1,9 +1,9 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
-import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
-import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
+import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.date.DateProviderImpl
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource

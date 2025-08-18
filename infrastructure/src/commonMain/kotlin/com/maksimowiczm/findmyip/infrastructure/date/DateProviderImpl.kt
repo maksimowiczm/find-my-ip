@@ -1,6 +1,6 @@
 package com.maksimowiczm.findmyip.infrastructure.date
 
-import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
+import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlinx.datetime.TimeZone

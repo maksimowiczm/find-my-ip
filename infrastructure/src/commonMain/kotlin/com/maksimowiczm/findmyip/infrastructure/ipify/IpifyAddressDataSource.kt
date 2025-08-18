@@ -1,7 +1,7 @@
 package com.maksimowiczm.findmyip.infrastructure.ipify
 
-import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.domain.entity.Ip4Address
 import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
