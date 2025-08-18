@@ -1,3 +1,4 @@
 <resources>
     <string name="action_refresh">Refresh</string>
+    <string name="error_failed_to_fetch_your_address">Failed to fetch your address</string>
 </resources>
