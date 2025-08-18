@@ -2,14 +2,11 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
-import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.date.DateProviderImpl
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource
-import com.maksimowiczm.findmyip.infrastructure.inmemory.InMemoryIpAddressDataSource
 import com.maksimowiczm.findmyip.infrastructure.ipify.IpifyAddressDataSource
 import com.maksimowiczm.findmyip.infrastructure.ipify.IpifyConfigImpl
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
@@ -29,8 +26,6 @@ import org.koin.dsl.module
 import org.koin.dsl.onClose
 
 val infrastructureModule = module {
-    singleOf(::InMemoryIpAddressDataSource)
-        .binds(arrayOf(Ip4AddressLocalDataSource::class, Ip6AddressLocalDataSource::class))
     singleOf(::DateProviderImpl).bind<DateProvider>()
     factory { StringToAddressMapperImpl }.bind<StringToAddressMapper>()
 

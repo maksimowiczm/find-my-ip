@@ -1,7 +1,9 @@
 package com.maksimowiczm.findmyip.application.usecase
 
-import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressRemoteDataSource
+import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.shared.log.Logger
 import com.maksimowiczm.findmyip.shared.result.Err
 import com.maksimowiczm.findmyip.shared.result.Ok
@@ -15,14 +17,19 @@ fun interface RefreshIp6AddressUseCase {
 
 internal class RefreshIp6AddressUseCaseImpl(
     private val remoteDataSource: Ip6AddressRemoteDataSource,
-    private val localDataSource: Ip6AddressLocalDataSource,
+    private val historyLocalDataSource: AddressHistoryLocalDataSource,
+    private val dateProvider: DateProvider,
     private val logger: Logger,
 ) : RefreshIp6AddressUseCase {
 
     override suspend fun refresh(): Result<Unit, RefreshIp6AddressError> =
         try {
             val currentAddress = remoteDataSource.getCurrentIp6Address()
-            localDataSource.saveCurrentIp6Address(currentAddress)
+
+            val history =
+                AddressHistory.Ipv6(id = 0, address = currentAddress, dateTime = dateProvider.now())
+            historyLocalDataSource.saveHistory(history)
+
             Ok(Unit)
         } catch (e: Exception) {
             logger.e(TAG, e) { "Failed to refresh current IP address" }

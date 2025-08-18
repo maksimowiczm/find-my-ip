@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AddressHistoryLocalDataSource {
     fun observeHistory(): Flow<PagingData<AddressHistory>>
+
+    suspend fun saveHistory(history: AddressHistory)
 }

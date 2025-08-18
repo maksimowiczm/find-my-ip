@@ -12,6 +12,7 @@ import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 internal class RoomAddressHistoryDataSource(
@@ -22,6 +23,10 @@ internal class RoomAddressHistoryDataSource(
         Pager(config = PagingConfig(pageSize = 30), pagingSourceFactory = { dao.observePaged() })
             .flow
             .map { data -> data.map { it.toModel() } }
+
+    override suspend fun saveHistory(history: AddressHistory) {
+        dao.insert(history.toEntity())
+    }
 
     @OptIn(ExperimentalTime::class)
     private fun AddressHistoryEntity.toModel(): AddressHistory =
@@ -44,4 +49,22 @@ internal class RoomAddressHistoryDataSource(
                             .toLocalDateTime(TimeZone.currentSystemDefault()),
                 )
         }
+
+    @OptIn(ExperimentalTime::class)
+    private fun AddressHistory.toEntity(): AddressHistoryEntity {
+        val version =
+            when (this) {
+                is AddressHistory.Ipv4 -> AddressVersion.IPV4
+                is AddressHistory.Ipv6 -> AddressVersion.IPV6
+            }
+
+        val epochSeconds = dateTime.toInstant(TimeZone.currentSystemDefault()).epochSeconds
+
+        return AddressHistoryEntity(
+            id = id,
+            address = stringRepresentation(),
+            addressVersion = version,
+            epochSeconds = epochSeconds,
+        )
+    }
 }

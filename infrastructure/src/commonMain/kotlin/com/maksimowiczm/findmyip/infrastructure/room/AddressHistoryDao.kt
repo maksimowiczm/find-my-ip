@@ -2,6 +2,8 @@ package com.maksimowiczm.findmyip.infrastructure.room
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -15,4 +17,6 @@ internal interface AddressHistoryDao {
     """
     )
     fun observePaged(): PagingSource<Int, AddressHistoryEntity>
+
+    @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insert(entity: AddressHistoryEntity)
 }
