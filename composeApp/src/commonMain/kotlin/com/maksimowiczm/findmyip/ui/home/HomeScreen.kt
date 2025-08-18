@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.currentaddress
+package com.maksimowiczm.findmyip.ui.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -8,6 +8,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Refresh
@@ -41,20 +43,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.presentation.currentaddress.CurrentAddressUiState
-import com.maksimowiczm.findmyip.presentation.currentaddress.IpAddressUiState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
+import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
-import findmyip.composeapp.generated.resources.*
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.now
+import findmyip.composeapp.generated.resources.Res
+import findmyip.composeapp.generated.resources.action_refresh
+import findmyip.composeapp.generated.resources.error_failed_to_fetch_your_address
+import findmyip.composeapp.generated.resources.ipv4
+import findmyip.composeapp.generated.resources.ipv6
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CurrentAddressScreen(
-    uiState: CurrentAddressUiState,
+    history: LazyPagingItems<AddressHistory>,
+    isRefreshing: Boolean,
+    isError: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -62,7 +67,7 @@ fun CurrentAddressScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = { TopBar(isLoading = uiState.isLoading, onRefresh = onRefresh) },
+        topBar = { TopBar(isLoading = isRefreshing, onRefresh = onRefresh) },
     ) { paddingValues ->
         Column(
             modifier =
@@ -73,30 +78,29 @@ fun CurrentAddressScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AnimatedVisibility(
-                visible = uiState.isError,
-                enter = expandVertically(),
-                exit = shrinkVertically(),
-            ) {
-                ErrorCard()
-            }
-            uiState.ip4.address?.let { addr ->
-                AddressButton(
-                    label = stringResource(Res.string.ipv4),
-                    address = addr,
-                    date = uiState.ip4.date,
-                    onClick = { clipboardManager.copyToClipboard(addr) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-            uiState.ip6.address?.let { addr ->
-                AddressButton(
-                    label = stringResource(Res.string.ipv6),
-                    address = addr,
-                    date = uiState.ip6.date,
-                    onClick = { clipboardManager.copyToClipboard(addr) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            LazyColumn {
+                item {
+                    Box {
+                        this@Column.AnimatedVisibility(
+                            visible = isError,
+                            enter = expandVertically(),
+                            exit = shrinkVertically(),
+                        ) {
+                            ErrorCard()
+                        }
+                    }
+                }
+
+                items(count = history.itemCount, key = history.itemKey { it.id }) {
+                    val item = history[it]
+
+                    if (item == null) {
+                        // TODO loading state
+                        return@items
+                    }
+
+                    AddressButton(history = item, onClick = {})
+                }
             }
         }
     }
@@ -129,13 +133,23 @@ private fun ErrorCard(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun AddressButton(
-    label: String,
-    date: LocalDateTime?,
-    address: String,
+    history: AddressHistory,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val dateFormatter = LocalDateFormatter.current
+
+    val label =
+        when (history) {
+            is AddressHistory.Ipv4 -> stringResource(Res.string.ipv4)
+            is AddressHistory.Ipv6 -> stringResource(Res.string.ipv6)
+        }
+    val date = history.dateTime
+    val address =
+        when (history) {
+            is AddressHistory.Ipv4 -> history.address.stringRepresentation()
+            is AddressHistory.Ipv6 -> history.address.stringRepresentation()
+        }
 
     Button(
         onClick = onClick,
@@ -157,12 +171,10 @@ private fun AddressButton(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = label, style = MaterialTheme.typography.titleMedium)
-                date?.let { date ->
-                    Text(
-                        text = dateFormatter.formatDateTimeLong(date),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
+                Text(
+                    text = dateFormatter.formatDateTimeLong(date),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
             Text(
                 text = address,
@@ -211,40 +223,4 @@ private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun CurrentAddressScreenPreview() {
-    val uiState =
-        CurrentAddressUiState(
-            ip4 = IpAddressUiState.Success("127.0.0.1", LocalDateTime.now()),
-            ip6 = IpAddressUiState.Success("::1", LocalDateTime.now()),
-        )
-
-    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
-}
-
-@Preview
-@Composable
-private fun CurrentAddressScreenLoadingPreview() {
-    val uiState =
-        CurrentAddressUiState(
-            ip4 = IpAddressUiState.Loading(null, LocalDateTime.now()),
-            ip6 = IpAddressUiState.Loading(null, LocalDateTime.now()),
-        )
-
-    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
-}
-
-@Preview
-@Composable
-private fun CurrentAddressScreenErrorPreview() {
-    val uiState =
-        CurrentAddressUiState(
-            ip4 = IpAddressUiState.Error(null, LocalDateTime.now()),
-            ip6 = IpAddressUiState.Error(null, LocalDateTime.now()),
-        )
-
-    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
 }

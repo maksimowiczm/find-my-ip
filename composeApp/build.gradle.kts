@@ -47,6 +47,8 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
 
+            implementation(libs.androidx.paging.common)
+
             implementation(projects.shared)
             implementation(projects.domain)
             implementation(projects.infrastructure)
