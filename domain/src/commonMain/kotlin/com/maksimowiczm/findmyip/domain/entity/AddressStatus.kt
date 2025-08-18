@@ -1,6 +1,6 @@
 package com.maksimowiczm.findmyip.domain.entity
 
-sealed interface AddressStatus<T> {
+sealed interface AddressStatus<out T> {
 
     sealed interface Error<T> : AddressStatus<T> {
 

@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.presentation.currentaddress.CurrentAddressUiState
+import com.maksimowiczm.findmyip.presentation.currentaddress.IpAddressUiState
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -134,23 +135,35 @@ private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier
 @Preview
 @Composable
 private fun CurrentAddressScreenPreview() {
-    FindMyIpTheme {
-        CurrentAddressScreen(uiState = CurrentAddressUiState.Success("192.168.1.1"), onRefresh = {})
-    }
+    val uiState =
+        CurrentAddressUiState(
+            ip4 = IpAddressUiState.Success("127.0.0.1"),
+            ip6 = IpAddressUiState.Success("::1"),
+        )
+
+    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
 }
 
 @Preview
 @Composable
 private fun CurrentAddressScreenLoadingPreview() {
-    FindMyIpTheme {
-        CurrentAddressScreen(uiState = CurrentAddressUiState.Loading(null), onRefresh = {})
-    }
+    val uiState =
+        CurrentAddressUiState(
+            ip4 = IpAddressUiState.Loading(null),
+            ip6 = IpAddressUiState.Loading(null),
+        )
+
+    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
 }
 
 @Preview
 @Composable
 private fun CurrentAddressScreenErrorPreview() {
-    FindMyIpTheme {
-        CurrentAddressScreen(uiState = CurrentAddressUiState.Error(null), onRefresh = {})
-    }
+    val uiState =
+        CurrentAddressUiState(
+            ip4 = IpAddressUiState.Error(null),
+            ip6 = IpAddressUiState.Error(null),
+        )
+
+    FindMyIpTheme { CurrentAddressScreen(uiState = uiState, onRefresh = {}) }
 }

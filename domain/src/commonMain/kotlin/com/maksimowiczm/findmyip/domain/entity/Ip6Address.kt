@@ -4,7 +4,7 @@ import kotlin.jvm.JvmInline
 
 @OptIn(ExperimentalUnsignedTypes::class)
 @JvmInline
-value class Ip6Address(val array: UByteArray) {
+value class Ip6Address(val array: UByteArray) : IpAddress {
     init {
         require(array.size == 16) {
             "IP address must be represented by an array of 16 bytes, but was ${array.size} bytes."
@@ -19,5 +19,5 @@ value class Ip6Address(val array: UByteArray) {
             .joinToString(":") { it.toString(16) }
     }
 
-    fun stringRepresentation(): String = toString()
+    override fun stringRepresentation(): String = toString()
 }

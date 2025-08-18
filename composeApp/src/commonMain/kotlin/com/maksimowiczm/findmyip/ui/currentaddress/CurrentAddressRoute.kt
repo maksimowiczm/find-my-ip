@@ -12,7 +12,7 @@ fun CurrentAddressRoute(
     modifier: Modifier = Modifier,
     viewModel: CurrentAddressViewModel = koinViewModel(),
 ) {
-    val uiState by viewModel.ip4Flow.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CurrentAddressScreen(uiState = uiState, onRefresh = viewModel::refresh, modifier = modifier)
 }
