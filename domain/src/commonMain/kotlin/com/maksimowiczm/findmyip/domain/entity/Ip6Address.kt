@@ -11,6 +11,13 @@ value class Ip6Address(val array: UByteArray) {
         }
     }
 
-    override fun toString(): String =
-        array.joinToString(separator = ":", transform = UByte::toString)
+    override fun toString(): String {
+        return array
+            .asSequence()
+            .chunked(2)
+            .map { (msb, lsb) -> (msb.toInt() shl 8) or lsb.toInt() }
+            .joinToString(":") { it.toString(16) }
+    }
+
+    fun stringRepresentation(): String = toString()
 }

@@ -2,6 +2,8 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.Ip4AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource
 import com.maksimowiczm.findmyip.infrastructure.inmemory.InMemoryIpAddressDataSource
@@ -13,12 +15,13 @@ import kotlin.random.Random
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
-import org.koin.dsl.bind
+import org.koin.dsl.binds
 import org.koin.dsl.module
 import org.koin.dsl.onClose
 
 val infrastructureModule = module {
-    singleOf(::InMemoryIpAddressDataSource).bind<Ip4AddressLocalDataSource>()
+    singleOf(::InMemoryIpAddressDataSource)
+        .binds(arrayOf(Ip4AddressLocalDataSource::class, Ip6AddressLocalDataSource::class))
 
     if (BuildConfig.USE_FAKE) {
         fakeModule()
@@ -36,7 +39,7 @@ private fun Module.ipifyModule() {
                 stringToAddressMapper = StringToAddressMapperImpl,
             )
         }
-        .bind<Ip4AddressRemoteDataSource>()
+        .binds(arrayOf(Ip4AddressRemoteDataSource::class, Ip6AddressRemoteDataSource::class))
 }
 
 private fun Module.fakeModule() {
@@ -46,5 +49,5 @@ private fun Module.fakeModule() {
                 stringToAddressMapper = StringToAddressMapperImpl,
             )
         }
-        .bind<Ip4AddressRemoteDataSource>()
+        .binds(arrayOf(Ip4AddressRemoteDataSource::class, Ip6AddressRemoteDataSource::class))
 }
