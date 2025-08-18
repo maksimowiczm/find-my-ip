@@ -107,6 +107,6 @@ class CurrentAddressViewModel(
 
     companion object {
         private const val SUBSCRIPTION_TIMEOUT_MS = 2_000L
-        private const val REFRESH_DELAY_MS = 200L
+        private const val REFRESH_DELAY_MS = 1000L
     }
 }

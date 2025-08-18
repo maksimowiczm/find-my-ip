@@ -1,15 +1,13 @@
 package com.maksimowiczm.findmyip.ui.currentaddress
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,17 +24,22 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.presentation.currentaddress.CurrentAddressUiState
 import com.maksimowiczm.findmyip.presentation.currentaddress.IpAddressUiState
@@ -51,12 +54,18 @@ fun CurrentAddressScreen(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(modifier = modifier, topBar = { TopBar(uiState.isLoading, onRefresh) }) { paddingValues
-        ->
-        Box(
+    Scaffold(
+        modifier = modifier,
+        topBar = { TopBar(isLoading = uiState.isLoading, onRefresh = onRefresh) },
+    ) { paddingValues ->
+        Column(
             modifier =
-                Modifier.fillMaxSize().padding(paddingValues).consumeWindowInsets(paddingValues),
-            contentAlignment = Alignment.TopCenter,
+                Modifier.fillMaxSize()
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimatedVisibility(
                 visible = uiState.isError,
@@ -65,13 +74,21 @@ fun CurrentAddressScreen(
             ) {
                 ErrorCard()
             }
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(uiState.toString())
+            uiState.ip4.address?.let { addr ->
+                AddressButton(
+                    label = stringResource(Res.string.ipv4),
+                    address = addr,
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            uiState.ip6.address?.let { addr ->
+                AddressButton(
+                    label = stringResource(Res.string.ipv6),
+                    address = addr,
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
@@ -92,37 +109,78 @@ private fun ErrorCard(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Icons.Outlined.ErrorOutline, contentDescription = null)
+            Icon(Icons.Outlined.ErrorOutline, null)
             Text(
                 text = stringResource(Res.string.error_failed_to_fetch_your_address),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun AddressButton(
+    label: String,
+    address: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        shapes = ButtonDefaults.shapes(shape = MaterialTheme.shapes.extraLarge),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(text = label, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = address,
+                style = MaterialTheme.typography.headlineMediumEmphasized,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
     val stateTransition = updateTransition(isLoading)
 
     val insets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
+    val motionScheme = MaterialTheme.motionScheme
 
     Column(modifier = modifier.windowInsetsPadding(insets).consumeWindowInsets(insets)) {
         stateTransition.AnimatedContent(
             contentKey = { it },
             transitionSpec = {
-                expandVertically() + fadeIn() togetherWith shrinkVertically() + fadeOut()
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start,
+                    motionScheme.slowEffectsSpec(),
+                ) togetherWith
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.End,
+                        motionScheme.slowEffectsSpec(),
+                    )
             },
         ) {
             if (it) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
             } else {
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(10.dp))
             }
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            IconButton(onRefresh) {
+            FilledTonalIconButton(onClick = onRefresh, shapes = IconButtonDefaults.shapes()) {
                 Icon(
                     imageVector = Icons.Outlined.Refresh,
                     contentDescription = stringResource(Res.string.action_refresh),
