@@ -28,6 +28,16 @@ internal class RoomAddressHistoryDataSource(
         dao.insert(history.toEntity())
     }
 
+    override suspend fun getLatestIp4Address(): AddressHistory? {
+        val entity = dao.getLatestAddress(AddressVersion.IPV4)
+        return entity?.toModel()
+    }
+
+    override suspend fun getLatestIp6Address(): AddressHistory? {
+        val entity = dao.getLatestAddress(AddressVersion.IPV6)
+        return entity?.toModel()
+    }
+
     @OptIn(ExperimentalTime::class)
     private fun AddressHistoryEntity.toModel(): AddressHistory =
         when (addressVersion) {

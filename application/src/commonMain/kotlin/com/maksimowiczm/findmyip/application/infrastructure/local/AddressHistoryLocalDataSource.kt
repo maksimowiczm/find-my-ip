@@ -8,4 +8,8 @@ interface AddressHistoryLocalDataSource {
     fun observeHistory(): Flow<PagingData<AddressHistory>>
 
     suspend fun saveHistory(history: AddressHistory)
+
+    suspend fun getLatestIp4Address(): AddressHistory?
+
+    suspend fun getLatestIp6Address(): AddressHistory?
 }

@@ -4,6 +4,7 @@ import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.transaction.TransactionProvider
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.date.DateProviderImpl
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource
@@ -68,7 +69,7 @@ private val Scope.database: FindMyIpDatabase
     get() = get<FindMyIpDatabase>()
 
 private fun Module.roomModule() {
-    single<FindMyIpDatabase> { database() }
+    single<FindMyIpDatabase> { database() }.binds(arrayOf(TransactionProvider::class))
 
     factory { database.addressHistoryDao }
 
