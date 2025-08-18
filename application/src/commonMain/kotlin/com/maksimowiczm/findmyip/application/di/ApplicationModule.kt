@@ -1,5 +1,7 @@
 package com.maksimowiczm.findmyip.application.di
 
+import com.maksimowiczm.findmyip.application.usecase.ObserveAddressHistoryUseCase
+import com.maksimowiczm.findmyip.application.usecase.ObserveAddressHistoryUseCaseImpl
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUseCaseImpl
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCase
@@ -18,4 +20,6 @@ val applicationModule = module {
 
     factoryOf(::ObserveCurrentIp6AddressUseCaseImpl).bind<ObserveCurrentIp6AddressUseCase>()
     factoryOf(::RefreshIp6AddressUseCaseImpl).bind<RefreshIp6AddressUseCase>()
+
+    factoryOf(::ObserveAddressHistoryUseCaseImpl).bind<ObserveAddressHistoryUseCase>()
 }
