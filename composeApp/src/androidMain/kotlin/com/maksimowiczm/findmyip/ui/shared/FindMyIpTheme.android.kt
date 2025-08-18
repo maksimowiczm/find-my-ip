@@ -2,7 +2,8 @@ package com.maksimowiczm.findmyip.ui.shared
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -16,6 +17,7 @@ actual fun FindMyIpTheme(content: @Composable (() -> Unit)) {
     FindMyIpTheme(dynamicColor = true, content = content)
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun FindMyIpTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -33,7 +35,7 @@ private fun FindMyIpTheme(
             else -> DefaultTheme.LightColorScheme
         }
 
-    MaterialTheme(colorScheme = colorScheme, content = content)
+    MaterialExpressiveTheme(colorScheme = colorScheme, content = content)
 }
 
 private object DefaultTheme {
