@@ -3,6 +3,8 @@ package com.maksimowiczm.findmyip.ui.home
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,16 +34,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -53,6 +59,7 @@ import findmyip.composeapp.generated.resources.action_refresh
 import findmyip.composeapp.generated.resources.error_failed_to_fetch_your_address
 import findmyip.composeapp.generated.resources.ipv4
 import findmyip.composeapp.generated.resources.ipv6
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -69,38 +76,35 @@ fun CurrentAddressScreen(
         modifier = modifier,
         topBar = { TopBar(isLoading = isRefreshing, onRefresh = onRefresh) },
     ) { paddingValues ->
-        Column(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = paddingValues.add(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyColumn {
-                item {
-                    Box {
-                        this@Column.AnimatedVisibility(
-                            visible = isError,
-                            enter = expandVertically(),
-                            exit = shrinkVertically(),
-                        ) {
-                            ErrorCard()
-                        }
+            item {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    AnimatedVisibility(
+                        visible = isError,
+                        enter = expandVertically(),
+                        exit = shrinkVertically(),
+                    ) {
+                        ErrorCard()
                     }
                 }
+            }
 
-                items(count = history.itemCount, key = history.itemKey { it.id }) {
-                    val item = history[it]
+            items(count = history.itemCount, key = history.itemKey { it.id }) {
+                val item = history[it]
 
-                    if (item == null) {
-                        // TODO loading state
-                        return@items
-                    }
-
-                    AddressButton(history = item, onClick = {})
+                if (item == null) {
+                    // TODO loading state
+                    return@items
                 }
+
+                AddressButton(
+                    history = item,
+                    onClick = { clipboardManager.copyToClipboard(item.stringRepresentation()) },
+                )
             }
         }
     }
@@ -208,19 +212,57 @@ private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier
             },
         ) {
             if (it) {
-                LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
+                LinearWavyProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.tertiary,
+                    trackColor = MaterialTheme.colorScheme.tertiaryContainer,
+                )
             } else {
                 Spacer(Modifier.height(10.dp))
             }
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            FilledTonalIconButton(onClick = onRefresh, shapes = IconButtonDefaults.shapes()) {
-                Icon(
-                    imageVector = Icons.Outlined.Refresh,
-                    contentDescription = stringResource(Res.string.action_refresh),
-                )
+            RefreshButton(onRefresh)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun RefreshButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val coroutineScope = rememberCoroutineScope()
+    val rotation = Animatable(0f)
+
+    val onSpin: () -> Unit =
+        remember(coroutineScope, rotation) {
+            {
+                coroutineScope.launch {
+                    rotation.animateTo(
+                        targetValue = rotation.value + 360f,
+                        animationSpec = tween(1_000),
+                    )
+                }
             }
         }
+
+    IconButton(
+        onClick = {
+            onSpin()
+            onClick()
+        },
+        modifier = modifier,
+        shapes = IconButtonDefaults.shapes(),
+        colors =
+            IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            ),
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Refresh,
+            contentDescription = stringResource(Res.string.action_refresh),
+            modifier = Modifier.graphicsLayer { rotationZ = rotation.value },
+        )
     }
 }
