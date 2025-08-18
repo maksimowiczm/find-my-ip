@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.presentation.currentaddress.CurrentAddressUiState
 import com.maksimowiczm.findmyip.presentation.currentaddress.IpAddressUiState
+import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -54,6 +55,8 @@ fun CurrentAddressScreen(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val clipboardManager = LocalClipboardManager.current
+
     Scaffold(
         modifier = modifier,
         topBar = { TopBar(isLoading = uiState.isLoading, onRefresh = onRefresh) },
@@ -78,7 +81,7 @@ fun CurrentAddressScreen(
                 AddressButton(
                     label = stringResource(Res.string.ipv4),
                     address = addr,
-                    onClick = {},
+                    onClick = { clipboardManager.copyToClipboard(addr) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -86,7 +89,7 @@ fun CurrentAddressScreen(
                 AddressButton(
                     label = stringResource(Res.string.ipv6),
                     address = addr,
-                    onClick = {},
+                    onClick = { clipboardManager.copyToClipboard(addr) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
