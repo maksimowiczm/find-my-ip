@@ -1,49 +1,51 @@
 package com.maksimowiczm.findmyip.ui.home
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material3.ExpandedFullScreenSearchBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopSearchBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -54,57 +56,113 @@ import androidx.paging.compose.itemKey
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
-import findmyip.composeapp.generated.resources.Res
-import findmyip.composeapp.generated.resources.action_refresh
-import findmyip.composeapp.generated.resources.error_failed_to_fetch_your_address
-import findmyip.composeapp.generated.resources.ipv4
-import findmyip.composeapp.generated.resources.ipv6
-import kotlinx.coroutines.launch
+import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun CurrentAddressScreen(
+fun HomeScreen(
     history: LazyPagingItems<AddressHistory>,
     isRefreshing: Boolean,
     isError: Boolean,
     onRefresh: () -> Unit,
+    onSearch: (String) -> Unit,
+    onVolunteer: () -> Unit,
+    onSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val clipboardManager = LocalClipboardManager.current
+    val pullState = rememberPullToRefreshState()
 
-    Scaffold(
-        modifier = modifier,
-        topBar = { TopBar(isLoading = isRefreshing, onRefresh = onRefresh) },
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = paddingValues.add(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+    val searchBarState = rememberSearchBarState()
+    val searchTextState = rememberTextFieldState()
+    val searchInputField =
+        @Composable {
+            SearchBarDefaults.InputField(
+                textFieldState = searchTextState,
+                searchBarState = searchBarState,
+                onSearch = onSearch,
+                placeholder = { Text(stringResource(Res.string.action_search)) },
+                leadingIcon = { Icon(Icons.Outlined.Search, null) },
+                // trailingIcon = { IconButton(onClick = {}) { Icon(Icons.Outlined.FilterAlt, null)
+                // } },
+            )
+        }
+    val topBar =
+        @Composable {
+            Row(
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .padding(horizontal = 4.dp)
+                        .windowInsetsPadding(SearchBarDefaults.windowInsets)
+                        .consumeWindowInsets(SearchBarDefaults.windowInsets),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                IconButton(
+                    onClick = onVolunteer,
+                    colors =
+                        IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        ),
+                ) {
+                    Icon(Icons.Outlined.VolunteerActivism, null)
+                }
+                TopSearchBar(
+                    state = searchBarState,
+                    inputField = searchInputField,
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = onSettings) { Icon(Icons.Filled.Settings, null) }
+            }
+        }
+
+    ExpandedFullScreenSearchBar(state = searchBarState, inputField = searchInputField) {}
+
+    Scaffold(modifier = modifier, topBar = topBar) { paddingValues ->
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            state = pullState,
+            indicator = {
+                MyCustomIndicator(
+                    state = pullState,
+                    isRefreshing = isRefreshing,
+                    contentPadding = PaddingValues(top = paddingValues.calculateTopPadding()),
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
+            },
         ) {
-            item {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    AnimatedVisibility(
-                        visible = isError,
-                        enter = expandVertically(),
-                        exit = shrinkVertically(),
-                    ) {
-                        ErrorCard()
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = paddingValues.add(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                item {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        AnimatedVisibility(
+                            visible = isError,
+                            enter = expandVertically(),
+                            exit = shrinkVertically(),
+                        ) {
+                            ErrorCard()
+                        }
                     }
                 }
-            }
 
-            items(count = history.itemCount, key = history.itemKey { it.id }) {
-                val item = history[it]
+                items(count = history.itemCount, key = history.itemKey { it.id }) {
+                    val item = history[it]
 
-                if (item == null) {
-                    // TODO loading state
-                    return@items
+                    if (item == null) {
+                        // TODO loading state
+                        return@items
+                    }
+
+                    AddressButton(
+                        history = item,
+                        onClick = { clipboardManager.copyToClipboard(item.stringRepresentation()) },
+                    )
                 }
-
-                AddressButton(
-                    history = item,
-                    onClick = { clipboardManager.copyToClipboard(item.stringRepresentation()) },
-                )
             }
         }
     }
@@ -189,80 +247,48 @@ private fun AddressButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun TopBar(isLoading: Boolean, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
-    val stateTransition = updateTransition(isLoading)
+fun MyCustomIndicator(
+    state: PullToRefreshState,
+    isRefreshing: Boolean,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier,
+) {
+    val topPadding = contentPadding.calculateTopPadding()
 
-    val insets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
-    val motionScheme = MaterialTheme.motionScheme
-
-    Column(modifier = modifier.windowInsetsPadding(insets).consumeWindowInsets(insets)) {
-        stateTransition.AnimatedContent(
-            contentKey = { it },
-            transitionSpec = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start,
-                    motionScheme.slowEffectsSpec(),
-                ) togetherWith
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.End,
-                        motionScheme.slowEffectsSpec(),
-                    )
+    Box(
+        modifier =
+            modifier.graphicsLayer {
+                alpha = if (state.distanceFraction == 0f) 0f else 1f
+                translationY =
+                    topPadding.roundToPx() - size.height + state.distanceFraction * size.height
             },
-        ) {
-            if (it) {
-                LinearWavyProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.tertiary,
-                    trackColor = MaterialTheme.colorScheme.tertiaryContainer,
-                )
-            } else {
-                Spacer(Modifier.height(10.dp))
-            }
-        }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            RefreshButton(onRefresh)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun RefreshButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val coroutineScope = rememberCoroutineScope()
-    val rotation = Animatable(0f)
-
-    val onSpin: () -> Unit =
-        remember(coroutineScope, rotation) {
-            {
-                coroutineScope.launch {
-                    rotation.animateTo(
-                        targetValue = rotation.value + 360f,
-                        animationSpec = tween(1_000),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (isRefreshing) {
+            ContainedLoadingIndicator(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                indicatorColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            )
+        } else {
+            Surface(
+                shape = CircleShape,
+                modifier = Modifier.size(48.dp),
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = null,
+                        modifier =
+                            Modifier.size(32.dp).graphicsLayer {
+                                this.rotationZ = state.distanceFraction * 90f
+                            },
                     )
                 }
             }
         }
-
-    IconButton(
-        onClick = {
-            onSpin()
-            onClick()
-        },
-        modifier = modifier,
-        shapes = IconButtonDefaults.shapes(),
-        colors =
-            IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            ),
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Refresh,
-            contentDescription = stringResource(Res.string.action_refresh),
-            modifier = Modifier.graphicsLayer { rotationZ = rotation.value },
-        )
     }
 }

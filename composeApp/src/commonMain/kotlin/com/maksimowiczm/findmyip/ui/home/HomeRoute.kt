@@ -9,16 +9,25 @@ import com.maksimowiczm.findmyip.presentation.home.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CurrentAddressRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {
+fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val isError by viewModel.isError.collectAsStateWithLifecycle()
     val pages = viewModel.history.collectAsLazyPagingItems()
 
-    CurrentAddressScreen(
+    HomeScreen(
         history = pages,
         isRefreshing = isRefreshing,
         isError = isError,
         onRefresh = viewModel::refresh,
+        onSearch = {
+            // TODO
+        },
+        onSettings = {
+            // TODO
+        },
+        onVolunteer = {
+            // TODO
+        },
         modifier = modifier,
     )
 }
