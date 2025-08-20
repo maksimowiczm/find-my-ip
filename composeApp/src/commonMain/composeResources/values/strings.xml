@@ -6,4 +6,5 @@
     <string name="action_search">Search</string>
     <string name="headline_current" description="Current device address">Current</string>
     <string name="headline_history" description="History of addresses">History</string>
+    <string name="action_clear">Clear</string>
 </resources>

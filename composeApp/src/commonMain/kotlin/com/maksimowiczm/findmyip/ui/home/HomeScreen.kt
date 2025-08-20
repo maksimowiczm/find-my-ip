@@ -26,16 +26,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VolunteerActivism
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
-import androidx.compose.material3.ExpandedFullScreenSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -46,16 +41,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopSearchBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -71,10 +66,17 @@ import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 import findmyip.composeapp.generated.resources.*
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class,
+    FlowPreview::class,
+)
 @Composable
 fun HomeScreen(
     ip4: CurrentAddressUiModel,
@@ -101,30 +103,13 @@ fun HomeScreen(
         )
     }
 
-    val searchBarState = rememberSearchBarState()
     val searchTextState = rememberTextFieldState()
-    val searchInputField =
-        @Composable {
-            SearchBarDefaults.InputField(
-                textFieldState = searchTextState,
-                searchBarState = searchBarState,
-                onSearch = onSearch,
-                placeholder = { Text(stringResource(Res.string.action_search)) },
-                leadingIcon = { Icon(Icons.Outlined.Search, null) },
-                trailingIcon = {
-                    IconButton(onClick = { showFilters = true }) {
-                        BadgedBox(
-                            badge = {
-                                if (filter.filtersCount > 0) {
-                                    Badge { Text(filter.filtersCount.toString()) }
-                                }
-                            },
-                            content = { Icon(Icons.Outlined.FilterAlt, null) },
-                        )
-                    }
-                },
-            )
-        }
+    LaunchedEffect(searchTextState, onSearch) {
+        snapshotFlow { searchTextState.text }
+            .debounce(100)
+            .collectLatest { onSearch(it.toString()) }
+    }
+
     val topBar =
         @Composable {
             Row(
@@ -134,6 +119,7 @@ fun HomeScreen(
                         .windowInsetsPadding(SearchBarDefaults.windowInsets)
                         .consumeWindowInsets(SearchBarDefaults.windowInsets),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 IconButton(
                     onClick = onVolunteer,
@@ -145,16 +131,16 @@ fun HomeScreen(
                 ) {
                     Icon(Icons.Outlined.VolunteerActivism, null)
                 }
-                TopSearchBar(
-                    state = searchBarState,
-                    inputField = searchInputField,
+                SearchBar(
+                    filtersCount = filter.filtersCount,
+                    state = searchTextState,
+                    onSearch = onSearch,
+                    onFilter = { showFilters = true },
                     modifier = Modifier.weight(1f),
                 )
                 IconButton(onClick = onSettings) { Icon(Icons.Filled.Settings, null) }
             }
         }
-
-    ExpandedFullScreenSearchBar(state = searchBarState, inputField = searchInputField) {}
 
     Scaffold(modifier = modifier, topBar = topBar) { paddingValues ->
         PullToRefreshBox(
@@ -234,7 +220,7 @@ fun HomeScreen(
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.animateItem()
+                        modifier = Modifier.animateItem(),
                     )
                     Spacer(Modifier.height(8.dp))
                 }

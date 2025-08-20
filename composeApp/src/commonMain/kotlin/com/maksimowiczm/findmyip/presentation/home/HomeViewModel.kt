@@ -13,13 +13,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class HomeViewModel(
     observeHistoryUseCase: ObserveAddressHistoryUseCase,
@@ -59,12 +63,20 @@ class HomeViewModel(
         _filter.value = newFilter
     }
 
+    private val _searchQuery =
+        MutableSharedFlow<String?>(replay = 1).apply { runBlocking { emit(null) } }
+    val searchQuery = _searchQuery.asSharedFlow()
+
+    fun search(query: String?) {
+        viewModelScope.launch { _searchQuery.emit(query) }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val history =
-        filter
-            .flatMapLatest { filter ->
+        combine(filter, searchQuery) { filter, query ->
                 observeHistoryUseCase
                     .observe(
+                        query = query,
                         ipv4 =
                             filter.protocols.contains(InternetProtocolVersion.IPV4) ||
                                 filter.protocols.isEmpty(),
@@ -74,6 +86,7 @@ class HomeViewModel(
                     )
                     .map { data -> data.map(::AddressHistoryUiModel) }
             }
+            .flatMapLatest { it }
             .cachedIn(viewModelScope)
 
     init {

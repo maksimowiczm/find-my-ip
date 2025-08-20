@@ -5,6 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.maksimowiczm.findmyip.infrastructure.room.AddressVersionSQLConstants.IPV4
+import com.maksimowiczm.findmyip.infrastructure.room.AddressVersionSQLConstants.IPV6
 
 @Dao
 internal interface AddressHistoryDao {
@@ -14,12 +16,19 @@ internal interface AddressHistoryDao {
         SELECT * 
         FROM AddressHistory
         WHERE
-            (addressVersion = 4 AND :ipv4) OR
-            (addressVersion = 6 AND :ipv6)
+            (:query IS NULL OR address LIKE '%' || :query || '%') AND
+            (
+                (addressVersion = CASE WHEN :ipv4 THEN $IPV4 ELSE -1 END) OR
+                (addressVersion = CASE WHEN :ipv6 THEN $IPV6 ELSE -1 END)
+            )
         ORDER BY epochSeconds DESC
     """
     )
-    fun observePaged(ipv4: Boolean, ipv6: Boolean): PagingSource<Int, AddressHistoryEntity>
+    fun observePaged(
+        query: String?,
+        ipv4: Boolean,
+        ipv6: Boolean,
+    ): PagingSource<Int, AddressHistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insert(entity: AddressHistoryEntity)
 

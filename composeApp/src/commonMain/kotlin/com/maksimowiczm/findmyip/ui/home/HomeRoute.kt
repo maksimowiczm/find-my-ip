@@ -23,9 +23,7 @@ fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinView
         filter = filter,
         isRefreshing = isRefreshing,
         onRefresh = viewModel::refresh,
-        onSearch = {
-            // TODO
-        },
+        onSearch = viewModel::search,
         onSettings = {
             // TODO
         },

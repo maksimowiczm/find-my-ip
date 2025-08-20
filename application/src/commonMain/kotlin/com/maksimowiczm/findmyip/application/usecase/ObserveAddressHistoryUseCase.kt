@@ -24,11 +24,12 @@ fun interface ObserveAddressHistoryUseCase {
     /**
      * Observes the address history, filtering out the current addresses.
      *
+     * @param query The search query to filter the address history.
      * @param ipv4 Whether to include IPv4 addresses in the history.
      * @param ipv6 Whether to include IPv6 addresses in the history.
      * @return A flow of [PagingData] containing the filtered address history.
      */
-    fun observe(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>>
+    fun observe(query: String?, ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>>
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -37,8 +38,14 @@ internal class ObserveAddressHistoryUseCaseImpl(
     private val currentIp4: CurrentIp4AddressLocalDataSource,
     private val currentIp6: CurrentIp6AddressLocalDataSource,
 ) : ObserveAddressHistoryUseCase {
-    override fun observe(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>> =
-        addressHistoryLocalDataSource.observeHistory(ipv4 = ipv4, ipv6 = ipv6).filterCurrent()
+    override fun observe(
+        query: String?,
+        ipv4: Boolean,
+        ipv6: Boolean,
+    ): Flow<PagingData<AddressHistory>> =
+        addressHistoryLocalDataSource
+            .observeHistory(query = query, ipv4 = ipv4, ipv6 = ipv6)
+            .filterCurrent()
 
     private fun Flow<PagingData<AddressHistory>>.filterCurrent(): Flow<PagingData<AddressHistory>> =
         combine(

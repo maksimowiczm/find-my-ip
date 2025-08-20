@@ -19,10 +19,14 @@ internal class RoomAddressHistoryDataSource(
     private val dao: AddressHistoryDao,
     private val stringToAddressMapper: StringToAddressMapper,
 ) : AddressHistoryLocalDataSource {
-    override fun observeHistory(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>> =
+    override fun observeHistory(
+        query: String?,
+        ipv4: Boolean,
+        ipv6: Boolean,
+    ): Flow<PagingData<AddressHistory>> =
         Pager(
                 config = PagingConfig(pageSize = 30),
-                pagingSourceFactory = { dao.observePaged(ipv4 = ipv4, ipv6 = ipv6) },
+                pagingSourceFactory = { dao.observePaged(query = query, ipv4 = ipv4, ipv6 = ipv6) },
             )
             .flow
             .map { data -> data.map { it.toModel() } }

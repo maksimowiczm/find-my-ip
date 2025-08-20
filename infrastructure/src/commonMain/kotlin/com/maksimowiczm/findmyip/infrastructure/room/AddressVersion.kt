@@ -11,15 +11,20 @@ internal class AddressVersionTypeConverter {
     @TypeConverter
     fun fromAddressVersion(addressVersion: AddressVersion): Int =
         when (addressVersion) {
-            AddressVersion.IPV4 -> 4
-            AddressVersion.IPV6 -> 6
+            AddressVersion.IPV4 -> AddressVersionSQLConstants.IPV4
+            AddressVersion.IPV6 -> AddressVersionSQLConstants.IPV6
         }
 
     @TypeConverter
     fun toAddressVersion(value: Int): AddressVersion =
         when (value) {
-            4 -> AddressVersion.IPV4
-            6 -> AddressVersion.IPV6
+            AddressVersionSQLConstants.IPV4 -> AddressVersion.IPV4
+            AddressVersionSQLConstants.IPV6 -> AddressVersion.IPV6
             else -> error("Unknown AddressVersion value: $value")
         }
+}
+
+internal object AddressVersionSQLConstants {
+    const val IPV4 = 4
+    const val IPV6 = 6
 }
