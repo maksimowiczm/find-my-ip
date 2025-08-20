@@ -14,31 +14,24 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -110,39 +103,19 @@ fun HomeScreen(
             .collectLatest { onSearch(it.toString()) }
     }
 
-    val topBar =
-        @Composable {
-            Row(
-                modifier =
-                    Modifier.fillMaxWidth()
-                        .padding(horizontal = 4.dp)
-                        .windowInsetsPadding(SearchBarDefaults.windowInsets)
-                        .consumeWindowInsets(SearchBarDefaults.windowInsets),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                IconButton(
-                    onClick = onVolunteer,
-                    colors =
-                        IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        ),
-                ) {
-                    Icon(Icons.Outlined.VolunteerActivism, null)
-                }
-                SearchBar(
-                    filtersCount = filter.filtersCount,
-                    state = searchTextState,
-                    onSearch = onSearch,
-                    onFilter = { showFilters = true },
-                    modifier = Modifier.weight(1f),
-                )
-                IconButton(onClick = onSettings) { Icon(Icons.Filled.Settings, null) }
-            }
-        }
-
-    Scaffold(modifier = modifier, topBar = topBar) { paddingValues ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            HomeTopBar(
+                filter = filter,
+                searchTextState = searchTextState,
+                onSearch = onSearch,
+                onVolunteer = onVolunteer,
+                onSettings = onSettings,
+                onFilter = { showFilters = true },
+            )
+        },
+    ) { paddingValues ->
         PullToRefreshBox(
             isRefreshing = isRefreshing,
             onRefresh = onRefresh,

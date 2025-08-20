@@ -17,12 +17,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
+fun HomeSearchBar(
     filtersCount: Int,
     state: TextFieldState,
     onSearch: (String) -> Unit,
@@ -33,6 +34,7 @@ fun SearchBar(
         modifier = modifier,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shape = CircleShape,
+        shadowElevation = 4.dp,
     ) {
         SearchBarDefaults.InputField(
             state = state,
