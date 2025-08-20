@@ -6,6 +6,23 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.gmazzo.buildconfig)
+}
+
+buildConfig {
+    val feedbackEmail = "maksimowicz.dev@gmail.com"
+    buildConfigField("String", "FEEDBACK_EMAIL", "\"$feedbackEmail\"")
+
+    val feedbackEmailUri = "mailto:$feedbackEmail?subject=Find my IP Feedback"
+    buildConfigField("String", "FEEDBACK_EMAIL_URI", "\"$feedbackEmailUri\"")
+
+    val githubUrl = "https://github.com/maksimowiczm/find-my-ip"
+    val githubIssues = "$githubUrl/issues"
+    buildConfigField("String", "GITHUB_URL", "\"$githubUrl\"")
+    buildConfigField("String", "GITHUB_ISSUES_URL", "\"$githubIssues\"")
+
+    val crowdin = "https://crowdin.com/project/find-my-ip"
+    buildConfigField("String", "CROWDIN_URL", "\"$crowdin\"")
 }
 
 kotlin {
