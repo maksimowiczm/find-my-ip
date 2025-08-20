@@ -1,5 +1,12 @@
 package com.maksimowiczm.findmyip.ui.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -179,7 +186,7 @@ fun HomeScreen(
                 }
 
                 if (ip4 is CurrentAddressUiModel.Address) {
-                    item {
+                    item(key = "ip4") {
                         AddressButton(
                             address = ip4.address,
                             protocol = ip4.internetProtocolVersion,
@@ -193,7 +200,7 @@ fun HomeScreen(
                 }
 
                 if (ip6 is CurrentAddressUiModel.Address) {
-                    item {
+                    item(key = "ip6") {
                         AddressButton(
                             address = ip6.address,
                             protocol = ip6.internetProtocolVersion,
@@ -227,6 +234,7 @@ fun HomeScreen(
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.animateItem()
                     )
                     Spacer(Modifier.height(8.dp))
                 }
@@ -235,7 +243,7 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun AddressButton(
     address: String,
@@ -253,6 +261,8 @@ private fun AddressButton(
             InternetProtocolVersion.IPV4 -> stringResource(Res.string.ipv4)
             InternetProtocolVersion.IPV6 -> stringResource(Res.string.ipv6)
         }
+
+    val timeTransition = updateTransition(dateTime)
 
     Button(
         onClick = onClick,
@@ -274,10 +284,18 @@ private fun AddressButton(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = label, style = MaterialTheme.typography.titleMedium)
-                Text(
-                    text = dateFormatter.formatDateTimeLong(dateTime),
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                timeTransition.AnimatedContent(
+                    contentKey = { it.toString() },
+                    transitionSpec = {
+                        fadeIn(tween(durationMillis = 1_000)) togetherWith
+                            fadeOut(tween(durationMillis = 200))
+                    },
+                ) {
+                    Text(
+                        text = dateFormatter.formatDateTimeLong(dateTime),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             Text(
                 text = address,
