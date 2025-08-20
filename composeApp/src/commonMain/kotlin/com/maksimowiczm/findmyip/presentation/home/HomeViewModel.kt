@@ -3,6 +3,7 @@ package com.maksimowiczm.findmyip.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.maksimowiczm.findmyip.application.usecase.ObserveAddressHistoryUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp6AddressUseCase
@@ -11,6 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -25,7 +27,15 @@ class HomeViewModel(
     private val _isError = MutableStateFlow(false)
     val isError = _isError.asStateFlow()
 
-    val history = observeHistoryUseCase.observe().cachedIn(viewModelScope)
+    val history =
+        observeHistoryUseCase
+            .observe()
+            .map { data -> data.map(::AddressHistoryUiModel) }
+            .cachedIn(viewModelScope)
+
+    init {
+        viewModelScope.launch { refresh() }
+    }
 
     fun refresh() {
         if (_isRefreshing.value) return
@@ -54,10 +64,6 @@ class HomeViewModel(
                 _isError.value = true
             }
         }
-    }
-
-    init {
-        viewModelScope.launch { refresh() }
     }
 
     companion object {

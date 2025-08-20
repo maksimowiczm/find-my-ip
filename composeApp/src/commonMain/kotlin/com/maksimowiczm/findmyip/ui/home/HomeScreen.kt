@@ -48,21 +48,24 @@ import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import com.maksimowiczm.findmyip.domain.entity.AddressHistory
+import com.maksimowiczm.findmyip.presentation.home.AddressHistoryUiModel
+import com.maksimowiczm.findmyip.presentation.home.ProtocolVersion
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 import findmyip.composeapp.generated.resources.*
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeScreen(
-    history: LazyPagingItems<AddressHistory>,
+    history: LazyPagingItems<AddressHistoryUiModel>,
     isRefreshing: Boolean,
     isError: Boolean,
     onRefresh: () -> Unit,
@@ -151,16 +154,15 @@ fun HomeScreen(
                 }
 
                 items(count = history.itemCount, key = history.itemKey { it.id }) {
-                    val item = history[it]
-
-                    if (item == null) {
-                        // TODO loading state
-                        return@items
-                    }
+                    val item = history[it] ?: return@items
 
                     AddressButton(
-                        history = item,
-                        onClick = { clipboardManager.copyToClipboard(item.stringRepresentation()) },
+                        address = item.address,
+                        protocol = item.protocolVersion,
+                        dateTime = item.dateTime,
+                        onClick = { clipboardManager.copyToClipboard(item.address) },
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
             }
@@ -195,22 +197,20 @@ private fun ErrorCard(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun AddressButton(
-    history: AddressHistory,
+    address: String,
+    protocol: ProtocolVersion,
+    dateTime: LocalDateTime,
     onClick: () -> Unit,
+    containerColor: Color,
+    contentColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val dateFormatter = LocalDateFormatter.current
 
     val label =
-        when (history) {
-            is AddressHistory.Ipv4 -> stringResource(Res.string.ipv4)
-            is AddressHistory.Ipv6 -> stringResource(Res.string.ipv6)
-        }
-    val date = history.dateTime
-    val address =
-        when (history) {
-            is AddressHistory.Ipv4 -> history.address.stringRepresentation()
-            is AddressHistory.Ipv6 -> history.address.stringRepresentation()
+        when (protocol) {
+            ProtocolVersion.IPV4 -> stringResource(Res.string.ipv4)
+            ProtocolVersion.IPV6 -> stringResource(Res.string.ipv6)
         }
 
     Button(
@@ -219,8 +219,8 @@ private fun AddressButton(
         shapes = ButtonDefaults.shapes(shape = MaterialTheme.shapes.extraLarge),
         colors =
             ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                containerColor = containerColor,
+                contentColor = contentColor,
             ),
     ) {
         Column(
@@ -234,7 +234,7 @@ private fun AddressButton(
             ) {
                 Text(text = label, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = dateFormatter.formatDateTimeLong(date),
+                    text = dateFormatter.formatDateTimeLong(dateTime),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
