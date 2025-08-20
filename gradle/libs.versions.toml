@@ -16,6 +16,7 @@ kotlinxDatetime = "0.7.1"
 ksp = "2.2.10-2.0.2"
 ktor = "3.2.3"
 material3 = "1.9.0-alpha04"
+navigation = "2.9.0-beta05"
 paging3 = "3.3.6"
 runner = "1.7.0"
 room = "2.7.2"
@@ -34,6 +35,7 @@ androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "ro
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-compose = { module = "io.insert-koin:koin-compose" }

@@ -1,11 +1,10 @@
 package com.maksimowiczm.findmyip
 
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import com.maksimowiczm.findmyip.ui.home.HomeRoute
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
 
-@OptIn(ExperimentalUnsignedTypes::class)
 @Composable
 fun App() {
-    FindMyIpTheme { HomeRoute() }
+    FindMyIpTheme { Surface { AppNavHost() } }
 }

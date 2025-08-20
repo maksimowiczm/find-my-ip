@@ -9,7 +9,12 @@ import com.maksimowiczm.findmyip.presentation.home.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {
+fun HomeRoute(
+    onSettings: () -> Unit,
+    onVolunteer: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = koinViewModel(),
+) {
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pages = viewModel.history.collectAsLazyPagingItems()
     val ip4 by viewModel.ipv4.collectAsStateWithLifecycle()
@@ -24,12 +29,8 @@ fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinView
         isRefreshing = isRefreshing,
         onRefresh = viewModel::refresh,
         onSearch = viewModel::search,
-        onSettings = {
-            // TODO
-        },
-        onVolunteer = {
-            // TODO
-        },
+        onSettings = onSettings,
+        onVolunteer = onVolunteer,
         onFilterUpdate = viewModel::updateFilter,
         modifier = modifier,
     )
