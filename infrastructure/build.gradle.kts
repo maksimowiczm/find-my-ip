@@ -11,7 +11,7 @@ buildConfig {
     packageName("com.maksimowiczm.findmyip.infrastructure")
     className("BuildConfig")
 
-    val useFake = true
+    val useFake = false
     buildConfigField("Boolean", "USE_FAKE", "$useFake")
 }
 

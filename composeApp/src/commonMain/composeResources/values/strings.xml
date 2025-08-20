@@ -4,4 +4,6 @@
     <string name="ipv4">IPv4</string>
     <string name="ipv6">IPv6</string>
     <string name="action_search">Search</string>
+    <string name="headline_current" description="Current device address">Current</string>
+    <string name="headline_history" description="History of addresses">History</string>
 </resources>

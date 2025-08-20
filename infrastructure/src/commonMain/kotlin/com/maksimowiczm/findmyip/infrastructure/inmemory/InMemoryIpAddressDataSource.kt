@@ -1,25 +1,29 @@
 package com.maksimowiczm.findmyip.infrastructure.inmemory
 
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp4AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
+import com.maksimowiczm.findmyip.domain.entity.AddressStatus
 import com.maksimowiczm.findmyip.domain.entity.Ip4Address
 import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 
-@Suppress("unused")
-internal class InMemoryIpAddressDataSource {
-    private val ip4 = MutableStateFlow<Ip4Address?>(null)
-    private val ip6 = MutableStateFlow<Ip6Address?>(null)
+internal class InMemoryIpAddressDataSource :
+    CurrentIp4AddressLocalDataSource, CurrentIp6AddressLocalDataSource {
+    private val ip4 = MutableStateFlow<AddressStatus<Ip4Address>?>(null)
 
-    fun observeCurrentIp4Address(): Flow<Ip4Address> = ip4.filterNotNull()
+    override fun observeIp4(): Flow<AddressStatus<Ip4Address>> = ip4.filterNotNull()
 
-    suspend fun saveCurrentIp4Address(address: Ip4Address) {
-        ip4.emit(address)
+    override suspend fun updateIp4(status: AddressStatus<Ip4Address>) {
+        ip4.emit(status)
     }
 
-    fun observeCurrentIp6Address(): Flow<Ip6Address> = ip6.filterNotNull()
+    private val ip6 = MutableStateFlow<AddressStatus<Ip6Address>?>(null)
 
-    suspend fun saveCurrentIp6Address(address: Ip6Address) {
-        ip6.emit(address)
+    override fun observeIp6(): Flow<AddressStatus<Ip6Address>> = ip6.filterNotNull()
+
+    override suspend fun updateIp6(status: AddressStatus<Ip6Address>) {
+        ip6.emit(status)
     }
 }

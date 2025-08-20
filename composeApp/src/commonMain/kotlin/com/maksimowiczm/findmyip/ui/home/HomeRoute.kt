@@ -11,13 +11,15 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinViewModel()) {
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
-    val isError by viewModel.isError.collectAsStateWithLifecycle()
     val pages = viewModel.history.collectAsLazyPagingItems()
+    val ip4 by viewModel.ipv4.collectAsStateWithLifecycle()
+    val ip6 by viewModel.ipv6.collectAsStateWithLifecycle()
 
     HomeScreen(
+        ip4 = ip4,
+        ip6 = ip6,
         history = pages,
         isRefreshing = isRefreshing,
-        isError = isError,
         onRefresh = viewModel::refresh,
         onSearch = {
             // TODO

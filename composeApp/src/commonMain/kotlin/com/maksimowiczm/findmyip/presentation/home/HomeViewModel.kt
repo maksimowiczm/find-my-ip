@@ -5,18 +5,24 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.maksimowiczm.findmyip.application.usecase.ObserveAddressHistoryUseCase
+import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUseCase
+import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp6AddressUseCase
-import com.maksimowiczm.findmyip.shared.result.isError
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     observeHistoryUseCase: ObserveAddressHistoryUseCase,
+    observeCurrentIp4AddressUseCase: ObserveCurrentIp4AddressUseCase,
+    observeCurrentIp6AddressUseCase: ObserveCurrentIp6AddressUseCase,
     private val refreshIp4AddressUseCase: RefreshIp4AddressUseCase,
     private val refreshIp6AddressUseCase: RefreshIp6AddressUseCase,
 ) : ViewModel() {
@@ -24,8 +30,25 @@ class HomeViewModel(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val _isError = MutableStateFlow(false)
-    val isError = _isError.asStateFlow()
+    val ipv4 =
+        observeCurrentIp4AddressUseCase
+            .observe()
+            .map(CurrentAddressUiModel::from)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(2_000),
+                initialValue = CurrentAddressUiModel.Unavailable,
+            )
+
+    val ipv6 =
+        observeCurrentIp6AddressUseCase
+            .observe()
+            .map(CurrentAddressUiModel::from)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(2_000),
+                initialValue = CurrentAddressUiModel.Unavailable,
+            )
 
     val history =
         observeHistoryUseCase
@@ -41,7 +64,6 @@ class HomeViewModel(
         if (_isRefreshing.value) return
 
         _isRefreshing.value = true
-        _isError.value = false
 
         val ip4Job =
             viewModelScope.async {
@@ -55,14 +77,8 @@ class HomeViewModel(
             }
 
         viewModelScope.launch {
-            val ip4 = ip4Job.await()
-            val ip6 = ip6Job.await()
+            awaitAll(ip4Job, ip6Job)
             _isRefreshing.value = false
-
-            // If both are errors, set error state
-            if (ip4.isError() && ip6.isError()) {
-                _isError.value = true
-            }
         }
     }
 

@@ -1,17 +1,16 @@
 package com.maksimowiczm.findmyip.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -20,14 +19,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExpandedFullScreenSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.maksimowiczm.findmyip.presentation.home.AddressHistoryUiModel
+import com.maksimowiczm.findmyip.presentation.home.CurrentAddressUiModel
 import com.maksimowiczm.findmyip.presentation.home.ProtocolVersion
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
@@ -65,9 +62,10 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeScreen(
+    ip4: CurrentAddressUiModel,
+    ip6: CurrentAddressUiModel,
     history: LazyPagingItems<AddressHistoryUiModel>,
     isRefreshing: Boolean,
-    isError: Boolean,
     onRefresh: () -> Unit,
     onSearch: (String) -> Unit,
     onVolunteer: () -> Unit,
@@ -139,17 +137,54 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = paddingValues.add(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                item {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        AnimatedVisibility(
-                            visible = isError,
-                            enter = expandVertically(),
-                            exit = shrinkVertically(),
-                        ) {
-                            ErrorCard()
-                        }
+                if (ip4 is CurrentAddressUiModel.Address || ip6 is CurrentAddressUiModel.Address) {
+                    item {
+                        Text(
+                            text = stringResource(Res.string.headline_current),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(Modifier.height(4.dp))
+                    }
+                }
+
+                if (ip4 is CurrentAddressUiModel.Address) {
+                    item {
+                        AddressButton(
+                            address = ip4.address,
+                            protocol = ip4.protocolVersion,
+                            dateTime = ip4.dateTime,
+                            onClick = { clipboardManager.copyToClipboard(ip4.address) },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                }
+
+                if (ip6 is CurrentAddressUiModel.Address) {
+                    item {
+                        AddressButton(
+                            address = ip6.address,
+                            protocol = ip6.protocolVersion,
+                            dateTime = ip6.dateTime,
+                            onClick = { clipboardManager.copyToClipboard(ip6.address) },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                }
+
+                if (history.itemCount > 0) {
+                    item {
+                        Text(
+                            text = stringResource(Res.string.headline_history),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(Modifier.height(4.dp))
                     }
                 }
 
@@ -161,35 +196,12 @@ fun HomeScreen(
                         protocol = item.protocolVersion,
                         dateTime = item.dateTime,
                         onClick = { clipboardManager.copyToClipboard(item.address) },
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
                     )
+                    Spacer(Modifier.height(8.dp))
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ErrorCard(modifier: Modifier = Modifier) {
-    Card(
-        colors =
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.onErrorContainer,
-            ),
-        modifier = modifier,
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(Icons.Outlined.ErrorOutline, null)
-            Text(
-                text = stringResource(Res.string.error_failed_to_fetch_your_address),
-                style = MaterialTheme.typography.bodyMedium,
-            )
         }
     }
 }
@@ -249,7 +261,7 @@ private fun AddressButton(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MyCustomIndicator(
+private fun MyCustomIndicator(
     state: PullToRefreshState,
     isRefreshing: Boolean,
     contentPadding: PaddingValues,

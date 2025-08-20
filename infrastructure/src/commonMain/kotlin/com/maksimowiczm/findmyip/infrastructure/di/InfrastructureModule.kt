@@ -2,12 +2,15 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp4AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.transaction.TransactionProvider
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.date.DateProviderImpl
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource
+import com.maksimowiczm.findmyip.infrastructure.inmemory.InMemoryIpAddressDataSource
 import com.maksimowiczm.findmyip.infrastructure.ipify.IpifyAddressDataSource
 import com.maksimowiczm.findmyip.infrastructure.ipify.IpifyConfigImpl
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
@@ -29,6 +32,13 @@ import org.koin.dsl.onClose
 val infrastructureModule = module {
     singleOf(::DateProviderImpl).bind<DateProvider>()
     factory { StringToAddressMapperImpl }.bind<StringToAddressMapper>()
+    singleOf(::InMemoryIpAddressDataSource)
+        .binds(
+            arrayOf(
+                CurrentIp4AddressLocalDataSource::class,
+                CurrentIp6AddressLocalDataSource::class,
+            )
+        )
 
     if (BuildConfig.USE_FAKE) {
         fakeModule()
