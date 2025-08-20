@@ -7,4 +7,25 @@
     <string name="headline_current" description="Current device address">Current</string>
     <string name="headline_history" description="History of addresses">History</string>
     <string name="action_clear">Clear</string>
+    <string name="action_go_back">Go Back</string>
+
+    <string name="headline_support_with_money">Support with money</string>
+    <string name="headline_sponsor">Sponsor</string>
+    <string name="description_sponsor">All contributions are welcome</string>
+
+    <string name="headline_spread_the_word">Spread the word</string>
+    <string name="action_share_with_friends">Share with friends</string>
+    <string name="description_share_with_friends">Support the app growth</string>
+
+    <string name="headline_get_involved">Get involved</string>
+    <string name="action_feature_request_on_github">Feature request on GitHub</string>
+    <string name="description_feature_request_on_github">Your ideas can shape the app</string>
+    <string name="action_report_issue_on_github">Report a bug on GitHub</string>
+    <string name="description_report_issue_on_github">Help with bug squashing</string>
+    <string name="action_translate">Translate</string>
+    <string name="description_translate">Help translate the app</string>
+    <string name="action_write_an_email">Write an email</string>
+    <string name="description_write_an_email">Reach out directly</string>
+
+    <string name="message_share_with_friends">Check out this app that shows your current IP address and its history! %1$s</string>
 </resources>
