@@ -5,7 +5,7 @@ import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import kotlinx.coroutines.flow.Flow
 
 interface AddressHistoryLocalDataSource {
-    fun observeHistory(): Flow<PagingData<AddressHistory>>
+    fun observeHistory(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>>
 
     suspend fun saveHistory(history: AddressHistory)
 

@@ -7,7 +7,7 @@ import kotlinx.datetime.LocalDateTime
 @Immutable
 data class AddressHistoryUiModel(
     val id: Long,
-    val protocolVersion: ProtocolVersion,
+    val internetProtocolVersion: InternetProtocolVersion,
     val address: String,
     val dateTime: LocalDateTime,
 ) {
@@ -15,10 +15,10 @@ data class AddressHistoryUiModel(
         domain: AddressHistory
     ) : this(
         id = domain.id,
-        protocolVersion =
+        internetProtocolVersion =
             when (domain) {
-                is AddressHistory.Ipv4 -> ProtocolVersion.IPV4
-                is AddressHistory.Ipv6 -> ProtocolVersion.IPV6
+                is AddressHistory.Ipv4 -> InternetProtocolVersion.IPV4
+                is AddressHistory.Ipv6 -> InternetProtocolVersion.IPV6
             },
         address = domain.stringRepresentation(),
         dateTime = domain.dateTime,

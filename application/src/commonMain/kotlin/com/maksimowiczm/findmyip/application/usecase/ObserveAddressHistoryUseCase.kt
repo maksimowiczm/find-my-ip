@@ -15,13 +15,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.observeWithInitialNull
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 fun interface ObserveAddressHistoryUseCase {
-    fun observe(): Flow<PagingData<AddressHistory>>
+    /**
+     * Observes the address history, filtering out the current addresses.
+     *
+     * @param ipv4 Whether to include IPv4 addresses in the history.
+     * @param ipv6 Whether to include IPv6 addresses in the history.
+     * @return A flow of [PagingData] containing the filtered address history.
+     */
+    fun observe(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>>
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,13 +37,18 @@ internal class ObserveAddressHistoryUseCaseImpl(
     private val currentIp4: CurrentIp4AddressLocalDataSource,
     private val currentIp6: CurrentIp6AddressLocalDataSource,
 ) : ObserveAddressHistoryUseCase {
-    override fun observe(): Flow<PagingData<AddressHistory>> =
-        combine(currentIp4.observeWithInitialNull(), currentIp6.observeWithInitialNull()) { ip4, ip6
-                ->
+    override fun observe(ipv4: Boolean, ipv6: Boolean): Flow<PagingData<AddressHistory>> =
+        addressHistoryLocalDataSource.observeHistory(ipv4 = ipv4, ipv6 = ipv6).filterCurrent()
+
+    private fun Flow<PagingData<AddressHistory>>.filterCurrent(): Flow<PagingData<AddressHistory>> =
+        combine(
+                currentIp4.observeIp4().observeWithInitialNull(),
+                currentIp6.observeIp6().observeWithInitialNull(),
+            ) { ip4, ip6 ->
                 val current4addr = (ip4 as? AddressStatus.Success<Ip4Address>)?.value
                 val current6addr = (ip6 as? AddressStatus.Success<Ip6Address>)?.value
 
-                addressHistoryLocalDataSource.observeHistory().map { data ->
+                map { data ->
                     data.filter {
                         when (it) {
                             is AddressHistory.Ipv4 ->
@@ -51,14 +63,6 @@ internal class ObserveAddressHistoryUseCaseImpl(
                 }
             }
             .flatMapLatest { it }
-
-    private fun CurrentIp4AddressLocalDataSource.observeWithInitialNull():
-        Flow<AddressStatus<Ip4Address>?> =
-        observeIp4().map { it as AddressStatus<Ip4Address>? }.onStart { emit(null) }
-
-    private fun CurrentIp6AddressLocalDataSource.observeWithInitialNull():
-        Flow<AddressStatus<Ip6Address>?> =
-        observeIp6().map { it as AddressStatus<Ip6Address>? }.onStart { emit(null) }
 }
 
 @OptIn(ExperimentalTime::class)

@@ -1,6 +1,6 @@
 package com.maksimowiczm.findmyip.presentation.home
 
-enum class ProtocolVersion {
+enum class InternetProtocolVersion {
     IPV4,
     IPV6,
 }

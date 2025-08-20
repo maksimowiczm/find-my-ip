@@ -19,9 +19,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VolunteerActivism
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
@@ -42,6 +45,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +59,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.maksimowiczm.findmyip.presentation.home.AddressHistoryUiModel
 import com.maksimowiczm.findmyip.presentation.home.CurrentAddressUiModel
-import com.maksimowiczm.findmyip.presentation.home.ProtocolVersion
+import com.maksimowiczm.findmyip.presentation.home.Filter
+import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 import findmyip.composeapp.generated.resources.*
@@ -65,15 +73,26 @@ fun HomeScreen(
     ip4: CurrentAddressUiModel,
     ip6: CurrentAddressUiModel,
     history: LazyPagingItems<AddressHistoryUiModel>,
+    filter: Filter,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     onSearch: (String) -> Unit,
     onVolunteer: () -> Unit,
     onSettings: () -> Unit,
+    onFilterUpdate: (Filter) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val pullState = rememberPullToRefreshState()
+
+    var showFilters by rememberSaveable { mutableStateOf(false) }
+    if (showFilters) {
+        FiltersModal(
+            filter = filter,
+            onDismiss = { showFilters = false },
+            onUpdateFilter = onFilterUpdate,
+        )
+    }
 
     val searchBarState = rememberSearchBarState()
     val searchTextState = rememberTextFieldState()
@@ -85,8 +104,18 @@ fun HomeScreen(
                 onSearch = onSearch,
                 placeholder = { Text(stringResource(Res.string.action_search)) },
                 leadingIcon = { Icon(Icons.Outlined.Search, null) },
-                // trailingIcon = { IconButton(onClick = {}) { Icon(Icons.Outlined.FilterAlt, null)
-                // } },
+                trailingIcon = {
+                    IconButton(onClick = { showFilters = true }) {
+                        BadgedBox(
+                            badge = {
+                                if (filter.filtersCount > 0) {
+                                    Badge { Text(filter.filtersCount.toString()) }
+                                }
+                            },
+                            content = { Icon(Icons.Outlined.FilterAlt, null) },
+                        )
+                    }
+                },
             )
         }
     val topBar =
@@ -153,7 +182,7 @@ fun HomeScreen(
                     item {
                         AddressButton(
                             address = ip4.address,
-                            protocol = ip4.protocolVersion,
+                            protocol = ip4.internetProtocolVersion,
                             dateTime = ip4.dateTime,
                             onClick = { clipboardManager.copyToClipboard(ip4.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -167,7 +196,7 @@ fun HomeScreen(
                     item {
                         AddressButton(
                             address = ip6.address,
-                            protocol = ip6.protocolVersion,
+                            protocol = ip6.internetProtocolVersion,
                             dateTime = ip6.dateTime,
                             onClick = { clipboardManager.copyToClipboard(ip6.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -193,7 +222,7 @@ fun HomeScreen(
 
                     AddressButton(
                         address = item.address,
-                        protocol = item.protocolVersion,
+                        protocol = item.internetProtocolVersion,
                         dateTime = item.dateTime,
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -210,7 +239,7 @@ fun HomeScreen(
 @Composable
 private fun AddressButton(
     address: String,
-    protocol: ProtocolVersion,
+    protocol: InternetProtocolVersion,
     dateTime: LocalDateTime,
     onClick: () -> Unit,
     containerColor: Color,
@@ -221,8 +250,8 @@ private fun AddressButton(
 
     val label =
         when (protocol) {
-            ProtocolVersion.IPV4 -> stringResource(Res.string.ipv4)
-            ProtocolVersion.IPV6 -> stringResource(Res.string.ipv6)
+            InternetProtocolVersion.IPV4 -> stringResource(Res.string.ipv4)
+            InternetProtocolVersion.IPV6 -> stringResource(Res.string.ipv6)
         }
 
     Button(

@@ -13,10 +13,13 @@ internal interface AddressHistoryDao {
         """
         SELECT * 
         FROM AddressHistory
+        WHERE
+            (addressVersion = 4 AND :ipv4) OR
+            (addressVersion = 6 AND :ipv6)
         ORDER BY epochSeconds DESC
     """
     )
-    fun observePaged(): PagingSource<Int, AddressHistoryEntity>
+    fun observePaged(ipv4: Boolean, ipv6: Boolean): PagingSource<Int, AddressHistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insert(entity: AddressHistoryEntity)
 

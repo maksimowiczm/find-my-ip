@@ -12,7 +12,7 @@ sealed interface CurrentAddressUiModel {
     data class Address(
         val address: String,
         val dateTime: LocalDateTime,
-        val protocolVersion: ProtocolVersion,
+        val internetProtocolVersion: InternetProtocolVersion,
     ) : CurrentAddressUiModel
 
     companion object {
@@ -26,7 +26,7 @@ sealed interface CurrentAddressUiModel {
                     Address(
                         address = addressStatus.value.stringRepresentation(),
                         dateTime = addressStatus.dateTime,
-                        protocolVersion = ProtocolVersion.IPV4,
+                        internetProtocolVersion = InternetProtocolVersion.IPV4,
                     )
             }
 
@@ -40,7 +40,7 @@ sealed interface CurrentAddressUiModel {
                     Address(
                         address = addressStatus.value.stringRepresentation(),
                         dateTime = addressStatus.dateTime,
-                        protocolVersion = ProtocolVersion.IPV6,
+                        internetProtocolVersion = InternetProtocolVersion.IPV6,
                     )
             }
     }

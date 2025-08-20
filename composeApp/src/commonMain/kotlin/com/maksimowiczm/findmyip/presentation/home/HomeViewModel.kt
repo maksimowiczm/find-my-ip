@@ -9,12 +9,14 @@ import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUse
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp6AddressUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -50,10 +52,28 @@ class HomeViewModel(
                 initialValue = CurrentAddressUiModel.Unavailable,
             )
 
+    private val _filter = MutableStateFlow(Filter(setOf()))
+    val filter = _filter.asStateFlow()
+
+    fun updateFilter(newFilter: Filter) {
+        _filter.value = newFilter
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     val history =
-        observeHistoryUseCase
-            .observe()
-            .map { data -> data.map(::AddressHistoryUiModel) }
+        filter
+            .flatMapLatest { filter ->
+                observeHistoryUseCase
+                    .observe(
+                        ipv4 =
+                            filter.protocols.contains(InternetProtocolVersion.IPV4) ||
+                                filter.protocols.isEmpty(),
+                        ipv6 =
+                            filter.protocols.contains(InternetProtocolVersion.IPV6) ||
+                                filter.protocols.isEmpty(),
+                    )
+                    .map { data -> data.map(::AddressHistoryUiModel) }
+            }
             .cachedIn(viewModelScope)
 
     init {

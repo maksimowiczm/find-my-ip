@@ -14,11 +14,13 @@ fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinView
     val pages = viewModel.history.collectAsLazyPagingItems()
     val ip4 by viewModel.ipv4.collectAsStateWithLifecycle()
     val ip6 by viewModel.ipv6.collectAsStateWithLifecycle()
+    val filter by viewModel.filter.collectAsStateWithLifecycle()
 
     HomeScreen(
         ip4 = ip4,
         ip6 = ip6,
         history = pages,
+        filter = filter,
         isRefreshing = isRefreshing,
         onRefresh = viewModel::refresh,
         onSearch = {
@@ -30,6 +32,7 @@ fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = koinView
         onVolunteer = {
             // TODO
         },
+        onFilterUpdate = viewModel::updateFilter,
         modifier = modifier,
     )
 }
