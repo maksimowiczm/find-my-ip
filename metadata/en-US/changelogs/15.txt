@@ -1,0 +1,2 @@
+Notes
+This version contains no functional changes. It only fixes the F-Droid build.
