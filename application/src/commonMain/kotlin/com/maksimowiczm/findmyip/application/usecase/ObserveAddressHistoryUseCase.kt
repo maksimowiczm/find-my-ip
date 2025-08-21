@@ -52,8 +52,8 @@ internal class ObserveAddressHistoryUseCaseImpl(
                 currentIp4.observeIp4().observeWithInitialNull(),
                 currentIp6.observeIp6().observeWithInitialNull(),
             ) { ip4, ip6 ->
-                val current4addr = (ip4 as? AddressStatus.Success<Ip4Address>)?.value
-                val current6addr = (ip6 as? AddressStatus.Success<Ip6Address>)?.value
+                val current4addr = (ip4 as? AddressStatus.Success<Ip4Address>)?.address
+                val current6addr = (ip6 as? AddressStatus.Success<Ip6Address>)?.address
 
                 map { data ->
                     data.filter {

@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.application.usecase
 
 import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
+import com.maksimowiczm.findmyip.application.infrastructure.dns.DnsService
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp4AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
@@ -25,6 +26,7 @@ internal class RefreshIp4AddressUseCaseImpl(
     private val historyLocalDataSource: AddressHistoryLocalDataSource,
     private val transactionProvider: TransactionProvider,
     private val dateProvider: DateProvider,
+    private val dnsService: DnsService,
     private val logger: Logger,
 ) : RefreshIp4AddressUseCase {
 
@@ -33,8 +35,17 @@ internal class RefreshIp4AddressUseCaseImpl(
 
         return try {
             val currentAddress = remoteDataSource.getCurrentIp4Address()
-            currentIp4.updateIp4(AddressStatus.Success(now, currentAddress))
-            val history = AddressHistory.Ipv4(id = 0, address = currentAddress, dateTime = now)
+            val domain = dnsService.reverseLookup(currentAddress)
+            currentIp4.updateIp4(
+                AddressStatus.Success(dateTime = now, address = currentAddress, domain = domain)
+            )
+            val history =
+                AddressHistory.Ipv4(
+                    id = 0,
+                    address = currentAddress,
+                    domain = domain,
+                    dateTime = now,
+                )
 
             transactionProvider.immediate {
                 val latest = historyLocalDataSource.getLatestIp4Address()

@@ -30,6 +30,8 @@ import org.koin.dsl.module
 import org.koin.dsl.onClose
 
 val infrastructureModule = module {
+    platformModule()
+
     singleOf(::DateProviderImpl).bind<DateProvider>()
     factory { StringToAddressMapperImpl }.bind<StringToAddressMapper>()
     singleOf(::InMemoryIpAddressDataSource)
@@ -48,6 +50,8 @@ val infrastructureModule = module {
 
     roomModule()
 }
+
+internal expect fun Module.platformModule()
 
 private fun Module.ipifyModule() {
     single(named("ipifyClient")) { HttpClient {} }.onClose { it?.close() }

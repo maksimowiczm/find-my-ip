@@ -11,6 +11,7 @@ sealed interface CurrentAddressUiModel {
 
     data class Address(
         val address: String,
+        val domain: String?,
         val dateTime: LocalDateTime,
         val internetProtocolVersion: InternetProtocolVersion,
     ) : CurrentAddressUiModel
@@ -24,7 +25,8 @@ sealed interface CurrentAddressUiModel {
 
                 is AddressStatus.Success<Ip4Address> ->
                     Address(
-                        address = addressStatus.value.stringRepresentation(),
+                        address = addressStatus.address.stringRepresentation(),
+                        domain = addressStatus.domain,
                         dateTime = addressStatus.dateTime,
                         internetProtocolVersion = InternetProtocolVersion.IPV4,
                     )
@@ -38,7 +40,8 @@ sealed interface CurrentAddressUiModel {
 
                 is AddressStatus.Success<Ip6Address> ->
                     Address(
-                        address = addressStatus.value.stringRepresentation(),
+                        address = addressStatus.address.stringRepresentation(),
+                        domain = addressStatus.domain,
                         dateTime = addressStatus.dateTime,
                         internetProtocolVersion = InternetProtocolVersion.IPV6,
                     )

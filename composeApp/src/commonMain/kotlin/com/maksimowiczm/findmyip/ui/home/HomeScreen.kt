@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -148,6 +149,7 @@ fun HomeScreen(
                     item(key = "ip4") {
                         AddressButton(
                             address = ip4.address,
+                            domain = ip4.domain,
                             protocol = ip4.internetProtocolVersion,
                             dateTime = ip4.dateTime,
                             onClick = { clipboardManager.copyToClipboard(ip4.address) },
@@ -162,6 +164,7 @@ fun HomeScreen(
                     item(key = "ip6") {
                         AddressButton(
                             address = ip6.address,
+                            domain = ip6.domain,
                             protocol = ip6.internetProtocolVersion,
                             dateTime = ip6.dateTime,
                             onClick = { clipboardManager.copyToClipboard(ip6.address) },
@@ -188,6 +191,7 @@ fun HomeScreen(
 
                     AddressButton(
                         address = item.address,
+                        domain = item.domain,
                         protocol = item.internetProtocolVersion,
                         dateTime = item.dateTime,
                         onClick = { clipboardManager.copyToClipboard(item.address) },
@@ -206,6 +210,7 @@ fun HomeScreen(
 @Composable
 private fun AddressButton(
     address: String,
+    domain: String?,
     protocol: InternetProtocolVersion,
     dateTime: LocalDateTime,
     onClick: () -> Unit,
@@ -261,6 +266,14 @@ private fun AddressButton(
                 style = MaterialTheme.typography.headlineMediumEmphasized,
                 fontWeight = FontWeight.Bold,
             )
+            domain?.let {
+                Text(
+                    text = domain,
+                    style = MaterialTheme.typography.bodyMediumEmphasized,
+                    fontWeight = FontWeight.SemiBold,
+                    fontStyle = FontStyle.Italic,
+                )
+            }
         }
     }
 }

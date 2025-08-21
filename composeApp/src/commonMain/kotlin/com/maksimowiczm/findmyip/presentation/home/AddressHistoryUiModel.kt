@@ -9,6 +9,7 @@ data class AddressHistoryUiModel(
     val id: Long,
     val internetProtocolVersion: InternetProtocolVersion,
     val address: String,
+    val domain: String?,
     val dateTime: LocalDateTime,
 ) {
     constructor(
@@ -21,6 +22,7 @@ data class AddressHistoryUiModel(
                 is AddressHistory.Ipv6 -> InternetProtocolVersion.IPV6
             },
         address = domain.stringRepresentation(),
+        domain = domain.domain,
         dateTime = domain.dateTime,
     )
 }

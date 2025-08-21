@@ -1,6 +1,7 @@
 package com.maksimowiczm.findmyip.application.usecase
 
 import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
+import com.maksimowiczm.findmyip.application.infrastructure.dns.DnsService
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
@@ -25,6 +26,7 @@ internal class RefreshIp6AddressUseCaseImpl(
     private val historyLocalDataSource: AddressHistoryLocalDataSource,
     private val transactionProvider: TransactionProvider,
     private val dateProvider: DateProvider,
+    private val dnsService: DnsService,
     private val logger: Logger,
 ) : RefreshIp6AddressUseCase {
 
@@ -33,8 +35,17 @@ internal class RefreshIp6AddressUseCaseImpl(
 
         return try {
             val currentAddress = remoteDataSource.getCurrentIp6Address()
-            currentIp6.updateIp6(AddressStatus.Success(now, currentAddress))
-            val history = AddressHistory.Ipv6(id = 0, address = currentAddress, dateTime = now)
+            val domain = dnsService.reverseLookup(currentAddress)
+            currentIp6.updateIp6(
+                AddressStatus.Success(dateTime = now, address = currentAddress, domain = domain)
+            )
+            val history =
+                AddressHistory.Ipv6(
+                    id = 0,
+                    address = currentAddress,
+                    domain = domain,
+                    dateTime = now,
+                )
 
             transactionProvider.immediate {
                 val latest = historyLocalDataSource.getLatestIp6Address()

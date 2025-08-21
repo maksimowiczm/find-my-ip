@@ -52,6 +52,7 @@ internal class RoomAddressHistoryDataSource(
                 AddressHistory.Ipv4(
                     id = id,
                     address = stringToAddressMapper.toIp4Address(address),
+                    domain = domain,
                     dateTime =
                         Instant.fromEpochSeconds(epochSeconds)
                             .toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -61,6 +62,7 @@ internal class RoomAddressHistoryDataSource(
                 AddressHistory.Ipv6(
                     id = id,
                     address = stringToAddressMapper.toIp6Address(address),
+                    domain = domain,
                     dateTime =
                         Instant.fromEpochSeconds(epochSeconds)
                             .toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -80,6 +82,7 @@ internal class RoomAddressHistoryDataSource(
         return AddressHistoryEntity(
             id = id,
             address = stringRepresentation(),
+            domain = domain,
             addressVersion = version,
             epochSeconds = epochSeconds,
         )

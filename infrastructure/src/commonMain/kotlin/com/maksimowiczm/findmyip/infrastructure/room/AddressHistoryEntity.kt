@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 internal data class AddressHistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val address: String,
+    val domain: String?,
     val addressVersion: AddressVersion,
     val epochSeconds: Long,
 )
