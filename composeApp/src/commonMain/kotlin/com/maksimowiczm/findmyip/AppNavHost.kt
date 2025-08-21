@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.navigation.forwardBackwardComposable
 import com.maksimowiczm.findmyip.ui.contribute.ContributeRoute
 import com.maksimowiczm.findmyip.ui.home.HomeRoute
+import com.maksimowiczm.findmyip.ui.settings.SettingsRoute
 
 @Composable
 fun AppNavHost(modifier: Modifier = Modifier.Companion) {
@@ -19,8 +20,19 @@ fun AppNavHost(modifier: Modifier = Modifier.Companion) {
     ) {
         forwardBackwardComposable(Route.Home.name) {
             HomeRoute(
-                onSettings = { /* TODO */ },
+                onSettings = {
+                    navController.navigate(Route.Settings.name) { launchSingleTop = true }
+                },
                 onVolunteer = {
+                    navController.navigate(Route.Contribute.name) { launchSingleTop = true }
+                },
+                modifier = Modifier,
+            )
+        }
+        forwardBackwardComposable(Route.Settings.name) {
+            SettingsRoute(
+                onBack = { navController.popBackStack(Route.Settings.name, inclusive = true) },
+                onContribute = {
                     navController.navigate(Route.Contribute.name) { launchSingleTop = true }
                 },
                 modifier = Modifier,
@@ -36,5 +48,6 @@ fun AppNavHost(modifier: Modifier = Modifier.Companion) {
 
 private enum class Route {
     Home,
+    Settings,
     Contribute,
 }

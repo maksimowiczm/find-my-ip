@@ -28,4 +28,9 @@
     <string name="description_write_an_email">Reach out directly</string>
 
     <string name="message_share_with_friends">Check out this app that shows your current IP address and its history! %1$s</string>
+
+    <string name="headline_settings">Settings</string>
+    <string name="headline_contribute">Contribute</string>
+    <string name="description_contribute">Ways you can support and grow the app</string>
+
 </resources>
