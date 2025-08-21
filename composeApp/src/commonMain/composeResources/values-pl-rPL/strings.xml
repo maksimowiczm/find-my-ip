@@ -1,0 +1,40 @@
+<resources>
+    <string name="action_refresh">Odśwież</string>
+    <string name="ipv4">IPv4</string>
+    <string name="ipv6">IPv6</string>
+    <string name="action_search">Szukaj</string>
+    <string name="headline_current" description="Current device address">Bieżący</string>
+    <string name="headline_history" description="History of addresses">Historia</string>
+    <string name="action_go_back">Wróć</string>
+
+    <string name="headline_settings">Ustawienia</string>
+    <string name="headline_contribute">Wspieraj</string>
+    <string name="description_contribute">Sposoby, w jakie możesz wspierać i rozwijać aplikację</string>
+
+    <string name="headline_become_a_sponsor">Zostań sponsorem</string>
+    <string name="description_become_a_sponsor">Wesprzyj finansowo, aby projekt mógł się rozwijać i ulepszać. Każdy wkład ma znaczenie.</string>
+    <string name="action_sponsor">Sponsoruj</string>
+
+    <string name="headline_share_with_friends">Udostępnij znajomym</string>
+    <string name="description_share_with_friends">Podziel się informacją! Powiedz innym o aplikacji i pomóż, aby odkryło ją więcej osób.</string>
+    <string name="action_share">Udostępnij</string>
+    <string name="message_share_with_friends">Sprawdź tę aplikację, która pokazuje twój aktualny adres IP i jego historię! %1$s</string>
+
+    <string name="headline_feature_request">Zaproponuj funkcjonalność</string>
+    <string name="description_feature_request">Masz pomysł, który mógłby ulepszyć aplikację? Podziel się sugestiami i pomóż kształtować przyszłe aktualizacje.</string>
+    <string name="action_feature_request">Zgłoś funkcję na GitHubie</string>
+
+    <string name="headline_bug_report">Zgłoś błąd</string>
+    <string name="description_bug_report">Zgłoś problemy lub usterki, aby pomóc poprawić stabilność i wydajność.</string>
+    <string name="action_bug_report">Zgłoś błąd na GitHubie</string>
+
+    <string name="action_translate">Przetłumacz</string>
+    <string name="description_translate">Dodaj tłumaczenia, aby aplikacja była dostępna w większej liczbie języków na całym świecie.</string>
+    <string name="description_translate_short">Pomóż przetłumaczyć aplikację</string>
+
+    <string name="headline_get_in_touch">Skontaktuj się</string>
+    <string name="description_get_in_touch">Przekaż opinie, pomysły lub pytania bezpośrednio przez e-mail.</string>
+    <string name="action_write_an_email">Napisz e-mail</string>
+
+    <string name="headline_language">Język</string>
+</resources>
