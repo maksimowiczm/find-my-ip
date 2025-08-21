@@ -280,7 +280,9 @@ private fun MyCustomIndicator(
             modifier.graphicsLayer {
                 alpha = if (state.distanceFraction == 0f) 0f else 1f
                 translationY =
-                    topPadding.roundToPx() - size.height + state.distanceFraction * size.height
+                    topPadding.roundToPx() - size.height +
+                        state.distanceFraction * size.height +
+                        8.dp.roundToPx()
             },
         contentAlignment = Alignment.Center,
     ) {
