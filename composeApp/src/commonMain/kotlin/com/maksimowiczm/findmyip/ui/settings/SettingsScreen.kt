@@ -1,5 +1,6 @@
 package com.maksimowiczm.findmyip.ui.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,12 +8,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFlexibleTopAppBar
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,12 +34,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
+import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SettingsScreen(onBack: () -> Unit, onContribute: () -> Unit, modifier: Modifier = Modifier) {
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onContribute: () -> Unit,
+    onLanguage: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
@@ -55,9 +66,20 @@ fun SettingsScreen(onBack: () -> Unit, onContribute: () -> Unit, modifier: Modif
                     contentPadding = PaddingValues(horizontal = 16.dp),
                 )
             }
+            item { Spacer(Modifier.height(16.dp)) }
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(Res.string.headline_language)) },
+                    modifier = Modifier.heightIn(min = 68.dp).clickable { onLanguage() },
+                    leadingContent = { Icon(Icons.Outlined.Language, null) },
+                    supportingContent = { Text(currentLanguage()) },
+                )
+            }
         }
     }
 }
+
+@Composable expect fun currentLanguage(): String
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -102,4 +124,10 @@ private fun PrimaryAction(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun SettingsScreenPreview() {
+    FindMyIpTheme { SettingsScreen(onBack = {}, onContribute = {}, onLanguage = {}) }
 }
