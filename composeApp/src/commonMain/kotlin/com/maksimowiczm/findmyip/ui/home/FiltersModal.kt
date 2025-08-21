@@ -49,12 +49,12 @@ private fun FiltersModalContent(
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            text = "Filters",
+            text = stringResource(Res.string.headline_filters),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         Text(
-            text = "Internet protocol",
+            text = stringResource(Res.string.headline_internet_protocol),
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(horizontal = 16.dp),
         )

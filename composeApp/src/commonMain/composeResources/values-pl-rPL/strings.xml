@@ -37,4 +37,7 @@
     <string name="action_write_an_email">Napisz e-mail</string>
 
     <string name="headline_language">Język</string>
+
+    <string name="headline_filters">Filtry</string>
+    <string name="headline_internet_protocol">Protokół internetowy</string>
 </resources>
