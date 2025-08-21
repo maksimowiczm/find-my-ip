@@ -1,12 +1,10 @@
 package com.maksimowiczm.findmyip.ui.contribute
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -23,18 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
-import com.maksimowiczm.findmyip.ui.shared.SettingsListItem
 import findmyip.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContributeScreen(
     onBack: () -> Unit,
@@ -48,140 +47,97 @@ fun ContributeScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    val getAction: (ContributeAction) -> () -> Unit =
+        remember(onSponsor, onShare, onFeatureRequest, onBugReport, onTranslate, onEmail) {
+            {
+                when (it) {
+                    ContributeAction.Sponsor -> onSponsor
+                    ContributeAction.ShareWithFriends -> onShare
+                    ContributeAction.FeatureRequest -> onFeatureRequest
+                    ContributeAction.BugReport -> onBugReport
+                    ContributeAction.Translate -> onTranslate
+                    ContributeAction.GetInTouch -> onEmail
+                }
+            }
+        }
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = {},
+                title = { Text(stringResource(Res.string.headline_contribute)) },
                 navigationIcon = { ArrowBackIconButton(onBack) },
+                subtitle = { Text(stringResource(Res.string.description_contribute)) },
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                    ),
                 scrollBehavior = scrollBehavior,
             )
         },
     ) { paddingValues ->
         LazyColumn(
-            modifier =
-                Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = paddingValues,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = paddingValues.add(vertical = 8.dp, horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            item { SupportWithMoney(onSponsor = onSponsor) }
-            item { SpreadTheWord(onShare = onShare) }
-            item {
-                GetInvolved(
-                    onFeatureRequest = onFeatureRequest,
-                    onBugReport = onBugReport,
-                    onTranslate = onTranslate,
-                    onEmail = onEmail,
+            items(items = ContributeAction.entries) { action ->
+                ContributeCard(
+                    icon = {
+                        Icon(action.icon, null, Modifier.size(ContributeCardDefaults.iconSize))
+                    },
+                    title = { Text(stringResource(action.title)) },
+                    description = { Text(stringResource(action.description)) },
+                    buttonLabel = { Text(stringResource(action.buttonLabel)) },
+                    onAction = getAction(action),
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun SupportWithMoney(onSponsor: () -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier) {
-        Text(
-            text = stringResource(Res.string.headline_support_with_money),
-            style = MaterialTheme.typography.headlineMediumEmphasized,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(Modifier.height(4.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.VolunteerActivism, null) },
-            title = { Text(stringResource(Res.string.headline_sponsor)) },
-            onClick = onSponsor,
-            shape = MaterialTheme.shapes.large,
-            supportingText = { Text(stringResource(Res.string.description_sponsor)) },
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun SpreadTheWord(onShare: () -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier) {
-        Text(
-            text = stringResource(Res.string.headline_spread_the_word),
-            style = MaterialTheme.typography.headlineMediumEmphasized,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(Modifier.height(4.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.Share, null) },
-            title = { Text(stringResource(Res.string.action_share_with_friends)) },
-            onClick = onShare,
-            shape = MaterialTheme.shapes.large,
-            supportingText = { Text(stringResource(Res.string.description_share_with_friends)) },
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun GetInvolved(
-    onFeatureRequest: () -> Unit,
-    onBugReport: () -> Unit,
-    onTranslate: () -> Unit,
-    onEmail: () -> Unit,
-    modifier: Modifier = Modifier,
+private enum class ContributeAction(
+    val icon: ImageVector,
+    val title: StringResource,
+    val description: StringResource,
+    val buttonLabel: StringResource,
 ) {
-    Column(modifier) {
-        Text(
-            text = stringResource(Res.string.headline_get_involved),
-            style = MaterialTheme.typography.headlineMediumEmphasized,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(Modifier.height(4.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.Lightbulb, null) },
-            title = { Text(stringResource(Res.string.action_feature_request_on_github)) },
-            onClick = onFeatureRequest,
-            shape =
-                RoundedCornerShape(
-                    topStart = MaterialTheme.shapes.large.topStart,
-                    topEnd = MaterialTheme.shapes.large.topEnd,
-                    bottomStart = MaterialTheme.shapes.extraSmall.bottomStart,
-                    bottomEnd = MaterialTheme.shapes.extraSmall.bottomEnd,
-                ),
-            supportingText = {
-                Text(stringResource(Res.string.description_feature_request_on_github))
-            },
-        )
-        Spacer(Modifier.height(2.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.BugReport, null) },
-            title = { Text(stringResource(Res.string.action_report_issue_on_github)) },
-            onClick = onBugReport,
-            supportingText = { Text(stringResource(Res.string.description_report_issue_on_github)) },
-        )
-        Spacer(Modifier.height(2.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.Translate, null) },
-            title = { Text(stringResource(Res.string.action_translate)) },
-            onClick = onTranslate,
-            supportingText = { Text(stringResource(Res.string.description_translate)) },
-        )
-        Spacer(Modifier.height(2.dp))
-        SettingsListItem(
-            icon = { Icon(Icons.Outlined.Mail, null) },
-            title = { Text(stringResource(Res.string.action_write_an_email)) },
-            onClick = onEmail,
-            shape =
-                RoundedCornerShape(
-                    topStart = MaterialTheme.shapes.extraSmall.topStart,
-                    topEnd = MaterialTheme.shapes.extraSmall.topEnd,
-                    bottomStart = MaterialTheme.shapes.large.bottomStart,
-                    bottomEnd = MaterialTheme.shapes.large.bottomEnd,
-                ),
-            supportingText = { Text(stringResource(Res.string.description_write_an_email)) },
-        )
-    }
+    Sponsor(
+        icon = Icons.Outlined.VolunteerActivism,
+        title = Res.string.headline_become_a_sponsor,
+        description = Res.string.description_become_a_sponsor,
+        buttonLabel = Res.string.action_sponsor,
+    ),
+    ShareWithFriends(
+        icon = Icons.Outlined.Share,
+        title = Res.string.headline_share_with_friends,
+        description = Res.string.description_share_with_friends,
+        buttonLabel = Res.string.action_share,
+    ),
+    FeatureRequest(
+        icon = Icons.Outlined.Lightbulb,
+        title = Res.string.headline_feature_request,
+        description = Res.string.description_feature_request,
+        buttonLabel = Res.string.action_feature_request,
+    ),
+    BugReport(
+        icon = Icons.Outlined.BugReport,
+        title = Res.string.headline_bug_report,
+        description = Res.string.description_bug_report,
+        buttonLabel = Res.string.action_bug_report,
+    ),
+    Translate(
+        icon = Icons.Outlined.Translate,
+        title = Res.string.action_translate,
+        description = Res.string.description_translate,
+        buttonLabel = Res.string.action_translate,
+    ),
+    GetInTouch(
+        icon = Icons.Outlined.Mail,
+        title = Res.string.headline_get_in_touch,
+        description = Res.string.description_get_in_touch,
+        buttonLabel = Res.string.action_write_an_email,
+    ),
 }
 
 @Preview

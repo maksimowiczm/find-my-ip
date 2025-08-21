@@ -9,28 +9,33 @@
     <string name="action_clear">Clear</string>
     <string name="action_go_back">Go Back</string>
 
-    <string name="headline_support_with_money">Support with money</string>
-    <string name="headline_sponsor">Sponsor</string>
-    <string name="description_sponsor">All contributions are welcome</string>
-
-    <string name="headline_spread_the_word">Spread the word</string>
-    <string name="action_share_with_friends">Share with friends</string>
-    <string name="description_share_with_friends">Support the app growth</string>
-
-    <string name="headline_get_involved">Get involved</string>
-    <string name="action_feature_request_on_github">Feature request on GitHub</string>
-    <string name="description_feature_request_on_github">Your ideas can shape the app</string>
-    <string name="action_report_issue_on_github">Report a bug on GitHub</string>
-    <string name="description_report_issue_on_github">Help with bug squashing</string>
-    <string name="action_translate">Translate</string>
-    <string name="description_translate">Help translate the app</string>
-    <string name="action_write_an_email">Write an email</string>
-    <string name="description_write_an_email">Reach out directly</string>
-
-    <string name="message_share_with_friends">Check out this app that shows your current IP address and its history! %1$s</string>
 
     <string name="headline_settings">Settings</string>
     <string name="headline_contribute">Contribute</string>
     <string name="description_contribute">Ways you can support and grow the app</string>
+
+    <string name="headline_become_a_sponsor">Become a sponsor</string>
+    <string name="description_become_a_sponsor">Provide financial support to keep the project growing and improving. Every contribution makes a difference.</string>
+    <string name="action_sponsor">Sponsor</string>
+
+    <string name="headline_share_with_friends">Share with friends</string>
+    <string name="description_share_with_friends">Spread the word! Tell others about the app and help more people discover it.</string>
+    <string name="action_share">Share</string>
+    <string name="message_share_with_friends">Check out this app that shows your current IP address and its history! %1$s</string>
+
+    <string name="headline_feature_request">Feature Request</string>
+    <string name="description_feature_request">Have an idea that could make the app better? Share your suggestions and help shape future updates.</string>
+    <string name="action_feature_request">Feature request on GitHub</string>
+
+    <string name="headline_bug_report">Bug Report</string>
+    <string name="description_bug_report">Report any issues or glitches to help improve stability and performance.</string>
+    <string name="action_bug_report">Report a bug on GitHub</string>
+
+    <string name="action_translate">Translate</string>
+    <string name="description_translate">Contribute translations to make the app accessible in more languages worldwide.</string>
+
+    <string name="headline_get_in_touch">Get in Touch</string>
+    <string name="description_get_in_touch">Reach out directly with feedback, thoughts, or questions by email.</string>
+    <string name="action_write_an_email">Write an email</string>
 
 </resources>

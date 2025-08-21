@@ -23,7 +23,7 @@ internal actual fun shareWithFriends(): () -> Unit {
             }
         }
 
-    val titleString = stringResource(Res.string.action_share_with_friends)
+    val titleString = stringResource(Res.string.headline_share_with_friends)
     return remember(context, shareIntent, titleString) {
         {
             val chooser = Intent.createChooser(shareIntent, titleString)
