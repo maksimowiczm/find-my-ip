@@ -41,4 +41,6 @@
     <string name="headline_filters">Filters</string>
     <string name="headline_internet_protocol">Internet Protocol</string>
 
+    <string name="clipboard_label_cryptocurrency_address">Address</string>
+
 </resources>

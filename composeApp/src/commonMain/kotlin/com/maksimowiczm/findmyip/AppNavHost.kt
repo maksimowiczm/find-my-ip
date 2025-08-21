@@ -9,6 +9,7 @@ import com.maksimowiczm.findmyip.ui.contribute.ContributeRoute
 import com.maksimowiczm.findmyip.ui.home.HomeRoute
 import com.maksimowiczm.findmyip.ui.language.LanguageRoute
 import com.maksimowiczm.findmyip.ui.settings.SettingsRoute
+import com.maksimowiczm.findmyip.ui.sponsor.SponsorRoute
 
 @Composable
 fun AppNavHost(modifier: Modifier = Modifier.Companion) {
@@ -44,12 +45,20 @@ fun AppNavHost(modifier: Modifier = Modifier.Companion) {
         }
         forwardBackwardComposable(Route.Contribute.name) {
             ContributeRoute(
-                onBack = { navController.popBackStack(Route.Contribute.name, inclusive = true) }
+                onBack = { navController.popBackStack(Route.Contribute.name, inclusive = true) },
+                onSponsor = {
+                    navController.navigate(Route.Sponsor.name) { launchSingleTop = true }
+                },
             )
         }
         forwardBackwardComposable(Route.Language.name) {
             LanguageRoute(
                 onBack = { navController.popBackStack(Route.Language.name, inclusive = true) }
+            )
+        }
+        forwardBackwardComposable(Route.Sponsor.name) {
+            SponsorRoute(
+                onBack = { navController.popBackStack(Route.Sponsor.name, inclusive = true) }
             )
         }
     }
@@ -60,4 +69,5 @@ private enum class Route {
     Settings,
     Contribute,
     Language,
+    Sponsor,
 }

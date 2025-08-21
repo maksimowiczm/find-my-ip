@@ -6,6 +6,8 @@ import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUse
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUseCaseImpl
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCaseImpl
+import com.maksimowiczm.findmyip.application.usecase.ObserveSponsorshipMethodsUseCase
+import com.maksimowiczm.findmyip.application.usecase.ObserveSponsorshipMethodsUseCaseImpl
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCase
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCaseImpl
 import com.maksimowiczm.findmyip.application.usecase.RefreshIp6AddressUseCase
@@ -24,4 +26,6 @@ val applicationModule = module {
     factoryOf(::ObserveCurrentIp4AddressUseCaseImpl).bind<ObserveCurrentIp4AddressUseCase>()
 
     factoryOf(::ObserveCurrentIp6AddressUseCaseImpl).bind<ObserveCurrentIp6AddressUseCase>()
+
+    factoryOf(::ObserveSponsorshipMethodsUseCaseImpl).bind<ObserveSponsorshipMethodsUseCase>()
 }

@@ -7,14 +7,14 @@ import com.maksimowiczm.findmyip.application.infrastructure.config.AppConfig
 import org.koin.compose.koinInject
 
 @Composable
-fun ContributeRoute(onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun ContributeRoute(onBack: () -> Unit, onSponsor: () -> Unit, modifier: Modifier = Modifier) {
     val appConfig: AppConfig = koinInject()
     val uriHandler = LocalUriHandler.current
 
     ContributeScreen(
         onBack = onBack,
         modifier = modifier,
-        onSponsor = { TODO() },
+        onSponsor = onSponsor,
         onShare = shareWithFriends(),
         onFeatureRequest = { uriHandler.openUri(appConfig.featureRequestUrl) },
         onBugReport = { uriHandler.openUri(appConfig.bugReportUrl) },
