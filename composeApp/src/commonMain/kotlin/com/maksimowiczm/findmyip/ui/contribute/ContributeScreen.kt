@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
@@ -81,7 +82,7 @@ fun ContributeScreen(
             columns = GridCells.Adaptive(360.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = paddingValues.add(horizontal = 16.dp, vertical = 8.dp),
         ) {
             items(items = ContributeAction.entries) { action ->
