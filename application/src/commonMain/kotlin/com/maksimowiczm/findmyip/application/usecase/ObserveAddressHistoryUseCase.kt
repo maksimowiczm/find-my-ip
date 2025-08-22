@@ -3,8 +3,7 @@ package com.maksimowiczm.findmyip.application.usecase
 import androidx.paging.PagingData
 import androidx.paging.filter
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp4AddressLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentAddressLocalDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import com.maksimowiczm.findmyip.domain.entity.AddressStatus
 import com.maksimowiczm.findmyip.domain.entity.Ip4Address
@@ -35,8 +34,8 @@ fun interface ObserveAddressHistoryUseCase {
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ObserveAddressHistoryUseCaseImpl(
     private val addressHistoryLocalDataSource: AddressHistoryLocalDataSource,
-    private val currentIp4: CurrentIp4AddressLocalDataSource,
-    private val currentIp6: CurrentIp6AddressLocalDataSource,
+    private val currentIp4: CurrentAddressLocalDataSource<Ip4Address>,
+    private val currentIp6: CurrentAddressLocalDataSource<Ip6Address>,
 ) : ObserveAddressHistoryUseCase {
     override fun observe(
         query: String?,
@@ -49,8 +48,8 @@ internal class ObserveAddressHistoryUseCaseImpl(
 
     private fun Flow<PagingData<AddressHistory>>.filterCurrent(): Flow<PagingData<AddressHistory>> =
         combine(
-                currentIp4.observeIp4().observeWithInitialNull(),
-                currentIp6.observeIp6().observeWithInitialNull(),
+                currentIp4.observe().observeWithInitialNull(),
+                currentIp6.observe().observeWithInitialNull(),
             ) { ip4, ip6 ->
                 val current4addr = (ip4 as? AddressStatus.Success<Ip4Address>)?.address
                 val current6addr = (ip6 as? AddressStatus.Success<Ip6Address>)?.address

@@ -1,5 +1,7 @@
 package com.maksimowiczm.findmyip.domain.entity
 
-interface IpAddress {
+sealed interface IpAddress : IpAddressString
+
+interface IpAddressString {
     fun stringRepresentation(): String
 }

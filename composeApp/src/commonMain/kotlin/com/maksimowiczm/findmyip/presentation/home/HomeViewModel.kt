@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.maksimowiczm.findmyip.application.usecase.ObserveAddressHistoryUseCase
-import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp4AddressUseCase
-import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIp6AddressUseCase
-import com.maksimowiczm.findmyip.application.usecase.RefreshIp4AddressUseCase
-import com.maksimowiczm.findmyip.application.usecase.RefreshIp6AddressUseCase
+import com.maksimowiczm.findmyip.application.usecase.ObserveCurrentIpAddressUseCase
+import com.maksimowiczm.findmyip.application.usecase.RefreshAddressUseCase
+import com.maksimowiczm.findmyip.domain.entity.Ip4Address
+import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -27,10 +27,10 @@ import kotlinx.coroutines.runBlocking
 
 class HomeViewModel(
     observeHistoryUseCase: ObserveAddressHistoryUseCase,
-    observeCurrentIp4AddressUseCase: ObserveCurrentIp4AddressUseCase,
-    observeCurrentIp6AddressUseCase: ObserveCurrentIp6AddressUseCase,
-    private val refreshIp4AddressUseCase: RefreshIp4AddressUseCase,
-    private val refreshIp6AddressUseCase: RefreshIp6AddressUseCase,
+    observeCurrentIp4AddressUseCase: ObserveCurrentIpAddressUseCase<Ip4Address>,
+    observeCurrentIp6AddressUseCase: ObserveCurrentIpAddressUseCase<Ip6Address>,
+    private val refreshIp4AddressUseCase: RefreshAddressUseCase,
+    private val refreshIp6AddressUseCase: RefreshAddressUseCase,
 ) : ViewModel() {
 
     private val _isRefreshing = MutableStateFlow(false)

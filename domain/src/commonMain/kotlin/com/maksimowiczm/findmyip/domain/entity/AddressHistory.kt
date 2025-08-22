@@ -2,7 +2,7 @@ package com.maksimowiczm.findmyip.domain.entity
 
 import kotlinx.datetime.LocalDateTime
 
-sealed interface AddressHistory : IpAddress {
+sealed interface AddressHistory : IpAddressString {
     val id: Long
     val domain: String?
     val dateTime: LocalDateTime

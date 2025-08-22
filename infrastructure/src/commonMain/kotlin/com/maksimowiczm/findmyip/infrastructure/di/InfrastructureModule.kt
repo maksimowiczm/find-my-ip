@@ -2,11 +2,12 @@ package com.maksimowiczm.findmyip.infrastructure.di
 
 import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp4AddressLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip4AddressRemoteDataSource
-import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentAddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.remote.IpAddressRemoteDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.transaction.TransactionProvider
+import com.maksimowiczm.findmyip.domain.entity.InternetProtocolVersion
+import com.maksimowiczm.findmyip.domain.entity.Ip4Address
+import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import com.maksimowiczm.findmyip.infrastructure.BuildConfig
 import com.maksimowiczm.findmyip.infrastructure.date.DateProviderImpl
 import com.maksimowiczm.findmyip.infrastructure.fake.FakeAddressDataSource
@@ -34,13 +35,10 @@ val infrastructureModule = module {
 
     singleOf(::DateProviderImpl).bind<DateProvider>()
     factory { StringToAddressMapperImpl }.bind<StringToAddressMapper>()
-    singleOf(::InMemoryIpAddressDataSource)
-        .binds(
-            arrayOf(
-                CurrentIp4AddressLocalDataSource::class,
-                CurrentIp6AddressLocalDataSource::class,
-            )
-        )
+    single(named(InternetProtocolVersion.IPV4)) { InMemoryIpAddressDataSource<Ip4Address>() }
+        .bind<CurrentAddressLocalDataSource<Ip4Address>>()
+    single(named(InternetProtocolVersion.IPV6)) { InMemoryIpAddressDataSource<Ip6Address>() }
+        .bind<CurrentAddressLocalDataSource<Ip6Address>>()
 
     if (BuildConfig.USE_FAKE) {
         fakeModule()
@@ -55,24 +53,27 @@ internal expect fun Module.platformModule()
 
 private fun Module.ipifyModule() {
     single(named("ipifyClient")) { HttpClient {} }.onClose { it?.close() }
-    factory {
-            IpifyAddressDataSource(
-                config = IpifyConfigImpl,
-                httpClient = get(named("ipifyClient")),
-                stringToAddressMapper = get(),
-            )
-        }
-        .binds(arrayOf(Ip4AddressRemoteDataSource::class, Ip6AddressRemoteDataSource::class))
+    single {
+        IpifyAddressDataSource(
+            config = IpifyConfigImpl,
+            httpClient = get(named("ipifyClient")),
+            stringToAddressMapper = get(),
+        )
+    }
+    factory(named(InternetProtocolVersion.IPV4)) { get<IpifyAddressDataSource>().ip4Wrapper() }
+        .bind<IpAddressRemoteDataSource<Ip4Address>>()
+    factory(named(InternetProtocolVersion.IPV6)) { get<IpifyAddressDataSource>().ip6Wrapper() }
+        .bind<IpAddressRemoteDataSource<Ip6Address>>()
 }
 
 private fun Module.fakeModule() {
     single {
-            FakeAddressDataSource(
-                random = Random(0),
-                stringToAddressMapper = StringToAddressMapperImpl,
-            )
-        }
-        .binds(arrayOf(Ip4AddressRemoteDataSource::class, Ip6AddressRemoteDataSource::class))
+        FakeAddressDataSource(random = Random(0), stringToAddressMapper = StringToAddressMapperImpl)
+    }
+    factory(named(InternetProtocolVersion.IPV4)) { get<FakeAddressDataSource>().ip4Wrapper() }
+        .bind<IpAddressRemoteDataSource<Ip4Address>>()
+    factory(named(InternetProtocolVersion.IPV6)) { get<FakeAddressDataSource>().ip6Wrapper() }
+        .bind<IpAddressRemoteDataSource<Ip6Address>>()
 }
 
 internal const val DATABASE_NAME = "findMyIpDatabase.db"
