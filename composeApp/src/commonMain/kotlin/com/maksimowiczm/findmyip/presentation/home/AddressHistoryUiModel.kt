@@ -7,11 +7,12 @@ import kotlinx.datetime.LocalDateTime
 @Immutable
 data class AddressHistoryUiModel(
     val id: Long,
-    val internetProtocolVersion: InternetProtocolVersion,
-    val address: String,
-    val domain: String?,
-    val dateTime: LocalDateTime,
-) {
+    override val internetProtocolVersion: InternetProtocolVersion,
+    override val address: String,
+    override val domain: String?,
+    override val dateTime: LocalDateTime,
+    override val networkType: NetworkType,
+) : AddressUiModel {
     constructor(
         domain: AddressHistory
     ) : this(
@@ -24,5 +25,6 @@ data class AddressHistoryUiModel(
         address = domain.stringRepresentation(),
         domain = domain.domain,
         dateTime = domain.dateTime,
+        networkType = NetworkType.fromDomain(domain.networkType),
     )
 }

@@ -10,11 +10,12 @@ sealed interface CurrentAddressUiModel {
     data object Unavailable : CurrentAddressUiModel
 
     data class Address(
-        val address: String,
-        val domain: String?,
-        val dateTime: LocalDateTime,
-        val internetProtocolVersion: InternetProtocolVersion,
-    ) : CurrentAddressUiModel
+        override val address: String,
+        override val domain: String?,
+        override val dateTime: LocalDateTime,
+        override val internetProtocolVersion: InternetProtocolVersion,
+        override val networkType: NetworkType,
+    ) : CurrentAddressUiModel, AddressUiModel
 
     companion object {
         @JvmName("fromIp4")
@@ -29,6 +30,7 @@ sealed interface CurrentAddressUiModel {
                         domain = addressStatus.domain,
                         dateTime = addressStatus.dateTime,
                         internetProtocolVersion = InternetProtocolVersion.IPV4,
+                        networkType = NetworkType.fromDomain(addressStatus.networkType),
                     )
             }
 
@@ -44,6 +46,7 @@ sealed interface CurrentAddressUiModel {
                         domain = addressStatus.domain,
                         dateTime = addressStatus.dateTime,
                         internetProtocolVersion = InternetProtocolVersion.IPV6,
+                        networkType = NetworkType.fromDomain(addressStatus.networkType),
                     )
             }
     }

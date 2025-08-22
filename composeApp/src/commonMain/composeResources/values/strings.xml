@@ -43,4 +43,9 @@
 
     <string name="clipboard_label_cryptocurrency_address">Address</string>
 
+    <string name="unknown" description="Unknown network type">Unknown</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="cellular">Cellular</string>
+    <string name="vpn">VPN</string>
+
 </resources>

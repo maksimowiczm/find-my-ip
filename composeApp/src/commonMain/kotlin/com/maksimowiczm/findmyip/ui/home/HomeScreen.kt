@@ -1,31 +1,17 @@
 package com.maksimowiczm.findmyip.ui.home
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -46,24 +32,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
 import com.maksimowiczm.findmyip.presentation.home.AddressHistoryUiModel
 import com.maksimowiczm.findmyip.presentation.home.CurrentAddressUiModel
 import com.maksimowiczm.findmyip.presentation.home.Filter
-import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
-import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 import findmyip.composeapp.generated.resources.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(
@@ -148,10 +128,7 @@ fun HomeScreen(
                 if (ip4 is CurrentAddressUiModel.Address) {
                     item(key = "ip4") {
                         AddressButton(
-                            address = ip4.address,
-                            domain = ip4.domain,
-                            protocol = ip4.internetProtocolVersion,
-                            dateTime = ip4.dateTime,
+                            model = ip4,
                             onClick = { clipboardManager.copyToClipboard(ip4.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -163,10 +140,7 @@ fun HomeScreen(
                 if (ip6 is CurrentAddressUiModel.Address) {
                     item(key = "ip6") {
                         AddressButton(
-                            address = ip6.address,
-                            domain = ip6.domain,
-                            protocol = ip6.internetProtocolVersion,
-                            dateTime = ip6.dateTime,
+                            model = ip6,
                             onClick = { clipboardManager.copyToClipboard(ip6.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -190,10 +164,7 @@ fun HomeScreen(
                     val item = history[it] ?: return@items
 
                     AddressButton(
-                        address = item.address,
-                        domain = item.domain,
-                        protocol = item.internetProtocolVersion,
-                        dateTime = item.dateTime,
+                        model = item,
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -201,78 +172,6 @@ fun HomeScreen(
                     )
                     Spacer(Modifier.height(8.dp))
                 }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalAnimationApi::class)
-@Composable
-private fun AddressButton(
-    address: String,
-    domain: String?,
-    protocol: InternetProtocolVersion,
-    dateTime: LocalDateTime,
-    onClick: () -> Unit,
-    containerColor: Color,
-    contentColor: Color,
-    modifier: Modifier = Modifier,
-) {
-    val dateFormatter = LocalDateFormatter.current
-
-    val label =
-        when (protocol) {
-            InternetProtocolVersion.IPV4 -> stringResource(Res.string.ipv4)
-            InternetProtocolVersion.IPV6 -> stringResource(Res.string.ipv6)
-        }
-
-    val timeTransition = updateTransition(dateTime)
-
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        shapes = ButtonDefaults.shapes(shape = MaterialTheme.shapes.extraLarge),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = containerColor,
-                contentColor = contentColor,
-            ),
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = label, style = MaterialTheme.typography.titleMedium)
-                timeTransition.AnimatedContent(
-                    contentKey = { it.toString() },
-                    transitionSpec = {
-                        fadeIn(tween(durationMillis = 1_000)) togetherWith
-                            fadeOut(tween(durationMillis = 200))
-                    },
-                ) {
-                    Text(
-                        text = dateFormatter.formatDateTimeLong(dateTime),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-            }
-            Text(
-                text = address,
-                style = MaterialTheme.typography.headlineMediumEmphasized,
-                fontWeight = FontWeight.Bold,
-            )
-            domain?.let {
-                Text(
-                    text = domain,
-                    style = MaterialTheme.typography.bodyMediumEmphasized,
-                    fontWeight = FontWeight.SemiBold,
-                    fontStyle = FontStyle.Italic,
-                )
             }
         }
     }
