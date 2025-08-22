@@ -5,13 +5,21 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.infrastructure.AndroidDateFormatter
 import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
 
@@ -22,7 +30,13 @@ actual suspend fun ComposeUiTest.capture(screenshot: Screenshot) {
     setContent {
         context = LocalContext.current
         CompositionLocalProvider(LocalDateFormatter provides AndroidDateFormatter(context)) {
-            screenshot.Content()
+            Box(
+                Modifier.consumeWindowInsets(WindowInsets.systemBars)
+                    .consumeWindowInsets(WindowInsets.displayCutout)
+                    .padding(vertical = 8.dp)
+            ) {
+                screenshot.Content()
+            }
         }
     }
 

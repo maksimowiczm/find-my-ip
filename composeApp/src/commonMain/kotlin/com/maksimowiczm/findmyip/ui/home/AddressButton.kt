@@ -111,7 +111,7 @@ private fun AddressButtonPreview() {
         object : AddressUiModel {
             override val internetProtocolVersion: InternetProtocolVersion =
                 InternetProtocolVersion.IPV4
-            override val address: String = CommonAddresses.GOOGLE_V4
+            override val address: String = CommonAddresses.GOOGLE_V4_1
             override val domain: String? = "google.com"
             override val dateTime: LocalDateTime = LocalDateTime.now()
             override val networkType: NetworkType = NetworkType.WIFI
