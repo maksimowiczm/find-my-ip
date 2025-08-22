@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
+import com.maksimowiczm.findmyip.domain.entity.NetworkType as DomainNetworkType
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -53,6 +54,7 @@ internal class RoomAddressHistoryDataSource(
                     id = id,
                     address = stringToAddressMapper.toIp4Address(address),
                     domain = domain,
+                    networkType = networkType(),
                     dateTime =
                         Instant.fromEpochSeconds(epochSeconds)
                             .toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -63,10 +65,19 @@ internal class RoomAddressHistoryDataSource(
                     id = id,
                     address = stringToAddressMapper.toIp6Address(address),
                     domain = domain,
+                    networkType = networkType(),
                     dateTime =
                         Instant.fromEpochSeconds(epochSeconds)
                             .toLocalDateTime(TimeZone.currentSystemDefault()),
                 )
+        }
+
+    private fun AddressHistoryEntity.networkType(): DomainNetworkType =
+        when (this.networkType) {
+            NetworkType.UNKNOWN -> DomainNetworkType.Unknown
+            NetworkType.WIFI -> DomainNetworkType.WiFi
+            NetworkType.CELLULAR -> DomainNetworkType.Cellular
+            NetworkType.VPN -> DomainNetworkType.VPN
         }
 
     @OptIn(ExperimentalTime::class)
@@ -84,7 +95,16 @@ internal class RoomAddressHistoryDataSource(
             address = stringRepresentation(),
             domain = domain,
             addressVersion = version,
+            networkType = networkType.toEnum(),
             epochSeconds = epochSeconds,
         )
     }
+
+    private fun DomainNetworkType.toEnum(): NetworkType =
+        when (this) {
+            DomainNetworkType.Unknown -> NetworkType.UNKNOWN
+            DomainNetworkType.WiFi -> NetworkType.WIFI
+            DomainNetworkType.Cellular -> NetworkType.CELLULAR
+            DomainNetworkType.VPN -> NetworkType.VPN
+        }
 }

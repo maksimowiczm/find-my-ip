@@ -3,6 +3,8 @@ package com.maksimowiczm.findmyip.infrastructure.di
 import androidx.room.Room
 import com.maksimowiczm.findmyip.application.infrastructure.dns.AndroidSystemDnsService
 import com.maksimowiczm.findmyip.application.infrastructure.dns.DnsService
+import com.maksimowiczm.findmyip.application.infrastructure.network.AndroidNetworkTypeObserver
+import com.maksimowiczm.findmyip.application.infrastructure.network.NetworkTypeObserver
 import com.maksimowiczm.findmyip.infrastructure.room.FindMyIpDatabase
 import com.maksimowiczm.findmyip.infrastructure.room.FindMyIpDatabase.Companion.buildDatabase
 import org.koin.core.module.Module
@@ -20,4 +22,5 @@ internal actual fun Scope.database(): FindMyIpDatabase =
 
 internal actual fun Module.platformModule() {
     factoryOf(::AndroidSystemDnsService).bind<DnsService>()
+    factoryOf(::AndroidNetworkTypeObserver).bind<NetworkTypeObserver>()
 }

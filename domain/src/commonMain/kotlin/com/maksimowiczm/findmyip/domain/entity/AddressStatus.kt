@@ -19,5 +19,6 @@ sealed interface AddressStatus<out T : IpAddress> {
         override val dateTime: LocalDateTime,
         val address: T,
         val domain: String?,
+        val networkType: NetworkType,
     ) : AddressStatus<T>
 }

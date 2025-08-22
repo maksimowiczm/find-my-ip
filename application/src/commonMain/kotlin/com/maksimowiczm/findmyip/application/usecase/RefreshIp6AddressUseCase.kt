@@ -4,6 +4,7 @@ import com.maksimowiczm.findmyip.application.infrastructure.date.DateProvider
 import com.maksimowiczm.findmyip.application.infrastructure.dns.DnsService
 import com.maksimowiczm.findmyip.application.infrastructure.local.AddressHistoryLocalDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.local.CurrentIp6AddressLocalDataSource
+import com.maksimowiczm.findmyip.application.infrastructure.network.NetworkTypeObserver
 import com.maksimowiczm.findmyip.application.infrastructure.remote.Ip6AddressRemoteDataSource
 import com.maksimowiczm.findmyip.application.infrastructure.transaction.TransactionProvider
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
@@ -27,6 +28,7 @@ internal class RefreshIp6AddressUseCaseImpl(
     private val transactionProvider: TransactionProvider,
     private val dateProvider: DateProvider,
     private val dnsService: DnsService,
+    private val networkTypeObserver: NetworkTypeObserver,
     private val logger: Logger,
 ) : RefreshIp6AddressUseCase {
 
@@ -34,10 +36,16 @@ internal class RefreshIp6AddressUseCaseImpl(
         val now = dateProvider.now()
 
         return try {
+            val networkType = networkTypeObserver.getNetworkType()
             val currentAddress = remoteDataSource.getCurrentIp6Address()
             val domain = dnsService.reverseLookup(currentAddress)
             currentIp6.updateIp6(
-                AddressStatus.Success(dateTime = now, address = currentAddress, domain = domain)
+                AddressStatus.Success(
+                    dateTime = now,
+                    address = currentAddress,
+                    domain = domain,
+                    networkType = networkType,
+                )
             )
             val history =
                 AddressHistory.Ipv6(
@@ -45,6 +53,7 @@ internal class RefreshIp6AddressUseCaseImpl(
                     address = currentAddress,
                     domain = domain,
                     dateTime = now,
+                    networkType = networkType,
                 )
 
             transactionProvider.immediate {
@@ -52,7 +61,8 @@ internal class RefreshIp6AddressUseCaseImpl(
 
                 if (
                     latest != null &&
-                        latest.stringRepresentation() == currentAddress.stringRepresentation()
+                        latest.stringRepresentation() == currentAddress.stringRepresentation() &&
+                        latest.networkType == networkType
                 ) {
                     logger.d(TAG) {
                         "Current IP address is the same as the latest one, skipping save."

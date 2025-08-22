@@ -9,5 +9,6 @@ internal data class AddressHistoryEntity(
     val address: String,
     val domain: String?,
     val addressVersion: AddressVersion,
+    val networkType: NetworkType,
     val epochSeconds: Long,
 )

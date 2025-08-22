@@ -14,7 +14,7 @@ import com.maksimowiczm.findmyip.application.infrastructure.transaction.Transact
     version = FindMyIpDatabase.VERSION,
     exportSchema = false,
 )
-@TypeConverters(AddressVersionTypeConverter::class)
+@TypeConverters(AddressVersionTypeConverter::class, NetworkTypeTypeConverter::class)
 internal abstract class FindMyIpDatabase : RoomDatabase(), TransactionProvider {
 
     abstract val addressHistoryDao: AddressHistoryDao
