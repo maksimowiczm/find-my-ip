@@ -17,7 +17,7 @@ internal class FakeAddressDataSource(
             error("Fake failure")
         }
 
-        return DEMO_IPS_V4.random(random).let(stringToAddressMapper::toIp4Address)
+        return CommonAddresses.v4.random(random).let(stringToAddressMapper::toIp4Address)
     }
 
     override suspend fun getCurrentIp6Address(): Ip6Address {
@@ -26,25 +26,6 @@ internal class FakeAddressDataSource(
             error("Fake failure")
         }
 
-        return DEMO_IPS_V6.random(random).let(stringToAddressMapper::toIp6Address)
+        return CommonAddresses.v6.random(random).let(stringToAddressMapper::toIp6Address)
     }
 }
-
-private val DEMO_IPS_V4 =
-    listOf(
-        // google.com
-        "172.253.63.100",
-        // github.com
-        "140.82.121.3",
-        // developer.android.com
-        "142.250.203.142",
-    )
-
-private val DEMO_IPS_V6 =
-    listOf(
-        // google.com
-        "2001:4860:4860::8888",
-        "2001:4860:4860:0:0:0:0:8888",
-        "2001:4860:4860::8844",
-        "2001:4860:4860:0:0:0:0:8844",
-    )
