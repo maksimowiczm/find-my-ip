@@ -5,6 +5,11 @@ default:
 format:
     @find . -type f \( -name "*.kt" -o -name "*.kts" \) -not -path "*/build/*" | xargs java -jar $KTFMT_JAR --kotlinlang-style
 
+screenshot:
+    @adb shell rm -fr /sdcard/Pictures/com.maksimowiczm.findmyip
+    @./gradlew :composeApp:connectedAndroidTest
+    @adb shell find /sdcard/Pictures/com.maksimowiczm.findmyip -iname "*.png" | while read line; do adb pull "$line" metadata/en-US/images/phoneScreenshots/; done
+
 release-opensource:
     @./gradlew clean
     @./gradlew --no-daemon assembleOpenSourceIpifyRelease
