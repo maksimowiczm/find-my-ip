@@ -2,9 +2,11 @@ package com.maksimowiczm.findmyip.ui.contribute
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -24,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
 import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
@@ -76,10 +77,12 @@ fun ContributeScreen(
             )
         },
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = paddingValues.add(vertical = 8.dp, horizontal = 16.dp),
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(360.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = paddingValues.add(horizontal = 16.dp, vertical = 8.dp),
         ) {
             items(items = ContributeAction.entries) { action ->
                 ContributeCard(

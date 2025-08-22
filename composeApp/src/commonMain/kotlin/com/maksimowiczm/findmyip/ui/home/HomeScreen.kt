@@ -1,13 +1,15 @@
 package com.maksimowiczm.findmyip.ui.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
@@ -110,18 +112,20 @@ fun HomeScreen(
                 )
             },
         ) {
-            LazyColumn(
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Adaptive(360.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = paddingValues.add(horizontal = 16.dp),
             ) {
                 if (ip4 is CurrentAddressUiModel.Address || ip6 is CurrentAddressUiModel.Address) {
-                    item {
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         Text(
                             text = stringResource(Res.string.headline_current),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 4.dp),
                         )
-                        Spacer(Modifier.height(4.dp))
                     }
                 }
 
@@ -132,8 +136,8 @@ fun HomeScreen(
                             onClick = { clipboardManager.copyToClipboard(ip4.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(bottom = 8.dp),
                         )
-                        Spacer(Modifier.height(8.dp))
                     }
                 }
 
@@ -144,19 +148,19 @@ fun HomeScreen(
                             onClick = { clipboardManager.copyToClipboard(ip6.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(bottom = 8.dp),
                         )
-                        Spacer(Modifier.height(8.dp))
                     }
                 }
 
                 if (history.itemCount > 0) {
-                    item {
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         Text(
                             text = stringResource(Res.string.headline_history),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 4.dp),
                         )
-                        Spacer(Modifier.height(4.dp))
                     }
                 }
 
@@ -168,9 +172,8 @@ fun HomeScreen(
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItem().padding(bottom = 8.dp),
                     )
-                    Spacer(Modifier.height(8.dp))
                 }
             }
         }
