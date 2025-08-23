@@ -29,6 +29,8 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("build-logic")
+
 include(":composeApp")
 
 include(":domain")

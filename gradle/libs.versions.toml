@@ -43,6 +43,9 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-compose = { group = "org.jetbrains.compose", name = "org.jetbrains.compose.gradle.plugin", version.ref = "composeMultiplatform" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 koin-android = { module = "io.insert-koin:koin-android" }
@@ -66,3 +69,4 @@ gmazzo-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "gmaz
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+feature = { id = "com.maksimowiczm.findmyip.plugins.libraries.feature" }
