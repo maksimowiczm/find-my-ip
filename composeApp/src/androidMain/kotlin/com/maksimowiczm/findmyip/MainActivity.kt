@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.maksimowiczm.findmyip.shared.presentation.AndroidClipboardManager
 import com.maksimowiczm.findmyip.shared.presentation.AndroidDateFormatter
 import com.maksimowiczm.findmyip.shared.ui.ProvideUtilities
+import com.maksimowiczm.findmyip.ui.App
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip
+package com.maksimowiczm.findmyip.ui
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
