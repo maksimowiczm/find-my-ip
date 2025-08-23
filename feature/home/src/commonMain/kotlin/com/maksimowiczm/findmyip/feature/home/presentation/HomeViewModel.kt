@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class HomeViewModel(
+internal class HomeViewModel(
     observeHistoryUseCase: ObserveAddressHistoryUseCase,
     observeCurrentIp4AddressUseCase: ObserveCurrentIpAddressUseCase<Ip4Address>,
     observeCurrentIp6AddressUseCase: ObserveCurrentIpAddressUseCase<Ip6Address>,

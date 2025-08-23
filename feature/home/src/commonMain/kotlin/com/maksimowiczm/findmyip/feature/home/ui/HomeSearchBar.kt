@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.home
+package com.maksimowiczm.findmyip.feature.home.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -23,7 +23,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeSearchBar(
+internal fun HomeSearchBar(
     filtersCount: Int,
     state: TextFieldState,
     onSearch: (String) -> Unit,

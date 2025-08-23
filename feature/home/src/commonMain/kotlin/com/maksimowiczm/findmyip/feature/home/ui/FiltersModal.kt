@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.home
+package com.maksimowiczm.findmyip.feature.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.presentation.home.Filter
-import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
+import com.maksimowiczm.findmyip.feature.home.presentation.Filter
+import com.maksimowiczm.findmyip.feature.home.presentation.InternetProtocolVersion
 import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -25,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FiltersModal(
+internal fun FiltersModal(
     filter: Filter,
     onDismiss: () -> Unit,
     onUpdateFilter: (Filter) -> Unit,

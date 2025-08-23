@@ -1,9 +1,9 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class Filter(val protocols: Set<InternetProtocolVersion>) {
+internal data class Filter(val protocols: Set<InternetProtocolVersion>) {
     val filtersCount = protocols.size
 
     fun toggleInternetProtocol(protocol: InternetProtocolVersion): Filter =

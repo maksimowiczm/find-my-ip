@@ -83,6 +83,7 @@ kotlin {
             implementation(projects.domain)
             implementation(projects.infrastructure)
             implementation(projects.application)
+            implementation(projects.feature.home)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

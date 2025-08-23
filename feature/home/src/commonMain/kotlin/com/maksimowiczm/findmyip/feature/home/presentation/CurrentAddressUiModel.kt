@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import com.maksimowiczm.findmyip.domain.entity.AddressStatus
 import com.maksimowiczm.findmyip.domain.entity.Ip4Address
@@ -6,7 +6,7 @@ import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import kotlin.jvm.JvmName
 import kotlinx.datetime.LocalDateTime
 
-sealed interface CurrentAddressUiModel {
+internal sealed interface CurrentAddressUiModel {
     data object Unavailable : CurrentAddressUiModel
 
     data class Address(

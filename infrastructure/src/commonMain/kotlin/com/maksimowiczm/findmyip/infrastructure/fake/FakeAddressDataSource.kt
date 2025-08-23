@@ -4,6 +4,7 @@ import com.maksimowiczm.findmyip.application.infrastructure.remote.IpAddressRemo
 import com.maksimowiczm.findmyip.domain.entity.Ip4Address
 import com.maksimowiczm.findmyip.domain.entity.Ip6Address
 import com.maksimowiczm.findmyip.infrastructure.mapper.StringToAddressMapper
+import com.maksimowiczm.findmyip.shared.infrastructure.fake.CommonAddresses
 import kotlin.random.Random
 
 internal class FakeAddressDataSource(

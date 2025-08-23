@@ -1,20 +1,17 @@
-package com.maksimowiczm.findmyip.ui.home
+package com.maksimowiczm.findmyip.feature.home.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.maksimowiczm.findmyip.presentation.home.HomeViewModel
+import com.maksimowiczm.findmyip.feature.home.presentation.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeRoute(
-    onSettings: () -> Unit,
-    onVolunteer: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = koinViewModel(),
-) {
+fun HomeRoute(onSettings: () -> Unit, onVolunteer: () -> Unit, modifier: Modifier = Modifier) {
+    val viewModel: HomeViewModel = koinViewModel()
+
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pages = viewModel.history.collectAsLazyPagingItems()
     val ip4 by viewModel.ipv4.collectAsStateWithLifecycle()

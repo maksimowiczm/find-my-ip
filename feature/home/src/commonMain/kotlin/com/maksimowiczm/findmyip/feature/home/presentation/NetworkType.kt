@@ -1,8 +1,8 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import com.maksimowiczm.findmyip.domain.entity.NetworkType as DomainNetworkType
 
-enum class NetworkType {
+internal enum class NetworkType {
     UNKNOWN,
     WIFI,
     CELLULAR,

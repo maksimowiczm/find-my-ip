@@ -40,3 +40,5 @@ include(":application")
 include(":shared")
 
 include(":infrastructure")
+
+include(":feature:home")

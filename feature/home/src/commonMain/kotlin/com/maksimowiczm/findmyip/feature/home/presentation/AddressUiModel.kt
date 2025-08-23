@@ -1,10 +1,10 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.LocalDateTime
 
 @Immutable
-interface AddressUiModel {
+internal interface AddressUiModel {
     val internetProtocolVersion: InternetProtocolVersion
     val address: String
     val domain: String?

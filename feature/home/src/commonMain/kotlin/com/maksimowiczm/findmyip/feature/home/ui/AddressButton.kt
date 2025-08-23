@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.home
+package com.maksimowiczm.findmyip.feature.home.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -25,10 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.infrastructure.fake.CommonAddresses
-import com.maksimowiczm.findmyip.presentation.home.AddressUiModel
-import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
-import com.maksimowiczm.findmyip.presentation.home.NetworkType
+import com.maksimowiczm.findmyip.feature.home.presentation.AddressUiModel
+import com.maksimowiczm.findmyip.feature.home.presentation.InternetProtocolVersion
+import com.maksimowiczm.findmyip.feature.home.presentation.NetworkType
 import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 import com.maksimowiczm.findmyip.shared.ui.LocalDateFormatter
 import kotlinx.datetime.LocalDateTime
@@ -37,7 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun AddressButton(
+internal fun AddressButton(
     model: AddressUiModel,
     onClick: () -> Unit,
     containerColor: Color,
@@ -110,7 +109,7 @@ private fun AddressButtonPreview() {
         object : AddressUiModel {
             override val internetProtocolVersion: InternetProtocolVersion =
                 InternetProtocolVersion.IPV4
-            override val address: String = CommonAddresses.GOOGLE_V4_1
+            override val address: String = "8.8.8.8"
             override val domain: String? = "google.com"
             override val dateTime: LocalDateTime = LocalDateTime.now()
             override val networkType: NetworkType = NetworkType.WIFI

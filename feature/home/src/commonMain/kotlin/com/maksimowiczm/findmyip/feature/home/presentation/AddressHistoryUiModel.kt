@@ -1,11 +1,11 @@
-package com.maksimowiczm.findmyip.presentation.home
+package com.maksimowiczm.findmyip.feature.home.presentation
 
 import androidx.compose.runtime.Immutable
 import com.maksimowiczm.findmyip.domain.entity.AddressHistory
 import kotlinx.datetime.LocalDateTime
 
 @Immutable
-data class AddressHistoryUiModel(
+internal data class AddressHistoryUiModel(
     val id: Long,
     override val internetProtocolVersion: InternetProtocolVersion,
     override val address: String,

@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.infrastructure.fake
+package com.maksimowiczm.findmyip.shared.infrastructure.fake
 
 // 22.08.2025 - local `dig` command
 object CommonAddresses {

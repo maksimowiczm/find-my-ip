@@ -45,6 +45,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.application)
             implementation(projects.domain)
+            implementation(projects.shared)
             implementation(libs.ktor.client.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
