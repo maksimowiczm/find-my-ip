@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.contribute
+package com.maksimowiczm.findmyip.feature.contribute.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

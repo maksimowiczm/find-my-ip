@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.maksimowiczm.findmyip.feature.contribute.ui.ContributeRoute
 import com.maksimowiczm.findmyip.feature.home.ui.HomeRoute
 import com.maksimowiczm.findmyip.feature.sponsor.ui.SponsorRoute
 import com.maksimowiczm.findmyip.navigation.forwardBackwardComposable
-import com.maksimowiczm.findmyip.ui.contribute.ContributeRoute
 import com.maksimowiczm.findmyip.ui.language.LanguageRoute
 import com.maksimowiczm.findmyip.ui.settings.SettingsRoute
 

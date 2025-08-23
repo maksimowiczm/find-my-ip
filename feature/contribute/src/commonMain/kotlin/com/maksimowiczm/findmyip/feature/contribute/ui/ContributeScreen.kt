@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.contribute
+package com.maksimowiczm.findmyip.feature.contribute.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.add
@@ -37,7 +37,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun ContributeScreen(
+internal fun ContributeScreen(
     onBack: () -> Unit,
     onSponsor: () -> Unit,
     onShare: () -> Unit,

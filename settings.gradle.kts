@@ -44,3 +44,5 @@ include(":infrastructure")
 include(":feature:home")
 
 include(":feature:sponsor")
+
+include(":feature:contribute")
