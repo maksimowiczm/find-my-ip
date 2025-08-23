@@ -18,6 +18,8 @@ buildConfig {
 room { schemaDirectory("$projectDir/schemas") }
 
 kotlin {
+    sourceSets.all { languageSettings.enableLanguageFeature("ExpectActualClasses") }
+
     androidLibrary {
         namespace = "com.maksimowiczm.findmyip.infrastructure"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -27,6 +29,8 @@ kotlin {
 
         withDeviceTestBuilder { sourceSetTreeName = "test" }
             .configure { instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" }
+
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
     val xcfName = "infrastructureKit"
@@ -49,13 +53,17 @@ kotlin {
             implementation(libs.androidx.room.paging)
         }
 
-        commonTest.dependencies { implementation(libs.androidx.room.testing) }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.androidx.room.testing)
+        }
 
         androidMain.dependencies { implementation(libs.ktor.client.okhttp) }
 
         getByName("androidDeviceTest").dependencies {
             implementation(libs.androidx.testRunner)
             implementation(libs.androidx.testCore)
+            implementation(libs.androidx.testCore.ktx)
             implementation(libs.androidx.testExt.junit)
         }
 
