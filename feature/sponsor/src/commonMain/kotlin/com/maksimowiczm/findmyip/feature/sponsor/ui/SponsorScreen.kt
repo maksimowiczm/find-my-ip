@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.sponsor
+package com.maksimowiczm.findmyip.feature.sponsor.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +53,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SponsorScreen(
+internal fun SponsorScreen(
     onBack: () -> Unit,
     methods: List<SponsorshipMethod>,
     modifier: Modifier = Modifier,

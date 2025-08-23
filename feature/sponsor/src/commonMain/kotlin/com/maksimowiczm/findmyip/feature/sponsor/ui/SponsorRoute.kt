@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.sponsor
+package com.maksimowiczm.findmyip.feature.sponsor.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
