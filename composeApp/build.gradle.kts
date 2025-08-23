@@ -87,6 +87,7 @@ kotlin {
             implementation(projects.feature.home)
             implementation(projects.feature.sponsor)
             implementation(projects.feature.contribute)
+            implementation(projects.feature.language)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

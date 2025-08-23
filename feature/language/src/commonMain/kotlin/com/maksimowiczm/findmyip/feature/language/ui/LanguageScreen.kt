@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.language
+package com.maksimowiczm.findmyip.feature.language.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -42,7 +42,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-expect fun LanguageScreen(
+internal expect fun LanguageScreen(
     onBack: () -> Unit,
     onTranslate: () -> Unit,
     modifier: Modifier = Modifier,
@@ -50,7 +50,7 @@ expect fun LanguageScreen(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun LanguageScreen(
+internal fun LanguageScreen(
     currentTag: String?,
     onUpdateLanguage: (tag: String?) -> Unit,
     onBack: () -> Unit,

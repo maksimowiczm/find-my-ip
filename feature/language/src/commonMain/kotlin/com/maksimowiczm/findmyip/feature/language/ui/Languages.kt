@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.language
+package com.maksimowiczm.findmyip.feature.language.ui
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 
-val languages =
+internal val languages =
     listOf(
         Translation(tag = "en-US", name = "English (United States)", authors = listOf()),
         Translation(
@@ -24,11 +24,11 @@ val languages =
         ),
     )
 
-fun List<Translation>.containsTag(tag: String): Boolean = any { it.tag == tag }
+internal fun List<Translation>.containsTag(tag: String): Boolean = any { it.tag == tag }
 
-data class Translation(val tag: String, val name: String, val authors: List<Author>)
+internal data class Translation(val tag: String, val name: String, val authors: List<Author>)
 
-data class Author(val name: String, val link: String? = null) {
+internal data class Author(val name: String, val link: String? = null) {
     @Composable
     fun toAnnotatedString(): AnnotatedString =
         if (link != null) {

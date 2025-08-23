@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.language
+package com.maksimowiczm.findmyip.feature.language.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

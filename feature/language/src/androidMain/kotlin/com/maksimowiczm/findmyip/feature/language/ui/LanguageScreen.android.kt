@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.language
+package com.maksimowiczm.findmyip.feature.language.ui
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
@@ -9,7 +9,11 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.core.os.LocaleListCompat
 
 @Composable
-actual fun LanguageScreen(onBack: () -> Unit, onTranslate: () -> Unit, modifier: Modifier) {
+internal actual fun LanguageScreen(
+    onBack: () -> Unit,
+    onTranslate: () -> Unit,
+    modifier: Modifier,
+) {
     val context = LocalContext.current
     val language = Locale.current.toLanguageTag().takeIf { languages.containsTag(it) }
     val onUpdateLanguage =
