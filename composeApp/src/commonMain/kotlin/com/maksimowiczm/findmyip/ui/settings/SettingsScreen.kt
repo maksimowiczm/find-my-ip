@@ -33,8 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.ArrowBackIconButton
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

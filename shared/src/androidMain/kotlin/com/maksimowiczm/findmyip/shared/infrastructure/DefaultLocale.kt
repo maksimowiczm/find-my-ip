@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.infrastructure
+package com.maksimowiczm.findmyip.shared.infrastructure
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate

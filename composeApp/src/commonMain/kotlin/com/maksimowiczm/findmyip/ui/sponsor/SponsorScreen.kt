@@ -40,9 +40,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.application.usecase.SponsorshipMethod
-import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
-import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.ArrowBackIconButton
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.LocalClipboardManager
 import findmyip.composeapp.generated.resources.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay

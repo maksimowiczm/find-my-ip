@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.ui.shared.ArrowBackIconButton
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.ArrowBackIconButton
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 import findmyip.composeapp.generated.resources.Res
 import findmyip.composeapp.generated.resources.action_translate
 import findmyip.composeapp.generated.resources.description_translate_short

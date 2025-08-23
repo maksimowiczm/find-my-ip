@@ -1,9 +1,8 @@
-package com.maksimowiczm.findmyip.ui.infrastructure
+package com.maksimowiczm.findmyip.shared.presentation
 
 import android.content.Context
 import android.text.format.DateFormat
-import com.maksimowiczm.findmyip.infrastructure.defaultLocale
-import com.maksimowiczm.findmyip.presentation.infrastructure.DateFormatter
+import com.maksimowiczm.findmyip.shared.infrastructure.defaultLocale
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.datetime.LocalDateTime

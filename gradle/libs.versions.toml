@@ -6,6 +6,7 @@ android-minSdk = "26"
 android-targetSdk = "36"
 
 agp = "8.12.0"
+appcompat = "1.7.1"
 androidx-activity = "1.10.1"
 androidx-core = "1.7.0"
 androidx-lifecycle = "2.9.2"
@@ -26,6 +27,7 @@ runner = "1.7.0"
 room = "2.8.0-rc01"
 
 [libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeAndroid" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeAndroid" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

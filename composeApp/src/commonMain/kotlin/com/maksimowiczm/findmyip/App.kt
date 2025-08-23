@@ -2,7 +2,7 @@ package com.maksimowiczm.findmyip
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 
 @Composable
 fun App() {

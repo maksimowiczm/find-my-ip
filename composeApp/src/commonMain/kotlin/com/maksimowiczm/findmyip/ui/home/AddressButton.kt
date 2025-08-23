@@ -29,11 +29,10 @@ import com.maksimowiczm.findmyip.infrastructure.fake.CommonAddresses
 import com.maksimowiczm.findmyip.presentation.home.AddressUiModel
 import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
 import com.maksimowiczm.findmyip.presentation.home.NetworkType
-import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.LocalDateFormatter
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.now
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

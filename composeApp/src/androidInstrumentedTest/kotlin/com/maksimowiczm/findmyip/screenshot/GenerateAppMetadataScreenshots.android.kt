@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -20,8 +19,9 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
-import com.maksimowiczm.findmyip.ui.infrastructure.AndroidDateFormatter
-import com.maksimowiczm.findmyip.ui.infrastructure.LocalDateFormatter
+import com.maksimowiczm.findmyip.shared.presentation.AndroidClipboardManager
+import com.maksimowiczm.findmyip.shared.presentation.AndroidDateFormatter
+import com.maksimowiczm.findmyip.shared.ui.ProvideUtilities
 
 @OptIn(ExperimentalTestApi::class)
 actual suspend fun ComposeUiTest.capture(screenshot: Screenshot) {
@@ -29,7 +29,7 @@ actual suspend fun ComposeUiTest.capture(screenshot: Screenshot) {
 
     setContent {
         context = LocalContext.current
-        CompositionLocalProvider(LocalDateFormatter provides AndroidDateFormatter(context)) {
+        ProvideUtilities(AndroidDateFormatter(context), AndroidClipboardManager(context)) {
             Box(
                 Modifier.consumeWindowInsets(WindowInsets.systemBars)
                     .consumeWindowInsets(WindowInsets.displayCutout)

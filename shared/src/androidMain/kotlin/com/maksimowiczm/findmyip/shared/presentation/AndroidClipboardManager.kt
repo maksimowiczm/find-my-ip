@@ -1,10 +1,9 @@
-package com.maksimowiczm.findmyip.ui.infrastructure
+package com.maksimowiczm.findmyip.shared.presentation
 
 import android.content.ClipData
 import android.content.Context
 import android.os.Build
 import android.widget.Toast
-import com.maksimowiczm.findmyip.presentation.infrastructure.ClipboardManager
 
 class AndroidClipboardManager(private val context: Context) : ClipboardManager {
     private val clipboard: android.content.ClipboardManager

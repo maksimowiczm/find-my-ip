@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.shared
+package com.maksimowiczm.findmyip.shared.ui
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

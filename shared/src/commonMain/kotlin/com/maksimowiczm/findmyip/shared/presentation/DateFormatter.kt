@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.presentation.infrastructure
+package com.maksimowiczm.findmyip.shared.presentation
 
 import kotlinx.datetime.LocalDateTime
 

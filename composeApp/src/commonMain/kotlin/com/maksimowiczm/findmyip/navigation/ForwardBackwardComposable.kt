@@ -15,8 +15,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.maksimowiczm.findmyip.motion.materialSharedAxisXIn
-import com.maksimowiczm.findmyip.motion.materialSharedAxisXOut
+import com.maksimowiczm.findmyip.shared.motion.materialSharedAxisXIn
+import com.maksimowiczm.findmyip.shared.motion.materialSharedAxisXOut
 import kotlin.jvm.JvmSuppressWildcards
 
 fun NavGraphBuilder.forwardBackwardComposable(

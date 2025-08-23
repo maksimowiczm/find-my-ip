@@ -46,8 +46,8 @@ import com.maksimowiczm.findmyip.presentation.home.CurrentAddressUiModel
 import com.maksimowiczm.findmyip.presentation.home.Filter
 import com.maksimowiczm.findmyip.presentation.home.InternetProtocolVersion
 import com.maksimowiczm.findmyip.presentation.home.NetworkType
-import com.maksimowiczm.findmyip.ui.infrastructure.LocalClipboardManager
-import com.maksimowiczm.findmyip.ui.shared.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
+import com.maksimowiczm.findmyip.shared.ui.LocalClipboardManager
 import findmyip.composeapp.generated.resources.*
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours

@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.shared
+package com.maksimowiczm.findmyip.shared.ui
 
 import androidx.compose.runtime.Composable
 
