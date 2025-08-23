@@ -12,15 +12,16 @@ screenshot output="screenshots/":
     @adb shell find /sdcard/Pictures/com.maksimowiczm.findmyip -iname "*.png" | while read line; do adb pull "$line" {{ output }}; done
 
 release-opensource:
-    @./gradlew clean
-    @./gradlew --no-daemon assembleOpenSourceIpifyRelease
+    @./gradlew --no-daemon --no-build-cache clean
+    @./gradlew --no-daemon --no-build-cache assembleRelease
     @zipalign -f -p -v 4 \
-      app/build/outputs/apk/openSourceIpify/release/app-openSource-ipify-release-unsigned.apk \
-      app/build/outputs/apk/openSourceIpify/release/aligned.apk
+      composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk \
+      composeApp/build/outputs/apk/release/aligned-unsigned.apk
     @apksigner sign \
       --alignment-preserved \
       --out ./release-opensource-signed.apk \
       --ks keystore \
       --ks-key-alias secret_key \
       --ks-pass stdin \
-      --key-pass stdin app/build/outputs/apk/openSourceIpify/release/aligned.apk
+      --key-pass stdin \
+      composeApp/build/outputs/apk/release/aligned-unsigned.apk

@@ -76,7 +76,7 @@ private fun Module.fakeModule() {
         .bind<IpAddressRemoteDataSource<Ip6Address>>()
 }
 
-internal const val DATABASE_NAME = "findMyIpDatabase.db"
+internal const val DATABASE_NAME = "database"
 
 internal expect fun Scope.database(): FindMyIpDatabase
 
