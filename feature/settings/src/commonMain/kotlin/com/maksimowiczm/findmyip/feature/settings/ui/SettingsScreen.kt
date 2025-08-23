@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.settings
+package com.maksimowiczm.findmyip.feature.settings.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,14 +34,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.shared.ui.ArrowBackIconButton
-import com.maksimowiczm.findmyip.shared.ui.FindMyIpTheme
 import findmyip.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun SettingsScreen(
+internal fun SettingsScreen(
     onBack: () -> Unit,
     onContribute: () -> Unit,
     onLanguage: () -> Unit,
@@ -79,7 +77,7 @@ fun SettingsScreen(
     }
 }
 
-@Composable expect fun currentLanguage(): String
+@Composable internal expect fun currentLanguage(): String
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -124,10 +122,4 @@ private fun PrimaryAction(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun SettingsScreenPreview() {
-    FindMyIpTheme { SettingsScreen(onBack = {}, onContribute = {}, onLanguage = {}) }
 }

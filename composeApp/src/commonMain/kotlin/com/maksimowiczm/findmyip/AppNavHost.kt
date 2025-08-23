@@ -7,9 +7,9 @@ import androidx.navigation.compose.rememberNavController
 import com.maksimowiczm.findmyip.feature.contribute.ui.ContributeRoute
 import com.maksimowiczm.findmyip.feature.home.ui.HomeRoute
 import com.maksimowiczm.findmyip.feature.language.ui.LanguageRoute
+import com.maksimowiczm.findmyip.feature.settings.ui.SettingsRoute
 import com.maksimowiczm.findmyip.feature.sponsor.ui.SponsorRoute
 import com.maksimowiczm.findmyip.navigation.forwardBackwardComposable
-import com.maksimowiczm.findmyip.ui.settings.SettingsRoute
 
 @Composable
 fun AppNavHost(modifier: Modifier = Modifier.Companion) {

@@ -48,3 +48,5 @@ include(":feature:sponsor")
 include(":feature:contribute")
 
 include(":feature:language")
+
+include(":feature:settings")

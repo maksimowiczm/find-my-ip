@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.ui.settings
+package com.maksimowiczm.findmyip.feature.settings.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
