@@ -129,3 +129,8 @@ android {
 }
 
 dependencies { debugImplementation(compose.uiTooling) }
+
+compose.resources {
+    packageOfResClass = "findmyip.composeapp.generated.resources"
+    generateResClass = never
+}
