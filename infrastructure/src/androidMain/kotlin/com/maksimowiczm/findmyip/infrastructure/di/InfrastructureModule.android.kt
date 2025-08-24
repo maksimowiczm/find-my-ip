@@ -1,6 +1,8 @@
 package com.maksimowiczm.findmyip.infrastructure.di
 
 import androidx.room.Room
+import com.maksimowiczm.findmyip.application.infrastructure.background.PeriodicWorkManager
+import com.maksimowiczm.findmyip.application.infrastructure.background.WorkManagerPeriodicWorkManager
 import com.maksimowiczm.findmyip.application.infrastructure.dns.AndroidSystemDnsService
 import com.maksimowiczm.findmyip.application.infrastructure.dns.DnsService
 import com.maksimowiczm.findmyip.application.infrastructure.network.AndroidNetworkTypeObserver
@@ -23,4 +25,5 @@ internal actual fun Scope.database(): FindMyIpDatabase =
 internal actual fun Module.platformModule() {
     factoryOf(::AndroidSystemDnsService).bind<DnsService>()
     factoryOf(::AndroidNetworkTypeObserver).bind<NetworkTypeObserver>()
+    factoryOf(::WorkManagerPeriodicWorkManager).bind<PeriodicWorkManager>()
 }

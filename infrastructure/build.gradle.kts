@@ -59,7 +59,10 @@ kotlin {
             implementation(libs.androidx.room.testing)
         }
 
-        androidMain.dependencies { implementation(libs.ktor.client.okhttp) }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.work.runtime.ktx)
+        }
 
         getByName("androidDeviceTest").dependencies {
             implementation(libs.androidx.testRunner)

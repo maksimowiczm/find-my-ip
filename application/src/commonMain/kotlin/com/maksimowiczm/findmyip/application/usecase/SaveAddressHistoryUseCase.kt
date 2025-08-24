@@ -40,7 +40,7 @@ internal class SaveAddressHistoryUseCaseImpl(
             ) {
                 logger.d(TAG) { "Current IP address is the same as the latest one, skipping save." }
             } else {
-                logger.d(TAG) { "Saving new current IP address: $address" }
+                logger.d(TAG) { "Saving new current IP address" }
                 historyLocalDataSource.saveHistory(
                     createHistory(address, domain, networkType, dateTime)
                 )
