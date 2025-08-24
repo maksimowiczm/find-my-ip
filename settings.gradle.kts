@@ -52,3 +52,5 @@ include(":feature:settings")
 include(":feature:contribute:common")
 
 include(":feature:contribute:opensource")
+
+include(":feature:contribute:pro")

@@ -1,16 +1,18 @@
-package com.maksimowiczm.findmyip.feature.contribute.ui
+package com.maksimowiczm.findmyip.feature.contribute.common.ui
 
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.maksimowiczm.findmyip.application.infrastructure.config.AppConfig
-import findmyip.composeapp.generated.resources.*
+import findmyip.composeapp.generated.resources.Res
+import findmyip.composeapp.generated.resources.headline_share_with_friends
+import findmyip.composeapp.generated.resources.message_share_with_friends
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @Composable
-internal actual fun shareWithFriends(): () -> Unit {
+actual fun shareWithFriends(): () -> Unit {
     val appConfig: AppConfig = koinInject()
     val context = LocalContext.current
     val shareMessage = stringResource(Res.string.message_share_with_friends, appConfig.appUrl)
