@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.feature.contribute.ui
+package com.maksimowiczm.findmyip.feature.contribute.common.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun ContributeCard(
+fun ContributeCard(
     icon: @Composable () -> Unit,
     title: @Composable () -> Unit,
     description: @Composable () -> Unit,

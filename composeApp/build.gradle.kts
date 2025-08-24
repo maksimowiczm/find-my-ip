@@ -86,7 +86,7 @@ kotlin {
 
             implementation(projects.feature.home)
             implementation(projects.feature.sponsor)
-            implementation(projects.feature.contribute)
+            implementation(projects.feature.contribute.opensource)
             implementation(projects.feature.language)
             implementation(projects.feature.settings)
         }

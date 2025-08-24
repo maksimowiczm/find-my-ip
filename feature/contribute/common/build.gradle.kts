@@ -1,9 +1,9 @@
 plugins { alias(libs.plugins.feature) }
 
 kotlin {
-    androidLibrary { namespace = "com.maksimowiczm.findmyip.feature.contribute" }
+    androidLibrary { namespace = "com.maksimowiczm.findmyip.feature.contribute.common" }
 
-    val xcfName = "feature:contributeKit"
+    val xcfName = "feature:contribute:commonKit"
 
     iosX64 { binaries.framework { baseName = xcfName } }
 

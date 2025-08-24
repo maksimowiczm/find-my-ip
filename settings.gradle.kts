@@ -45,8 +45,10 @@ include(":feature:home")
 
 include(":feature:sponsor")
 
-include(":feature:contribute")
-
 include(":feature:language")
 
 include(":feature:settings")
+
+include(":feature:contribute:common")
+
+include(":feature:contribute:opensource")
