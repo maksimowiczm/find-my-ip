@@ -1,4 +1,4 @@
-package com.maksimowiczm.findmyip.navigation
+package com.maksimowiczm.findmyip.shared.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope

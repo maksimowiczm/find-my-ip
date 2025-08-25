@@ -10,7 +10,7 @@ import com.maksimowiczm.findmyip.feature.home.ui.HomeRoute
 import com.maksimowiczm.findmyip.feature.language.ui.LanguageRoute
 import com.maksimowiczm.findmyip.feature.settings.ui.SettingsRoute
 import com.maksimowiczm.findmyip.feature.sponsor.ui.SponsorRoute
-import com.maksimowiczm.findmyip.navigation.forwardBackwardComposable
+import com.maksimowiczm.findmyip.shared.navigation.forwardBackwardComposable
 
 @Composable
 fun AppNavHost(modifier: Modifier = Modifier.Companion) {
