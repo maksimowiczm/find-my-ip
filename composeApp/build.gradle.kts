@@ -89,6 +89,7 @@ kotlin {
             implementation(projects.feature.contribute.opensource)
             implementation(projects.feature.language)
             implementation(projects.feature.settings)
+            implementation(projects.feature.background.opensource)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

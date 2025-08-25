@@ -54,3 +54,5 @@ include(":feature:contribute:common")
 include(":feature:contribute:opensource")
 
 include(":feature:contribute:pro")
+
+include(":feature:background:opensource")

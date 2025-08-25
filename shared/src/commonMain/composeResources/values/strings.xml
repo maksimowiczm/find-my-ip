@@ -48,4 +48,11 @@
     <string name="cellular">Cellular</string>
     <string name="vpn">VPN</string>
 
+    <string name="headline_run_in_background">Run in background</string>
+    <string name="description_run_in_background">Keep tracking while app is closed</string>
+    <string name="headline_periodic_refresh">Periodic refresh</string>
+    <string name="description_periodic_refresh">Run periodically in the background</string>
+
+    <string name="hint_combine_periodic_refresh_with_notifications">You can combine periodic work with notifications</string>
+
 </resources>

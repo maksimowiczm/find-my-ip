@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.maksimowiczm.findmyip.feature.background.ui.RunInBackgroundRoute
 import com.maksimowiczm.findmyip.feature.contribute.ui.ContributeRoute
 import com.maksimowiczm.findmyip.feature.home.ui.HomeRoute
 import com.maksimowiczm.findmyip.feature.language.ui.LanguageRoute
@@ -37,6 +38,9 @@ fun AppNavHost(modifier: Modifier = Modifier.Companion) {
                 onContribute = {
                     navController.navigate(Route.Contribute.name) { launchSingleTop = true }
                 },
+                onRunInBackground = {
+                    navController.navigate(Route.Background.name) { launchSingleTop = true }
+                },
                 onLanguage = {
                     navController.navigate(Route.Language.name) { launchSingleTop = true }
                 },
@@ -61,6 +65,11 @@ fun AppNavHost(modifier: Modifier = Modifier.Companion) {
                 onBack = { navController.popBackStack(Route.Sponsor.name, inclusive = true) }
             )
         }
+        forwardBackwardComposable(Route.Background.name) {
+            RunInBackgroundRoute(
+                onBack = { navController.popBackStack(Route.Background.name, inclusive = true) }
+            )
+        }
     }
 }
 
@@ -70,4 +79,5 @@ private enum class Route {
     Contribute,
     Language,
     Sponsor,
+    Background,
 }

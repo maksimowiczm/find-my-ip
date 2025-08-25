@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Engineering
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.Button
@@ -31,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.maksimowiczm.findmyip.shared.ui.ArrowBackIconButton
@@ -42,10 +45,11 @@ import org.jetbrains.compose.resources.stringResource
 internal fun SettingsScreen(
     onBack: () -> Unit,
     onContribute: () -> Unit,
+    onRunInBackground: () -> Unit,
     onLanguage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
         modifier = modifier,
@@ -57,7 +61,10 @@ internal fun SettingsScreen(
             )
         },
     ) { paddingValues ->
-        LazyColumn(contentPadding = paddingValues.add(vertical = 8.dp)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = paddingValues.add(vertical = 8.dp),
+        ) {
             item {
                 PrimaryAction(
                     onContribute = onContribute,
@@ -65,6 +72,18 @@ internal fun SettingsScreen(
                 )
             }
             item { Spacer(Modifier.height(16.dp)) }
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(Res.string.headline_run_in_background))
+                    },
+                    modifier = Modifier.heightIn(min = 68.dp).clickable { onRunInBackground() },
+                    leadingContent = { Icon(Icons.Outlined.Engineering, null) },
+                    supportingContent = {
+                        Text(stringResource(Res.string.description_run_in_background))
+                    },
+                )
+            }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(Res.string.headline_language)) },
