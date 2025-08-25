@@ -25,6 +25,7 @@ app every time.
 - 🌐 **IPv4 & IPv6 Support** - works seamlessly with both IP address types
 - 📜 **IP History** - maintains a log of your previous IP addresses
 - 🔔 **Background Updates** - optionally detects and records IP changes even when the app is closed
+- 🧭 **Reverse DNS Lookups** - resolve IP addresses back to domain names
 
 ---
 
