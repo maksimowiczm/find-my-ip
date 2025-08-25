@@ -5,18 +5,18 @@ default:
 format:
     @find . -type f \( -name "*.kt" -o -name "*.kts" \) -not -path "*/build/*" | xargs java -jar $KTFMT_JAR --kotlinlang-style
 
-screenshot output="screenshots/":
+screenshots-opensource output="screenshots-opensource/":
     @adb shell rm -fr /sdcard/Pictures/com.maksimowiczm.findmyip
-    @./gradlew :composeApp:connectedAndroidTest
+    @./gradlew :opensource:composeApp:connectedAndroidTest
     @mkdir -p {{ output }}
     @adb shell find /sdcard/Pictures/com.maksimowiczm.findmyip -iname "*.png" | while read line; do adb pull "$line" {{ output }}; done
 
 release-opensource:
     @./gradlew --no-daemon --no-build-cache clean
-    @./gradlew --no-daemon --no-build-cache assembleRelease
+    @./gradlew --no-daemon --no-build-cache opensource:composeApp:assembleRelease
     @zipalign -f -p -v 4 \
-      composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk \
-      composeApp/build/outputs/apk/release/aligned-unsigned.apk
+      opensource/composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk \
+      opensource/composeApp/build/outputs/apk/release/aligned-unsigned.apk
     @apksigner sign \
       --alignment-preserved \
       --out ./release-opensource-signed.apk \
@@ -24,4 +24,4 @@ release-opensource:
       --ks-key-alias secret_key \
       --ks-pass stdin \
       --key-pass stdin \
-      composeApp/build/outputs/apk/release/aligned-unsigned.apk
+      opensource/composeApp/build/outputs/apk/release/aligned-unsigned.apk

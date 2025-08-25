@@ -29,30 +29,10 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild("build-logic")
+include(":opensource:composeApp")
 
-include(":composeApp")
+include(":shared:common")
 
-include(":domain")
+include(":shared:core")
 
-include(":application")
-
-include(":shared")
-
-include(":infrastructure")
-
-include(":feature:home")
-
-include(":feature:sponsor")
-
-include(":feature:language")
-
-include(":feature:settings")
-
-include(":feature:contribute:common")
-
-include(":feature:contribute:opensource")
-
-include(":feature:contribute:pro")
-
-include(":feature:background:opensource")
+include(":shared:feature")
