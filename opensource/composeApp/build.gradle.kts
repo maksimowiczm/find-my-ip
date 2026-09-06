@@ -42,11 +42,6 @@ kotlin {
 
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
-
-        dependencies {
-            debugImplementation(libs.androidx.compose.ui.test.manifest)
-            androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-        }
     }
 
     listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
@@ -131,8 +126,6 @@ android {
     }
 }
 
-dependencies { debugImplementation(compose.uiTooling) }
-
 compose.resources {
     packageOfResClass = "findmyip.composeapp.generated.resources"
     generateResClass = never
@@ -147,4 +140,8 @@ dependencies {
             "kspIosSimulatorArm64",
         )
         .forEach { add(it, libs.androidx.room.compiler) }
+
+    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }

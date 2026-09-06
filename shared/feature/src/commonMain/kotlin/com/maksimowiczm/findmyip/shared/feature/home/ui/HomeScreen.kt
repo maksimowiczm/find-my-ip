@@ -42,6 +42,7 @@ import com.maksimowiczm.findmyip.shared.core.feature.ui.LocalClipboardManager
 import com.maksimowiczm.findmyip.shared.feature.home.persentation.AddressHistoryUiModel
 import com.maksimowiczm.findmyip.shared.feature.home.persentation.CurrentAddressUiModel
 import com.maksimowiczm.findmyip.shared.feature.home.persentation.Filter
+import com.maksimowiczm.findmyip.shared.feature.home.persentation.isAvailable
 import findmyip.composeapp.generated.resources.Res
 import findmyip.composeapp.generated.resources.headline_current
 import findmyip.composeapp.generated.resources.headline_history
@@ -138,7 +139,10 @@ internal fun HomeScreen(
                             onClick = { clipboardManager.copyToClipboard(ip4.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.padding(bottom = 8.dp),
+                            modifier = Modifier.padding(bottom = 2.dp),
+                            shapes =
+                                if (ip6.isAvailable()) AddressButtonDefaults.topShapes()
+                                else AddressButtonDefaults.singleShapes(),
                         )
                     }
                 }
@@ -150,31 +154,46 @@ internal fun HomeScreen(
                             onClick = { clipboardManager.copyToClipboard(ip6.address) },
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.padding(bottom = 8.dp),
+                            shapes =
+                                if (ip4.isAvailable()) AddressButtonDefaults.bottomShapes()
+                                else AddressButtonDefaults.singleShapes(),
                         )
                     }
                 }
 
                 if (history.itemCount > 0) {
                     item(span = StaggeredGridItemSpan.FullLine) {
+                        val applyTopPadding = ip4.isAvailable() || ip6.isAvailable()
                         Text(
                             text = stringResource(Res.string.headline_history),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(bottom = 4.dp),
+                            modifier =
+                                Modifier.padding(
+                                    top = if (applyTopPadding) 8.dp else 0.dp,
+                                    bottom = 4.dp,
+                                ),
                         )
                     }
                 }
 
-                items(count = history.itemCount, key = history.itemKey { it.id }) {
-                    val item = history[it] ?: return@items
+                items(count = history.itemCount, key = history.itemKey { it.id }) { index ->
+                    val item = history[index] ?: return@items
+
+                    val shapes =
+                        when (index) {
+                            0 -> AddressButtonDefaults.topShapes()
+                            history.itemCount - 1 -> AddressButtonDefaults.bottomShapes()
+                            else -> AddressButtonDefaults.middleShapes()
+                        }
 
                     AddressButton(
                         model = item,
                         onClick = { clipboardManager.copyToClipboard(item.address) },
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.animateItem().padding(bottom = 8.dp),
+                        modifier = Modifier.animateItem().padding(bottom = 2.dp),
+                        shapes = shapes,
                     )
                 }
             }

@@ -51,3 +51,5 @@ internal sealed interface CurrentAddressUiModel {
             }
     }
 }
+
+internal fun CurrentAddressUiModel.isAvailable(): Boolean = this is CurrentAddressUiModel.Address

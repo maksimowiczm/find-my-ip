@@ -8,13 +8,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonShapes
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,6 +46,7 @@ internal fun AddressButton(
     containerColor: Color,
     contentColor: Color,
     modifier: Modifier = Modifier,
+    shapes: ButtonShapes = AddressButtonDefaults.singleShapes(),
 ) {
     val dateFormatter = LocalDateFormatter.current
 
@@ -50,7 +55,8 @@ internal fun AddressButton(
     Button(
         onClick = onClick,
         modifier = modifier,
-        shapes = ButtonDefaults.shapes(shape = MaterialTheme.shapes.extraLarge),
+        shapes = shapes,
+        contentPadding = PaddingValues(horizontal = 28.dp, vertical = 16.dp),
         colors =
             ButtonDefaults.buttonColors(
                 containerColor = containerColor,
@@ -58,7 +64,7 @@ internal fun AddressButton(
             ),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Row(
@@ -102,6 +108,64 @@ internal fun AddressButton(
     }
 }
 
+object AddressButtonDefaults {
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    private val pressedShape: Shape
+        @Composable get() = MaterialTheme.shapes.extraExtraLarge
+
+    private val middleCornerRadius: CornerSize
+        @Composable get() = MaterialTheme.shapes.medium.bottomEnd
+
+    private val outerCornerRadius: CornerSize
+        @Composable get() = MaterialTheme.shapes.extraLarge.topStart
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun topShapes(): ButtonShapes =
+        ButtonDefaults.shapes(
+            shape =
+                RoundedCornerShape(
+                    outerCornerRadius,
+                    outerCornerRadius,
+                    middleCornerRadius,
+                    middleCornerRadius,
+                ),
+            pressedShape = pressedShape,
+        )
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun middleShapes(): ButtonShapes =
+        ButtonDefaults.shapes(
+            shape = RoundedCornerShape(middleCornerRadius),
+            pressedShape = pressedShape,
+        )
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun bottomShapes(): ButtonShapes =
+        ButtonDefaults.shapes(
+            shape =
+                RoundedCornerShape(
+                    middleCornerRadius,
+                    middleCornerRadius,
+                    outerCornerRadius,
+                    outerCornerRadius,
+                ),
+            pressedShape = pressedShape,
+        )
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun singleShapes(): ButtonShapes =
+        ButtonDefaults.shapes(
+            shape = RoundedCornerShape(outerCornerRadius),
+            pressedShape = pressedShape,
+        )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Preview
 @Composable
 private fun AddressButtonPreview() {
