@@ -19,55 +19,49 @@
 
 ---
 
-**Find my IP** is a lightweight app that fetches and stores your current IP address. It keeps a
-history of your past IPs and can automatically log changes in the background — no need to open the
-app every time.
+**Find my IP** 是一款轻量级应用，用于获取并存储您当前的 IP 地址。它会保存您过去 IP 的历史记录，并能在后台自动记录变更——无需每次都打开应用。
 
 ---
 
 <div align="center">
-    <img src="./metadata/en-US/images/phoneScreenshots/1.png" alt="Main Screen" width="30%" style="border-radius: 12px" />
-    <img src="./metadata/en-US/images/phoneScreenshots/2.png" alt="Settings" width="30%" style="border-radius: 12px"  />
-    <img src="./metadata/en-US/images/phoneScreenshots/3.png" alt="Notifications" width="30%" style="border-radius: 12px"  />
+    <img src="./metadata/en-US/images/phoneScreenshots/1.png" alt="主屏幕" width="30%" style="border-radius: 12px" />
+    <img src="./metadata/en-US/images/phoneScreenshots/2.png" alt="设置" width="30%" style="border-radius: 12px" />
+    <img src="./metadata/en-US/images/phoneScreenshots/3.png" alt="通知" width="30%" style="border-radius: 12px" />
 </div>
 
 ---
 
-### ✨ Features
+### ✨ 特性
 
-- 🎨 **[Material 3 Expressive](https://m3.material.io/blog/building-with-m3-expressive) Design** -
-  modern, clean, and user-friendly interface
-- 🌐 **IPv4 & IPv6 Support** - works seamlessly with both IP address types
-- 📜 **IP History** - maintains a log of your previous IP addresses
-- 🔔 **Background Updates and Notifications** - optionally detects and notifies you of IP changes
-  even when the app is closed
-- 🧭 **Reverse DNS Lookups** - resolve IP addresses back to domain names
-
----
-
-### 🎨 Design
-
-Explore the design mockups and prototypes
-on [Figma](https://www.figma.com/design/BDNLirxKWIx8BljIWhEz6B/Find-my-IP)
+- 🎨 **[Material 3 Expressive](https://m3.material.io/blog/building-with-m3-expressive) 设计** -
+  现代、简洁且友好的用户界面
+- 🌐 **支持 IPv4 和 IPv6** - 无缝适用于两种 IP 地址类型
+- 📜 **IP 历史记录** - 维护您过往 IP 地址的日志
+- 🔔 **后台更新与通知** - 可选地在应用关闭时检测并通知您 IP 地址的变化
+- 🧭 **反向 DNS 查询** - 将 IP 地址解析回域名
 
 ---
 
-### 🤝 Contributing
+### 🎨 设计
 
-Want to help make it even better? Here are some great ways to contribute:
-
-- 🌍 **Translate the App** – Help improve international accessibility
-  via [Crowdin](https://crowdin.com/project/find-my-ip). Let me know if you'd like to credited
-- 💡 **Request a Feature** – Got an idea? Open
-  a [GitHub issue](https://github.com/maksimowiczm/find-my-ip/issues) to suggest a new feature or
-  improvement
-- 🐞 **Report Bugs** – Found a bug? Submit it
-  via [GitHub issue](https://github.com/maksimowiczm/find-my-ip/issues) so it can be fixed
-- ⭐ **Star the Repository** – If you like the project, give it a star
+在 [Figma](https://www.figma.com/design/BDNLirxKWIx8BljIWhEz6B/Find-my-IP) 上探索设计稿和原型
 
 ---
 
-### 📜 License
+### 🤝 贡献
+
+想帮助我们做得更好吗？这里有一些很棒的贡献方式：
+
+- 🌍 **翻译应用** – 通过 [Crowdin](https://crowdin.com/project/find-my-ip) 帮助我们提升应用的国际化程度。如果您希望被署名，请告诉我
+- 💡 **功能请求** – 有好点子吗？可以提交一个 [GitHub issue](https://github.com/maksimowiczm/find-my-ip/issues) 来建议新功能或改进
+- 🐞 **报告 Bug** – 发现 Bug 了？通过 [GitHub issue](https://github.com/maksimowiczm/find-my-ip/issues) 提交，以便我们修复
+- ⭐ **为项目点赞 (Star)** – 如果您喜欢这个项目，请给它一个 Star
+
+---
+
+### 📜 许可证
+
+
 
 ```
 Copyright (C) 2024-2025 Mateusz Maksimowicz

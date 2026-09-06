@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Find my IP</string>
+    <string name="internet_protocol">網際網路協定</string>
+    <string name="network_type" description="Wi-Fi, Mobile, VPN">網路類型</string>
+    <string name="cellular">行動網路</string>
+    <string name="date">日期</string>
+    <string name="headline_system">系統</string>
+    <string name="headline_system_language_settings">系統語言設定</string>
+    <string name="headline_history">歷史紀錄</string>
+    <string name="headline_internet_protocols">網際網路協定</string>
+    <string name="headline_settings">設定</string>
+    <string name="headline_background_services">背景服務</string>
+    <string name="headline_notifications">通知</string>
+    <string name="headline_language">語言</string>
+    <string name="headline_notify_on_ip_change">IP 變更提醒</string>
+    <string name="headline_system_notifications_settings">系統通知設定</string>
+    <string name="headline_periodic_work">週期性工作</string>
+    <string name="headline_permission_required">需要權限</string>
+    <string name="headline_home">主頁</string>
+    <string name="headline_ip_change">IP 變更</string>
+    <string name="headline_new_address_detected">偵測到新位址</string>
+    <string name="headline_version">版本</string>
+    <string name="headline_about">關於</string>
+    <string name="headline_source_code">原始碼</string>
+    <string name="headline_privacy_policy">隱私權政策</string>
+    <string name="neutral_your_public_ip_address_is">你的公網 IP 位址是</string>
+    <string name="neutral_not_detected">未偵測到</string>
+    <string name="neutral_copied">資訊已複製到剪貼簿</string>
+    <string name="neutral_you_havent_allowed_notifications">你尚未允許通知</string>
+    <string name="error_no_internet_connection">無網路連線</string>
+    <string name="action_refresh">重新整理</string>
+    <string name="action_show_search_bar">顯示搜尋列</string>
+    <string name="action_hide_search_bar">隱藏搜尋列</string>
+    <string name="action_clear_input">清空輸入</string>
+    <string name="action_show_filters">顯示篩選器</string>
+    <string name="action_copy_ip">複製 IP</string>
+    <string name="action_delete_entry">刪除項目</string>
+    <string name="action_delete">刪除</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_ok">確定</string>
+    <string name="action_clear">清除</string>
+    <string name="action_close">關閉</string>
+    <string name="action_confirm">確認</string>
+    <string name="action_go_back">返回</string>
+    <string name="action_translate">翻譯</string>
+    <string name="action_go_to_settings">前往設定</string>
+    <string name="action_agree_and_continue"><![CDATA[同意並繼續]]></string>
+    <string name="action_enable">啟用</string>
+    <string name="action_skip_for_now">暫時略過</string>
+    <string name="description_delete_entry">該位址項目將被永久從歷史紀錄中移除</string>
+    <string name="description_background_services_short">在應用程式關閉時繼續執行</string>
+    <string name="description_background_services_long">使用背景服務可在應用程式關閉時持續追蹤你的位址</string>
+    <string name="description_notifications">當 IP 發生變化時發送通知</string>
+    <string name="description_translate">協助翻譯此應用程式</string>
+    <string name="description_network_type">哪些網路類型應觸發通知</string>
+    <string name="description_internet_protocol">哪些網際網路協定應觸發通知</string>
+    <string name="description_periodic_work">週期性在背景執行</string>
+    <string name="description_combine_periodic_notifications">你可以將週期性工作與通知結合，形成強大的組合</string>
+    <string name="description_notifications_permission_required">發送 IP 變更通知需要通知權限。請在系統設定中啟用。</string>
+    <string name="description_source_code">在 GitHub 查看專案原始碼</string>
+    <string name="description_about">了解更多關於本應用程式的資訊</string>
+    <string name="description_privacy_policy">閱讀隱私權政策</string>
+    <string name="onboarding_read_the_privacy_policy">閱讀隱私權政策</string>
+    <string name="onboarding_description_before_you_get_started">為了提供準確的 IP 追蹤，我們使用 ipify 取得你的公網 IP 位址。你的 IP 歷史僅保存在你的裝置上——我們不會上傳或與任何人分享你的資料。</string>
+    <string name="onboarding_headline_before_you_get_started">開始之前</string>
+    <string name="onboarding_headline_keep_tracking">即使不使用應用程式也持續追蹤</string>
+    <string name="onboarding_description_keep_tracking">啟用自動 IP 追蹤，讓你的位址歷史保持最新——即使應用程式關閉時。</string>
+    <string name="onboarding_headline_stay_informed">隨時獲知變化</string>
+    <string name="onboarding_description_stay_informed">當你的 IP 位址發生變化時接收通知——在出行時尤其有用。</string>
+    <string name="headline_foreground_service_and_periodic_work">前景服務與週期性工作</string>
+    <string name="headline_foreground_service">前景服務</string>
+    <string name="headline_what_is_network_state_change">什麼是網路狀態變化？</string>
+    <string name="description_foreground_service_and_periodic_work">前景服務將持續執行，並在網路變化時檢查你的 IP 位址。週期性工作會不時執行，更省電。</string>
+    <string name="description_foreground_service">監聽網路狀態變化</string>
+    <string name="description_what_is_network_state_change">裝置的網際網路連線發生更新——例如切換 Wi-Fi、行動數據或失去連線</string>
+    <string name="neutral_refreshing">正在重新整理</string>
+    <string name="notification_network_monitor">網路監視器</string>
+    <string name="headline_sponsor">贊助</string>
+    <string name="description_sponsor">歡迎以任何形式支持</string>
+    <string name="description_sponsor_2">你的支持讓應用程式得以持續</string>
+    <string name="headline_contact">聯絡方式</string>
+    <string name="description_sponsor_contact">如有任何有關贊助的需求，歡迎透過電子郵件或 GitHub 與我聯繫。</string>
+
+    <!-- 後半段合併英文區翻譯 -->
+    <string name="ipv4">IPv4</string>
+    <string name="ipv6">IPv6</string>
+    <string name="action_search">搜尋</string>
+    <string name="headline_current" description="Current device address">目前</string>
+    <string name="headline_contribute">貢獻</string>
+    <string name="description_contribute">你可以支持與擴展應用程式的方法</string>
+
+    <string name="headline_become_a_sponsor">成為贊助者</string>
+    <string name="description_become_a_sponsor">提供財務支持以讓專案持續成長與改善。每一份貢獻都很重要。</string>
+    <string name="action_sponsor">贊助</string>
+
+    <string name="headline_share_with_friends">與朋友分享</string>
+    <string name="description_share_with_friends">幫忙宣傳！告訴其他人這個應用程式，讓更多人發現它。</string>
+    <string name="action_share">分享</string>
+    <string name="message_share_with_friends">來看看這個能顯示你目前 IP 位址及其歷史紀錄的應用程式！%1$s</string>
+
+    <string name="headline_feature_request">功能請求</string>
+    <string name="description_feature_request">有任何想法能讓應用程式更好嗎？分享你的建議，幫助塑造未來的更新。</string>
+    <string name="action_feature_request">在 GitHub 提交功能請求</string>
+
+    <string name="headline_bug_report">錯誤回報</string>
+    <string name="description_bug_report">回報任何問題或錯誤，幫助改善穩定性與效能。</string>
+    <string name="action_bug_report">在 GitHub 回報錯誤</string>
+
+    <string name="description_translate_short">協助翻譯應用程式</string>
+
+    <string name="headline_get_in_touch">保持聯繫</string>
+    <string name="description_get_in_touch">透過電子郵件直接提供回饋、想法或問題。</string>
+    <string name="action_write_an_email">寫一封電子郵件</string>
+
+    <string name="headline_filters">篩選器</string>
+    <string name="headline_internet_protocol">網際網路協定</string>
+    <string name="description_internet_protocol_notifications">哪些 IP 版本應觸發通知</string>
+
+    <string name="clipboard_label_cryptocurrency_address">位址</string>
+
+    <string name="headline_network_type" description="Wi-Fi, Mobile, VPN">網路類型</string>
+    <string name="description_network_type_notifications">哪些網路類型應觸發通知</string>
+    <string name="unknown" description="Unknown network type">未知</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="vpn">VPN</string>
+
+    <string name="headline_run_in_background">在背景執行</string>
+    <string name="description_run_in_background">在應用程式關閉時持續追蹤</string>
+    <string name="headline_periodic_refresh">週期性重新整理</string>
+    <string name="description_periodic_refresh">定期在背景執行</string>
+
+    <string name="hint_combine_periodic_refresh_with_notifications">你可以將週期性工作與通知結合</string>
+
+    <string name="notification_channel_address_changed">位址已變更</string>
+</resources>
